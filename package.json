@@ -9,7 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.124.0",
+    "@types/pdf-parse": "^1.1.5",
+    "docx": "^9.7.1",
+    "mammoth": "^1.12.2",
     "next": "16.3.4",
+    "pdf-parse": "^2.4.5",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },

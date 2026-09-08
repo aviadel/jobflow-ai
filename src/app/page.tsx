@@ -1,69 +1,132 @@
-import Image from "next/image";
+import Link from 'next/link'
 
-export default function Home() {
+export const metadata = {
+  title: 'JobFlow — AI-powered job application toolkit',
+  description: 'Generate tailored CVs and cover letters for every application. Self-hosted, one-time purchase, powered by Claude.',
+}
+
+export default async function LandingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ expired?: string }>
+}) {
+  const { expired } = await searchParams
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{ fontFamily: 'system-ui, sans-serif', background: '#ECEBE7', minHeight: '100vh' }}>
+
+      {/* Trial-expired banner */}
+      {expired && (
+        <div style={{ background: '#B91C1C', color: '#fff', padding: '10px 24px', textAlign: 'center', fontSize: 14 }}>
+          Your 7-day free trial has ended. Purchase a license below to continue.
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+      )}
+
+      {/* Nav */}
+      <nav style={{ maxWidth: 900, margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: 'Georgia, serif', fontSize: 20, color: '#1A1917' }}>JobFlow</span>
+        <Link
+          href="/setup"
+          style={{ fontSize: 13, fontWeight: 600, color: '#2362D4', textDecoration: 'none' }}
+        >
+          Open app →
+        </Link>
+      </nav>
+
+      {/* Hero */}
+      <main style={{ maxWidth: 900, margin: '0 auto', padding: '72px 24px 80px' }}>
+        <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', color: '#2362D4', marginBottom: 16 }}>
+          AI Job Application Toolkit
+        </p>
+        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(36px, 6vw, 56px)', lineHeight: 1.1, color: '#1A1917', maxWidth: 640, marginBottom: 20 }}>
+          A tailored CV for every application.
+        </h1>
+        <p style={{ fontSize: 17, color: '#6B6660', maxWidth: 520, lineHeight: 1.6, marginBottom: 12 }}>
+          Paste a job description. JobFlow decodes it, writes a tailored CV, and generates a cover letter — all in under 2 minutes. Self-hosted on Vercel. Powered by Claude.
+        </p>
+        <p style={{ fontSize: 14, color: '#2362D4', fontWeight: 600, marginBottom: 32 }}>
+          7-day free trial — no credit card required.
+        </p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai&env=ANTHROPIC_API_KEY,APP_PASSWORD&project-name=jobflow-ai&repository-name=jobflow-ai"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              background: '#1A1917', color: '#fff', padding: '12px 24px',
+              borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none',
+            }}
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
+            Deploy to Vercel (free trial)
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/setup"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              background: '#2362D4', color: '#fff', padding: '12px 24px',
+              borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: 'none',
+            }}
           >
-            Documentation
-          </a>
+            Open app →
+          </Link>
+        </div>
+
+        {/* Feature grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16, marginTop: 72 }}>
+          {[
+            { icon: '📄', title: 'CV generation', desc: 'Tailored 4–8 job CV per application. Self-correcting AI pass. Section-by-section regen.' },
+            { icon: '✉️', title: 'Cover letters', desc: 'Parallel to CV generation. Custom-prompt regeneration. Matches your voice.' },
+            { icon: '🔍', title: 'JD Decode', desc: 'Extract role, keywords, skills, and a fit verdict against your profile in one click.' },
+            { icon: '📊', title: 'Application tracker', desc: 'Status, salary, notes, and history. Stored in your own Vercel instance.' },
+          ].map((f) => (
+            <div key={f.title} style={{ background: '#F8F7F4', border: '1px solid #D9D6CE', borderRadius: 12, padding: 20 }}>
+              <span style={{ fontSize: 22, display: 'block', marginBottom: 10 }}>{f.icon}</span>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#1A1917', marginBottom: 6 }}>{f.title}</div>
+              <div style={{ fontSize: 13, color: '#6B6660', lineHeight: 1.5 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pricing */}
+        <div style={{ marginTop: 80 }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 28, color: '#1A1917', marginBottom: 8 }}>One-time purchase</h2>
+          <p style={{ fontSize: 14, color: '#6B6660', marginBottom: 32 }}>You bring your own Anthropic API key. No subscription, no lock-in.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+            {[
+              { tier: 'Starter', price: '$49', features: ['CV generation', 'Cover letters', 'JD Decode', 'Application tracker', '6 months updates'] },
+              { tier: 'Professional', price: '$99', recommended: true, features: ['Everything in Starter', 'Resume Audit', 'Chrome Extension', 'DB adapters (Sheets, Supabase)', '12 months updates'] },
+              { tier: 'Lifetime', price: '$179', features: ['Everything in Professional', 'AI Job Suggestions', 'Updates forever'] },
+            ].map((p) => (
+              <div
+                key={p.tier}
+                style={{
+                  background: '#F8F7F4',
+                  border: `${p.recommended ? '2' : '1'}px solid ${p.recommended ? '#2362D4' : '#D9D6CE'}`,
+                  borderRadius: 12, padding: 20,
+                }}
+              >
+                {p.recommended && (
+                  <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: '#2362D4', marginBottom: 4 }}>★ Best value</p>
+                )}
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#6B6660', marginBottom: 4 }}>{p.tier}</div>
+                <div style={{ fontFamily: 'Georgia, serif', fontSize: 28, color: '#1A1917', marginBottom: 12 }}>
+                  {p.price} <span style={{ fontSize: 13, fontFamily: 'system-ui, sans-serif', color: '#A8A29E', fontWeight: 400 }}>one-time</span>
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {p.features.map((f) => (
+                    <li key={f} style={{ fontSize: 12.5, color: '#6B6660', padding: '3px 0', display: 'flex', gap: 7 }}>
+                      <span style={{ color: '#14532D' }}>✓</span> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
+
+      <footer style={{ maxWidth: 900, margin: '0 auto', padding: '24px', borderTop: '1px solid #D9D6CE', fontSize: 12, color: '#A8A29E', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+        <span>JobFlow</span>
+        <span>Self-hosted · Vercel + Claude API · One-time purchase</span>
+      </footer>
     </div>
-  );
+  )
 }
