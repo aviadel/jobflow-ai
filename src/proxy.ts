@@ -3,13 +3,15 @@ import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
 
 const PUBLIC_PATHS = new Set(['/', '/favicon.ico'])
-const PUBLIC_PREFIXES = ['/_next/', '/api/']
+const PUBLIC_PREFIXES = ['/_next/']
 
 const TRIAL_DAYS = 7
 const TRIAL_COOKIE = 'jf_trial'
 
 function trialSecret(): string {
-  return process.env.LICENSE_SIGNING_SECRET ?? 'jobflow-trial-fallback-key'
+  const s = process.env.LICENSE_SIGNING_SECRET
+  if (!s) throw new Error('LICENSE_SIGNING_SECRET is not set')
+  return s
 }
 
 function makeTrialCookie(timestamp: number): string {

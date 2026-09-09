@@ -85,7 +85,7 @@ export function parseTrialCookie(
   if (dot === -1) return null
   const ts = value.slice(0, dot)
   const sig = value.slice(dot + 1)
-  const expectedBuf = createHmac('sha256', secret || 'jobflow-trial-fallback-key').update(ts).digest()
+  const expectedBuf = createHmac('sha256', secret).update(ts).digest()
   let sigBuf: Buffer
   try { sigBuf = Buffer.from(sig, 'hex') } catch { return null }
   if (sigBuf.length !== expectedBuf.length || !timingSafeEqual(sigBuf, expectedBuf)) return null

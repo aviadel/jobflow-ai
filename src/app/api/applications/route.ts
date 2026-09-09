@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { company, role, location, track, jdUrl, summary, coverLetter, notes } = body
+    const { company, role, location, jdUrl, summary, coverLetter, notes } = body
 
     if (!company || !role) {
       return NextResponse.json({ error: 'Company and role are required.' }, { status: 400 })

@@ -178,6 +178,27 @@ function isPro(tier: Tier) {
   return tier === 'professional' || tier === 'lifetime'
 }
 
+// ── Pro lock card ─────────────────────────────────────────────────────────────
+
+function ProLock({ feature }: { feature: string }) {
+  return (
+    <div style={cardLocked}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>{feature}</span>
+            <span style={badge('purple')}>Professional</span>
+          </div>
+          <p style={{ fontSize: 12, color: '#6B6660' }}>Upgrade your license to unlock this feature.</p>
+        </div>
+        <Link href="/" style={{ ...btn, textDecoration: 'none', flexShrink: 0, fontSize: 12 }}>
+          Upgrade →
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function NewClient({ tier }: { tier: Tier }) {
@@ -370,27 +391,6 @@ export function NewClient({ tier }: { tier: Tier }) {
       setSavedId(data.id)
     } catch (e) { alert(e instanceof Error ? e.message : 'Save failed') }
     finally { setSaving(false) }
-  }
-
-  // ── Pro feature lock card ──────────────────────────────────────────────────
-
-  function ProLock({ feature }: { feature: string }) {
-    return (
-      <div style={cardLocked}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>{feature}</span>
-              <span style={badge('purple')}>Professional</span>
-            </div>
-            <p style={{ fontSize: 12, color: '#6B6660' }}>Upgrade your license to unlock this feature.</p>
-          </div>
-          <Link href="/" style={{ ...btn, textDecoration: 'none', flexShrink: 0, fontSize: 12 }}>
-            Upgrade →
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   // ── Review phase ──────────────────────────────────────────────────────────

@@ -8,6 +8,7 @@ export function createDataProvider(): DataProvider {
   const type = process.env.DATA_PROVIDER ?? 'json'
   switch (type) {
     case 'sheets': {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { SheetsProvider } = require('./adapters/sheets') as typeof import('./adapters/sheets')
       return new SheetsProvider()
     }

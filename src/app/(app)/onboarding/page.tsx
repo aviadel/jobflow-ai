@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { saveProfile } from './actions'
 
 const INDUSTRIES = [
@@ -50,6 +51,7 @@ const REQUIRED_FIELDS = ['targetRoles', 'careerLevel', 'arrangement', 'industry'
 type RequiredField = (typeof REQUIRED_FIELDS)[number]
 
 export default function OnboardingPage() {
+  const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
 
   // Required fields state
@@ -191,7 +193,7 @@ export default function OnboardingPage() {
               style={inputStyle}
               onChange={(e) => mark('targetRoles', e.target.value.trim().length > 0)}
             />
-            <FieldNote>List the job titles you're actively applying for. Claude will tailor keyword density toward these.</FieldNote>
+            <FieldNote>List the job titles you are actively applying for. Claude will tailor keyword density toward these.</FieldNote>
           </Field>
 
           <Divider />
@@ -255,7 +257,7 @@ export default function OnboardingPage() {
               style={inputStyle}
               onChange={(e) => mark('locations', e.target.value.trim().length > 0)}
             />
-            <FieldNote>City names, regions, or "Remote" — comma-separated.</FieldNote>
+            <FieldNote>City names, regions, or Remote — comma-separated.</FieldNote>
           </Field>
 
           <Divider />
@@ -380,7 +382,7 @@ export default function OnboardingPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
             type="button"
-            onClick={() => window.location.href = '/dashboard'}
+            onClick={() => router.push('/dashboard')}
             style={{ background: 'transparent', border: '1.5px solid #D9D6CE', color: '#6B6660', padding: '9px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}
           >
             Fill in later

@@ -23,19 +23,6 @@ const STATUS_META: Record<ApplicationStatus, { label: string; bg: string; color:
 
 const ALL_STATUSES = Object.keys(STATUS_META) as ApplicationStatus[]
 
-function StatusBadge({ status }: { status: ApplicationStatus }) {
-  const m = STATUS_META[status]
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', padding: '2px 9px',
-      borderRadius: 99, fontSize: 11, fontWeight: 600,
-      background: m.bg, color: m.color,
-    }}>
-      {m.label}
-    </span>
-  )
-}
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }

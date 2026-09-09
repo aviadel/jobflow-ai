@@ -12,16 +12,21 @@ export async function PATCH(
     if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
     const body = await req.json()
+    const { status, notes, url, location, jobTitle } = body
     const updated = await db.upsertApplication({
       ...existing,
-      ...body,
+      ...(status    !== undefined && { status }),
+      ...(notes     !== undefined && { notes }),
+      ...(url       !== undefined && { url }),
+      ...(location  !== undefined && { location }),
+      ...(jobTitle  !== undefined && { jobTitle }),
       id,
       updatedAt: new Date().toISOString(),
     })
     return NextResponse.json(updated)
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('applications PATCH error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Update failed.' }, { status: 500 })
   }
 }
 
@@ -35,7 +40,7 @@ export async function DELETE(
     await db.deleteApplication(id)
     return NextResponse.json({ ok: true })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('applications DELETE error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Delete failed.' }, { status: 500 })
   }
 }

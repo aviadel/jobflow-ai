@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const data = JSON.parse(cleaned)
     return NextResponse.json(data)
   } catch (err) {
-    console.error('audit-resume error:', err)
-    return NextResponse.json({ error: 'Audit failed. Please try again.' }, { status: 500 })
+    console.error('audit-resume error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Audit failed — try again.' }, { status: 500 })
   }
 }

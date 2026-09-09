@@ -5,6 +5,19 @@ import { createDataProvider } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
+const PRIVATE_IP = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/
+
+function isSafeUrl(raw: string): boolean {
+  try {
+    const u = new URL(raw)
+    if (u.protocol !== 'https:') return false
+    if (PRIVATE_IP.test(u.hostname)) return false
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { url, text } = await req.json()
@@ -16,6 +29,9 @@ export async function POST(req: NextRequest) {
     let jdContent = text as string | undefined
 
     if (url && !text) {
+      if (!isSafeUrl(url)) {
+        return NextResponse.json({ error: 'Invalid URL. Only public HTTPS URLs are supported.' }, { status: 400 })
+      }
       try {
         const res = await fetch(url as string, {
           headers: { 'User-Agent': 'Mozilla/5.0 (compatible; JobFlow/1.0)' },
@@ -50,8 +66,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ...data, jdText: jdContent })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    console.error('analyze-jd error:', msg)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('analyze-jd error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Analysis failed — try again.' }, { status: 500 })
   }
 }

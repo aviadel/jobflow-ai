@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const text = await claudeComplete(SYSTEM_PROMPT, prompt, 1500, 'fast')
     return NextResponse.json({ text })
   } catch (err) {
-    console.error('regenerate-section error:', err)
-    return NextResponse.json({ error: 'Regeneration failed. Please try again.' }, { status: 500 })
+    console.error('regenerate-section error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Regeneration failed — try again.' }, { status: 500 })
   }
 }

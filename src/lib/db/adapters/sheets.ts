@@ -207,6 +207,7 @@ export class SheetsProvider implements DataProvider {
 
   // ── Job suggestions ───────────────────────────────────────
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async listSuggestions(_status?: SuggestionStatus): Promise<JobSuggestion[]> {
     return []
   }
@@ -215,6 +216,7 @@ export class SheetsProvider implements DataProvider {
     return s
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async dismissSuggestion(_id: string): Promise<void> {}
 
   // ── User profile ──────────────────────────────────────────
