@@ -1,27 +1,5 @@
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "ANTHROPIC_API_KEY": {
-      "description": "Your Anthropic API key — get it at console.anthropic.com/settings/api-keys",
-      "required": true
-    },
-    "JOBFLOW_LICENSE_KEY": {
-      "description": "Your JobFlow license key from your purchase email (JWT format). Leave blank to start your 7-day free trial."
-    },
-    "APP_PASSWORD": {
-      "description": "Password to protect your private JobFlow instance — your browser will prompt for it on first visit",
-      "required": true,
-      "generator": "secret"
-    },
-    "DATA_PROVIDER": {
-      "description": "Storage backend: json (default, ephemeral), sheets (persistent), or supabase (persistent)",
-      "value": "json"
-    },
-    "LICENSE_SIGNING_SECRET": {
-      "description": "HMAC-SHA256 secret used to verify license JWTs — must match the key used to generate licenses",
-      "required": true
-    }
-  }
+  "framework": "nextjs"
 }
