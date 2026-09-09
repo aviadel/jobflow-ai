@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
 
 const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms'])
-const PUBLIC_PREFIXES = ['/_next/']
+const PUBLIC_PREFIXES = ['/_next/', '/features/']
 
 const TRIAL_DAYS = 7
 const TRIAL_COOKIE = 'jf_trial'

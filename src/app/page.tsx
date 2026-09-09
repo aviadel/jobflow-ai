@@ -38,8 +38,13 @@ const RESPONSIVE = `
     border-right: 1px solid #21262d;
     border-bottom: 1px solid #21262d;
     transition: background .15s;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
   }
   .jf-feature-card:hover { background: #161b22; }
+  .jf-feature-card .jf-arrow { opacity: 0; transition: opacity .15s; color: #4493f8; font-size: 11px; }
+  .jf-feature-card:hover .jf-arrow { opacity: 1; }
   .jf-feature-card:nth-child(3n) { border-right: none; }
   .jf-feature-card:nth-last-child(-n+3) { border-bottom: none; }
   .jf-pricing-grid {
@@ -68,12 +73,12 @@ const LOGO = (
 )
 
 const FEATURES = [
-  { icon: '📄', title: 'CV generation',       desc: 'Tailored CV per application. Self-correcting AI pass. Section-by-section regen until you approve.' },
-  { icon: '✉️', title: 'Cover letters',        desc: 'Written in parallel with your CV. Matches your voice. Custom-prompt regen per section.' },
-  { icon: '🔍', title: 'JD Decode',            desc: 'Extract role, keywords, and a fit verdict against your profile in one click.' },
-  { icon: '📊', title: 'Application tracker',  desc: 'Status, notes, and history - stored in your own instance, never shared.' },
-  { icon: '🔬', title: 'Resume audit',          desc: 'ATS compatibility check, keyword gap analysis, and LinkedIn consistency review.', pro: true },
-  { icon: '💬', title: 'Application Q&A',      desc: 'Paste 1-4 free-text questions from the application form. Claude answers in your voice.', pro: true },
+  { icon: '📄', title: 'CV generation',       slug: 'cv-generation',      desc: 'Tailored CV per application. Self-correcting AI pass. Section-by-section regen until you approve.' },
+  { icon: '✉️', title: 'Cover letters',        slug: 'cover-letters',      desc: 'Written in parallel with your CV. Matches your voice. Custom-prompt regen per section.' },
+  { icon: '🔍', title: 'JD Decode',            slug: 'jd-decode',          desc: 'Extract role, keywords, and a fit verdict against your profile in one click.' },
+  { icon: '📊', title: 'Application tracker',  slug: 'application-tracker', desc: 'Status, notes, and history - stored in your own instance, never shared.' },
+  { icon: '🔬', title: 'Resume audit',          slug: 'resume-audit',       desc: 'ATS compatibility check, keyword gap analysis, and LinkedIn consistency review.', pro: true },
+  { icon: '💬', title: 'Application Q&A',      slug: 'application-qa',     desc: 'Paste 1-4 free-text questions from the application form. Claude answers in your voice.', pro: true },
 ]
 
 export const metadata = {
@@ -195,10 +200,15 @@ export default async function LandingPage({
         </p>
         <div className="jf-feature-grid">
           {FEATURES.map((f) => (
-            <div key={f.title} className="jf-feature-card">
+            <Link key={f.title} href={`/features/${f.slug}`} className="jf-feature-card">
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
+                <span style={{ fontSize: 22, lineHeight: 1 }}>{f.icon}</span>
+                <span className="jf-arrow">→</span>
+              </div>
               {f.pro && (
                 <span style={{
-                  float: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '.05em',
+                  display: 'inline-block', marginBottom: 6,
+                  fontSize: 10, fontWeight: 700, letterSpacing: '.05em',
                   textTransform: 'uppercase', color: PURPLE,
                   background: 'rgba(163,113,247,.15)', borderRadius: 4, padding: '1px 6px',
                   border: '1px solid rgba(163,113,247,.25)',
@@ -206,10 +216,9 @@ export default async function LandingPage({
                   Pro
                 </span>
               )}
-              <span style={{ fontSize: 22, display: 'block', marginBottom: 14, lineHeight: 1 }}>{f.icon}</span>
               <div style={{ fontSize: 13.5, fontWeight: 600, color: TEXT, marginBottom: 6 }}>{f.title}</div>
               <div style={{ fontSize: 12.5, color: MUTED, lineHeight: 1.6 }}>{f.desc}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

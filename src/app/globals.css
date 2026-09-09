@@ -29,3 +29,16 @@ body {
   0%, 100% { background-position: 200% 0; }
   50%       { background-position: -200% 0; }
 }
+@keyframes jf-pane-a {
+  0%, 42% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+@keyframes jf-pane-b {
+  0%, 42% { opacity: 0; }
+  46%, 100% { opacity: 1; }
+}
+@keyframes jf-click-pulse {
+  0%, 36%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(88,174,255,0); }
+  39% { transform: scale(0.93); box-shadow: 0 0 0 5px rgba(88,174,255,0.35); }
+  44% { transform: scale(1); box-shadow: 0 0 0 0 rgba(88,174,255,0); }
+}
