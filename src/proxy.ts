@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
 
-const PUBLIC_PATHS = new Set(['/', '/favicon.ico'])
+const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms'])
 const PUBLIC_PREFIXES = ['/_next/']
 
 const TRIAL_DAYS = 7

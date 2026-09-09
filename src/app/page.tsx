@@ -287,12 +287,16 @@ export default async function LandingPage({
       </section>
 
       {/* Footer */}
-      <footer style={{ maxWidth: 1080, margin: '0 auto', padding: '20px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, borderTop: `1px solid ${BORDER}` }}>
+      <footer style={{ maxWidth: 1080, margin: '0 auto', padding: '20px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, borderTop: `1px solid ${BORDER}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {LOGO}
           <span style={{ fontSize: 14, fontWeight: 600, color: MUTED }}>JobFlow</span>
         </div>
-        <span style={{ fontSize: 12, color: MUTED }}>Self-hosted · Vercel + Claude API · One-time purchase</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+          <a href="mailto:info@jobflowai.app" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>info@jobflowai.app</a>
+          <Link href="/terms" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Terms &amp; Conditions</Link>
+          <span style={{ fontSize: 12, color: MUTED }}>Self-hosted · Vercel + Claude API · One-time purchase</span>
+        </div>
       </footer>
     </div>
   )
