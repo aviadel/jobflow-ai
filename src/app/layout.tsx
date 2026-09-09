@@ -13,8 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JobFlow",
-  description: "AI-powered job application toolkit — tailored CVs and cover letters for every application.",
+  title: "JobFlow — AI Job Application Toolkit",
+  description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. One-time purchase.",
+  openGraph: {
+    title: "JobFlow — AI Job Application Toolkit",
+    description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. One-time purchase.",
+    type: "website",
+    siteName: "JobFlow",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JobFlow — AI Job Application Toolkit",
+    description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
