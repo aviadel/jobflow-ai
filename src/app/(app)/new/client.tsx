@@ -4,6 +4,18 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { LicenseTier } from '@/lib/license'
 
+const RESPONSIVE = `
+  .jf-two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .jf-two-col-lg { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  .jf-action-bar { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #D9D6CE; padding:12px 20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .jf-action-bar-downloads { display:flex; gap:6px; }
+  @media(max-width:560px){
+    .jf-two-col, .jf-two-col-lg { grid-template-columns:1fr; }
+    .jf-action-bar-downloads { display:none; }
+    .jf-action-bar { padding:10px 16px; }
+  }
+`
+
 // ── DOCX download ─────────────────────────────────────────────────────────────
 
 async function downloadDocx(
@@ -385,6 +397,7 @@ export function NewClient({ tier }: { tier: Tier }) {
 
   if (content) return (
     <div style={{ maxWidth: 760, margin: '0 auto', padding: '32px 24px 100px' }}>
+      <style>{RESPONSIVE}</style>
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
@@ -592,11 +605,11 @@ export function NewClient({ tier }: { tier: Tier }) {
       ) : <ProLock feature="Application questions" />}
 
       {/* Bottom action bar */}
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#fff', borderTop: '1px solid #D9D6CE', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
-        <span style={{ fontSize: 13, color: allApproved ? '#14532D' : '#6B6660', flex: 1 }}>
+      <div className="jf-action-bar">
+        <span style={{ fontSize: 13, color: allApproved ? '#14532D' : '#6B6660', flex: 1, minWidth: 140 }}>
           {allApproved ? 'All sections approved — ready to save' : `${approvedCount} of ${keys.length} sections approved`}
         </span>
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div className="jf-action-bar-downloads">
           <button
             style={{ ...btn, fontSize: 12 }}
             onClick={() => downloadDocx(content, role, company, 'cv')}
@@ -631,6 +644,7 @@ export function NewClient({ tier }: { tier: Tier }) {
 
   return (
     <div style={{ maxWidth: 640, margin: '0 auto', padding: '40px 24px' }}>
+      <style>{RESPONSIVE}</style>
       <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: '#2362D4', marginBottom: 10 }}>
         New application
       </p>
@@ -677,7 +691,7 @@ export function NewClient({ tier }: { tier: Tier }) {
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', color: '#6B6660', marginBottom: 12 }}>
             Step 2 — Confirm details before generating
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+          <div className="jf-two-col">
             {([{ label: 'Role', value: role, setter: setRole }, { label: 'Company', value: company, setter: setCompany }] as const).map(({ label, value, setter }) => (
               <div key={label}>
                 <p style={{ fontSize: 11, fontWeight: 600, color: '#1A1917', marginBottom: 5 }}>{label} <span style={{ color: '#2362D4', fontWeight: 400 }}>auto-filled</span></p>
@@ -685,7 +699,7 @@ export function NewClient({ tier }: { tier: Tier }) {
               </div>
             ))}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+          <div className="jf-two-col-lg">
             <div>
               <p style={{ fontSize: 11, fontWeight: 600, color: '#1A1917', marginBottom: 5 }}>Location <span style={{ color: '#2362D4', fontWeight: 400 }}>auto-filled</span></p>
               <input style={inpFilled} value={location} onChange={e => setLocation(e.target.value)} />

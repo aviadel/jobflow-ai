@@ -4,6 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import type { Application, ApplicationStatus } from '@/lib/db/types'
 
+const RESPONSIVE = `
+  @media(max-width:520px){
+    .jf-tracker-wrap { padding:20px 14px 60px; }
+    .jf-app-row { padding:12px 14px; gap:10px; }
+  }
+`
+
 const STATUS_META: Record<ApplicationStatus, { label: string; bg: string; color: string }> = {
   saved:      { label: 'Saved',      bg: '#F3F4F6', color: '#374151' },
   applied:    { label: 'Applied',    bg: '#DBEAFE', color: '#1E40AF' },
@@ -76,7 +83,8 @@ export function TrackerClient({ initialApps }: { initialApps: Application[] }) {
   }, {})
 
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px 80px', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="jf-tracker-wrap" style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px 80px', fontFamily: 'system-ui, sans-serif' }}>
+      <style>{RESPONSIVE}</style>
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
@@ -155,7 +163,7 @@ export function TrackerClient({ initialApps }: { initialApps: Application[] }) {
                 }}
               >
                 {/* Main row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', flexWrap: 'wrap' }}>
+                <div className="jf-app-row" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', flexWrap: 'wrap' }}>
                   {/* Company + role */}
                   <div style={{ flex: 1, minWidth: 180 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>

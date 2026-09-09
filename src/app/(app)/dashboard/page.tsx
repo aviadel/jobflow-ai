@@ -2,6 +2,14 @@ import Link from 'next/link'
 import { createDataProvider } from '@/lib/db'
 import type { ApplicationStatus } from '@/lib/db/types'
 
+const RESPONSIVE = `
+  .jf-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
+  .jf-actions { display:flex; gap:10px; margin-bottom:32px; flex-wrap:wrap; }
+  @media(max-width:600px){
+    .jf-stats { grid-template-columns:repeat(2,1fr); }
+  }
+`
+
 export const metadata = { title: 'Dashboard — JobFlow' }
 
 const STATUS_COLORS: Record<ApplicationStatus, { bg: string; color: string }> = {
@@ -31,6 +39,7 @@ export default async function DashboardPage() {
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '36px 24px 80px', fontFamily: 'system-ui, sans-serif' }}>
+      <style>{RESPONSIVE}</style>
 
       {/* Header */}
       <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: '#2362D4', marginBottom: 6 }}>
@@ -70,7 +79,7 @@ export default async function DashboardPage() {
 
       {/* Stats */}
       {total > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
+        <div className="jf-stats">
           {[
             { label: 'Total', value: total, color: '#1A1917' },
             { label: 'Active', value: active, color: '#2362D4' },
@@ -86,7 +95,7 @@ export default async function DashboardPage() {
       )}
 
       {/* Quick actions */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
+      <div className="jf-actions">
         <Link
           href="/new"
           style={{

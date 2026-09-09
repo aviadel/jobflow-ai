@@ -142,6 +142,7 @@ export default function OnboardingPage() {
         ))}
       </div>
 
+      <style>{RESPONSIVE}</style>
       <form ref={formRef} onSubmit={handleSubmit}>
 
         {/* ── CARD: Photo ─────────────────────────────── */}
@@ -196,7 +197,7 @@ export default function OnboardingPage() {
           <Divider />
 
           {/* Q2 + Q3: Level + Arrangement */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+          <div className="jf-two-col">
             <Field label="Career level" style={{ marginBottom: 0 }}>
               <select
                 name="careerLevel"
@@ -585,6 +586,11 @@ function OrDivider() {
     </div>
   )
 }
+
+const RESPONSIVE = `
+  .jf-two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+  @media(max-width:520px){ .jf-two-col { grid-template-columns:1fr; } }
+`
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
