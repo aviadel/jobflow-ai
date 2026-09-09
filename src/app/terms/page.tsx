@@ -61,7 +61,7 @@ export default function TermsPage() {
           <p>
             All purchases are final. Because JobFlow is a digital product that is immediately accessible upon payment, we do not
             offer refunds. If you have a technical issue preventing you from running the software, contact us at{' '}
-            <a href="mailto:info@jobflowai.app" style={{ color: '#4493f8' }}>info@jobflowai.app</a> and we will do our best to
+            <a href="mailto:info@jobflow-ai.app" style={{ color: '#4493f8' }}>info@jobflow-ai.app</a> and we will do our best to
             help you resolve it.
           </p>
         </Section>
@@ -108,7 +108,7 @@ export default function TermsPage() {
         <Section title="11. Contact">
           <p>
             Questions about these terms?{' '}
-            <a href="mailto:info@jobflowai.app" style={{ color: '#4493f8' }}>info@jobflowai.app</a>
+            <a href="mailto:info@jobflow-ai.app" style={{ color: '#4493f8' }}>info@jobflow-ai.app</a>
           </p>
         </Section>
 
