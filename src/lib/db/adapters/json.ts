@@ -130,4 +130,15 @@ export class JsonProvider implements DataProvider {
       [],
     )
   }
+
+  // ── Instance config (trial) ───────────────────────────────
+
+  async getTrialStart(): Promise<number | null> {
+    const data = await readJson<{ trialStart?: number }>(join(this.dir, 'instance.json'), {})
+    return data.trialStart ?? null
+  }
+
+  async setTrialStart(ts: number): Promise<void> {
+    await writeJson(join(this.dir, 'instance.json'), { trialStart: ts })
+  }
 }

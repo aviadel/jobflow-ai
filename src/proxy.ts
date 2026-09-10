@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
 
-const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms', '/how-it-works'])
+const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms', '/how-it-works', '/api/trial'])
 const PUBLIC_PREFIXES = ['/_next/', '/features/']
 
 const TRIAL_DAYS = 7
@@ -52,7 +52,40 @@ function isLicenseValid(): boolean {
   return timingSafeEqual(expectedBuf, receivedBuf)
 }
 
-export function proxy(request: NextRequest) {
+function internalSecret(): string | null {
+  const s = process.env.LICENSE_SIGNING_SECRET
+  if (!s) return null
+  return createHmac('sha256', s).update('trial-internal').digest('hex')
+}
+
+async function fetchTrialStart(origin: string, secret: string): Promise<number | null> {
+  try {
+    const res = await fetch(`${origin}/api/trial`, {
+      headers: { 'x-internal-secret': secret },
+    })
+    if (!res.ok) return null
+    const data = await res.json() as { startedAt: number | null }
+    return data.startedAt
+  } catch {
+    return null
+  }
+}
+
+async function createTrialInDb(origin: string, secret: string): Promise<number> {
+  try {
+    const res = await fetch(`${origin}/api/trial`, {
+      method: 'POST',
+      headers: { 'x-internal-secret': secret },
+    })
+    if (!res.ok) return Date.now()
+    const data = await res.json() as { startedAt: number }
+    return data.startedAt
+  } catch {
+    return Date.now()
+  }
+}
+
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (
@@ -92,14 +125,55 @@ export function proxy(request: NextRequest) {
       const daysElapsed = (Date.now() - startedAt) / 86_400_000
       if (daysElapsed < TRIAL_DAYS) return NextResponse.next()
     }
-    // Trial expired or tampered — send to landing page with ?expired flag
+    // Cookie expired or tampered — fall through to DB check below
+  }
+
+  // ── DB check: cookie absent or expired — verify against server-side record ──
+  const secret = internalSecret()
+  if (secret) {
+    const origin = request.nextUrl.origin
+    const dbStart = await fetchTrialStart(origin, secret)
+
+    if (dbStart !== null) {
+      const daysElapsed = (Date.now() - dbStart) / 86_400_000
+      if (daysElapsed >= TRIAL_DAYS) {
+        // Trial expired in DB — redirect
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        url.search = '?expired=1'
+        return NextResponse.redirect(url)
+      }
+      // Trial still valid — re-sync cookie and allow
+      const res = NextResponse.next()
+      res.cookies.set(TRIAL_COOKIE, makeTrialCookie(dbStart), {
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 30,
+        path: '/',
+      })
+      return res
+    }
+
+    // No record in DB — genuine first visit, create trial in DB and set cookie
+    const newStart = await createTrialInDb(origin, secret)
+    const res = NextResponse.next()
+    res.cookies.set(TRIAL_COOKIE, makeTrialCookie(newStart), {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30,
+      path: '/',
+    })
+    return res
+  }
+
+  // ── Fallback: no LICENSE_SIGNING_SECRET configured ──────────────────────────
+  if (trialVal) {
+    // Cookie was present but expired/tampered (we fell through from above)
     const url = request.nextUrl.clone()
     url.pathname = '/'
     url.search = '?expired=1'
     return NextResponse.redirect(url)
   }
-
-  // ── No trial yet — start one on first protected-page visit ─────────────────
   const res = NextResponse.next()
   res.cookies.set(TRIAL_COOKIE, makeTrialCookie(Date.now()), {
     httpOnly: true,

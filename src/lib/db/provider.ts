@@ -25,4 +25,8 @@ export interface DataProvider {
   // Generated documents (CV / cover letter versions)
   saveDocument(doc: GeneratedDocument): Promise<GeneratedDocument>
   listDocuments(applicationId: string): Promise<GeneratedDocument[]>
+
+  // Instance config (trial)
+  getTrialStart(): Promise<number | null>
+  setTrialStart(ts: number): Promise<void>
 }

@@ -109,7 +109,7 @@ async function ensureSheets(spreadsheetId: string): Promise<void> {
   const meta = await res.json() as { sheets: { properties: { title: string } }[] }
   const existing = new Set(meta.sheets.map(s => s.properties.title))
   const toAdd: string[] = []
-  for (const name of ['applications', 'profile']) {
+  for (const name of ['applications', 'profile', 'config']) {
     if (!existing.has(name)) toAdd.push(name)
   }
   if (toAdd.length === 0) return
@@ -253,5 +253,25 @@ export class SheetsProvider implements DataProvider {
 
   async listDocuments(applicationId: string): Promise<GeneratedDocument[]> {
     return this._docs.get(applicationId) ?? []
+  }
+
+  // ── Instance config (trial) ───────────────────────────────
+
+  async getTrialStart(): Promise<number | null> {
+    await ensureSheets(this.id)
+    const res = await sheetsGet(`/${this.id}/values/config!A1`)
+    const data = await res.json() as { values?: string[][] }
+    const raw = data.values?.[0]?.[0]
+    if (!raw) return null
+    const n = parseInt(raw, 10)
+    return isNaN(n) ? null : n
+  }
+
+  async setTrialStart(ts: number): Promise<void> {
+    await ensureSheets(this.id)
+    await sheetsPut(
+      `/${this.id}/values/config!A1?valueInputOption=RAW`,
+      { values: [[String(ts)]] },
+    )
   }
 }
