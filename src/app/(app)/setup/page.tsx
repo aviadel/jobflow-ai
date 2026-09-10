@@ -31,7 +31,7 @@ async function runChecks(): Promise<Check[]> {
     label: 'License key',
     ok: license.valid,
     detail: license.valid
-      ? `Valid — ${license.tier} tier · issued ${license.issued}`
+      ? `Valid - ${license.tier} tier, issued ${license.issued}`
       : license.error ?? 'Invalid license key',
     fix: license.valid
       ? undefined
@@ -71,7 +71,7 @@ async function runChecks(): Promise<Check[]> {
   checks.push({
     label: 'App password',
     ok: hasPassword,
-    detail: hasPassword ? 'APP_PASSWORD is set — instance is protected' : 'APP_PASSWORD is not set — instance is unprotected',
+    detail: hasPassword ? 'APP_PASSWORD is set - instance is protected' : 'APP_PASSWORD is not set - instance is unprotected',
     fix: hasPassword
       ? undefined
       : 'Set APP_PASSWORD in Vercel environment variables to protect your instance.',
@@ -86,6 +86,10 @@ export default async function SetupPage() {
 
   return (
     <main className="max-w-2xl mx-auto px-5 py-12">
+      <Link href="/" className="text-xs text-zinc-400 hover:text-zinc-600 inline-flex items-center gap-1 mb-8 no-underline">
+        ← Home
+      </Link>
+
       {/* Header */}
       <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">
         Step 1 of 3 · App Config

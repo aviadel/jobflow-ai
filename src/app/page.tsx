@@ -283,21 +283,34 @@ export default async function LandingPage({
           <div className="jf-howto-step" style={{ marginBottom: 64 }}>
             <div>
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, fontWeight: 600, letterSpacing: '.1em', color: ACCENT, display: 'block', marginBottom: 10 }}>02</span>
-              <h3 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 10, color: TEXT }}>Open your instance</h3>
+              <h3 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 10, color: TEXT }}>Verify your config</h3>
               <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.7, marginBottom: 16 }}>
-                Vercel gives you a URL like <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 12.5, color: TEXT }}>your-name.vercel.app</span>. The browser prompts for HTTP Basic Auth - enter any username and the <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 12.5, color: TEXT }}>APP_PASSWORD</span> you set. Your 7-day free trial starts automatically on first visit.
+                Visit your Vercel URL and sign in with <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 12.5, color: TEXT }}>APP_PASSWORD</span> when prompted. You land on the config check - everything must be green before you continue. Your 7-day free trial starts on first visit.
               </p>
+              <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, color: MUTED, display: 'inline-block', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 4, padding: '3px 8px' }}>/setup</span>
             </div>
-            <div style={{ background: '#1c2030', border: `1px solid ${BORDER}`, borderRadius: 10, padding: 24, maxWidth: 320 }}>
-              <div style={{ fontSize: 12, color: MUTED, marginBottom: 4, fontWeight: 500 }}>Sign in</div>
-              <div style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, color: ACCENT, marginBottom: 18 }}>your-name.vercel.app</div>
-              <div style={{ fontSize: 11.5, color: MUTED, marginBottom: 5 }}>Username</div>
-              <div style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 4, padding: '7px 10px', fontSize: 11.5, color: MUTED, marginBottom: 12 }}>&nbsp;</div>
-              <div style={{ fontSize: 11.5, color: MUTED, marginBottom: 5 }}>Password</div>
-              <div style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 4, padding: '7px 10px', fontSize: 11.5, color: MUTED, marginBottom: 18, fontFamily: 'var(--font-geist-mono), monospace' }}>••••••••••••</div>
-              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, color: MUTED, padding: '6px 14px' }}>Cancel</span>
-                <span style={{ fontSize: 12, background: ACCENT, color: '#fff', padding: '6px 14px', borderRadius: 5, fontWeight: 600 }}>Sign in</span>
+            <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 10, overflow: 'hidden' }}>
+              <div style={{ padding: '10px 14px', borderBottom: `1px solid ${BORDER}` }}>
+                <span style={{ color: TEXT, fontWeight: 600, fontSize: 12 }}>Configuration check</span>
+              </div>
+              <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[
+                  { label: 'Claude API key',  detail: 'ANTHROPIC_API_KEY is set' },
+                  { label: 'License key',     detail: 'Valid - starter tier' },
+                  { label: 'Storage',         detail: 'json provider connected' },
+                  { label: 'App password',    detail: 'APP_PASSWORD is set' },
+                ].map(({ label, detail }) => (
+                  <div key={label} style={{ background: 'rgba(63,185,80,.08)', border: '1px solid rgba(63,185,80,.25)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ width: 16, height: 16, borderRadius: '50%', background: '#14532d', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, flexShrink: 0 }}>✓</span>
+                    <div>
+                      <div style={{ fontSize: 11.5, fontWeight: 600, color: TEXT }}>{label}</div>
+                      <div style={{ fontSize: 10.5, color: GREEN }}>{detail}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding: '10px 14px', borderTop: `1px solid ${BORDER}`, display: 'flex', justifyContent: 'flex-end' }}>
+                <span style={{ fontSize: 12, background: ACCENT, color: '#fff', padding: '6px 14px', borderRadius: 5, fontWeight: 600 }}>Continue to profile setup →</span>
               </div>
             </div>
           </div>
