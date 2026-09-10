@@ -33,7 +33,18 @@ function b64urlDecodeBuffer(str: string): Buffer {
 
 const VALID_TIERS: LicenseTier[] = ['starter', 'professional', 'lifetime']
 
-export function validateLicense(token: string | undefined): LicenseResult {
+/**
+ * Verifies a license key.
+ *
+ * `publicKeyPem` exists purely as a test seam: the suite generates a throwaway
+ * keypair rather than committing a genuine signed key, which would otherwise be
+ * a working licence sitting in the repo for anyone to copy. Production callers
+ * pass nothing and get the baked-in key.
+ */
+export function validateLicense(
+  token: string | undefined,
+  publicKeyPem: string = LICENSE_PUBLIC_KEY_PEM,
+): LicenseResult {
   if (!token) {
     return { valid: false, tier: null, issued: null, error: 'No license key provided' }
   }
@@ -50,7 +61,7 @@ export function validateLicense(token: string | undefined): LicenseResult {
     signatureOk = verify(
       null,
       Buffer.from(`${headerB64}.${payloadB64}`),
-      createPublicKey(LICENSE_PUBLIC_KEY_PEM),
+      createPublicKey(publicKeyPem),
       b64urlDecodeBuffer(sigB64),
     )
   } catch {
@@ -113,7 +124,7 @@ export const ACTIVATION_LIMIT_MESSAGE =
 
 /** Maps an LZ product name to a tier. Unrecognised names fall back to the
  *  lowest tier, so a renamed product can never silently grant Professional. */
-function tierFromProductName(name: string | undefined): LicenseTier {
+export function tierFromProductName(name: string | undefined): LicenseTier {
   const n = (name ?? '').toLowerCase()
   if (n.includes('lifetime')) return 'lifetime'
   if (n.includes('professional')) return 'professional'
@@ -212,6 +223,10 @@ export function parseTrialCookie(
   if (sigBuf.length !== expectedBuf.length || !timingSafeEqual(sigBuf, expectedBuf)) return null
   const startedAt = parseInt(ts, 10)
   if (isNaN(startedAt) || startedAt <= 0) return null
-  const daysLeft = Math.max(0, TRIAL_DAYS - Math.floor((Date.now() - startedAt) / 86_400_000))
+  // Clamp elapsed time at zero: a start date in the future (clock skew, or a
+  // forged cookie) would otherwise subtract a negative and report more than a
+  // full trial remaining.
+  const elapsed = Math.max(0, Date.now() - startedAt)
+  const daysLeft = Math.max(0, TRIAL_DAYS - Math.floor(elapsed / 86_400_000))
   return daysLeft > 0 ? { daysLeft } : null
 }

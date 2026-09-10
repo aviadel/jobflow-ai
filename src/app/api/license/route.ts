@@ -3,8 +3,6 @@ import { NextRequest } from 'next/server'
 import { createDataProvider } from '@/lib/db'
 import {
   ACTIVATION_LIMIT_MESSAGE,
-  LICENSE_GRACE_MS,
-  LICENSE_REVALIDATE_MS,
   activateLemonLicense,
   isActivationLimitError,
   isSignedLicense,
@@ -12,6 +10,7 @@ import {
   validateLemonLicense,
   validateLicense,
 } from '@/lib/license'
+import { decideLicenseCheck, decideOnUnreachable } from '@/lib/license-check'
 import type { LicenseCache } from '@/lib/db/types'
 
 function validateSecret(req: NextRequest): boolean {
@@ -56,31 +55,24 @@ export async function GET(req: NextRequest) {
     // Storage unavailable - fall through and ask LZ directly.
   }
 
-  const cacheMatchesKey = cache?.key === key
+  const action = decideLicenseCheck({
+    cache,
+    key,
+    now,
+    persistent: storageIsPersistent(),
+  })
 
-  // Fresh cache wins outright.
-  if (cache && cacheMatchesKey && now - cache.checkedAt < LICENSE_REVALIDATE_MS) {
-    return verdict(cache.valid, cache.tier, 'cache')
+  if (action.kind === 'cached') {
+    return verdict(action.valid, action.tier, 'cache')
   }
 
-  // Stale, missing, or for a different key - ask LZ.
   try {
-    let result
-    if (cacheMatchesKey && cache?.instanceId) {
-      // Already activated on this instance - re-check without consuming a slot.
-      result = await validateLemonLicense(key, cache.instanceId)
-    } else if (storageIsPersistent()) {
-      // First sight of this key and we can remember the outcome, so claim an
-      // activation slot. This is what makes the per-product activation limit
-      // actually enforce anything.
-      result = await activateLemonLicense(key, new URL(req.url).host)
-    } else {
-      // Ephemeral storage (DATA_PROVIDER=json): /tmp is wiped on every cold
-      // start, so activating here would burn a fresh slot each time and lock
-      // the buyer out within days. Validate only - weaker sharing enforcement,
-      // but it never bricks a paying customer.
-      result = await validateLemonLicense(key, null)
-    }
+    const result =
+      action.kind === 'validateInstance'
+        ? await validateLemonLicense(key, action.instanceId)
+        : action.kind === 'activate'
+          ? await activateLemonLicense(key, new URL(req.url).host)
+          : await validateLemonLicense(key, null)
 
     // Replace LZ's terse wording with something the buyer can act on. Cached
     // alongside the verdict so /setup can show it instead of a bare failure.
@@ -105,9 +97,8 @@ export async function GET(req: NextRequest) {
   } catch {
     // LZ unreachable. Honour a previously-good verdict rather than locking out
     // a paying customer because someone else's API is down.
-    if (cache && cacheMatchesKey && cache.valid && now - cache.checkedAt < LICENSE_GRACE_MS) {
-      return verdict(true, cache.tier, 'grace')
-    }
+    const fallback = decideOnUnreachable({ cache, key, now })
+    if (fallback) return verdict(true, fallback.tier, 'grace')
     return verdict(false, null, 'unreachable', 'Could not reach the license server')
   }
 }

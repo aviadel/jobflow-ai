@@ -147,7 +147,8 @@ export async function proxy(request: NextRequest) {
   if (trialVal) {
     const { valid, startedAt } = verifyTrialCookie(trialVal)
     if (valid) {
-      const daysElapsed = (Date.now() - startedAt) / 86_400_000
+      // Clamped at zero so a future-dated cookie cannot extend the trial.
+      const daysElapsed = Math.max(0, Date.now() - startedAt) / 86_400_000
       if (daysElapsed < TRIAL_DAYS) return NextResponse.next()
     }
     // Cookie expired or tampered — fall through to DB check below
@@ -159,7 +160,7 @@ export async function proxy(request: NextRequest) {
     const dbStart = await fetchTrialStart(origin, secret)
 
     if (dbStart !== null) {
-      const daysElapsed = (Date.now() - dbStart) / 86_400_000
+      const daysElapsed = Math.max(0, Date.now() - dbStart) / 86_400_000
       if (daysElapsed >= TRIAL_DAYS) {
         // Trial expired in DB — redirect
         const url = request.nextUrl.clone()
