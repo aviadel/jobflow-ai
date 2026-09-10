@@ -114,6 +114,18 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // ── Misconfiguration guard ──────────────────────────────────────────────────
+  // Without TRIAL_SECRET the trial gate has nothing to sign with. Send everyone
+  // to /setup, which is allowed through so its config check can say what is
+  // missing - far better than an opaque 500 on every page.
+  if (!process.env.TRIAL_SECRET) {
+    if (pathname === '/setup') return NextResponse.next()
+    const url = request.nextUrl.clone()
+    url.pathname = '/setup'
+    url.search = ''
+    return NextResponse.redirect(url)
+  }
+
   // ── Valid license bypasses trial entirely ───────────────────────────────────
   const licenseKey = process.env.JOBFLOW_LICENSE_KEY
   const secret = internalSecret()

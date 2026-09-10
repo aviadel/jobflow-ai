@@ -159,7 +159,7 @@ export default async function LandingPage({
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
             <a
-              href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai&env=ANTHROPIC_API_KEY,APP_PASSWORD&project-name=jobflow-ai&repository-name=jobflow-ai"
+              href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai&env=ANTHROPIC_API_KEY,APP_PASSWORD,TRIAL_SECRET&envDescription=Your%20Claude%20API%20key%2C%20a%20password%20to%20protect%20your%20instance%2C%20and%20a%20random%20string%20for%20the%20trial%20gate&envLink=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai%23environment-variables&project-name=jobflow-ai&repository-name=jobflow-ai"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 background: ACCENT, color: '#fff', padding: '10px 20px', borderRadius: 6,

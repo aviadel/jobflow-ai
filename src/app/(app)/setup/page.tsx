@@ -25,7 +25,20 @@ async function runChecks(): Promise<Check[]> {
       : 'Add ANTHROPIC_API_KEY to your Vercel project → Settings → Environment Variables. Get a key at console.anthropic.com.',
   })
 
-  // 2. License key
+  // 2. Trial secret — without it the trial gate cannot run at all
+  const hasTrialSecret = Boolean(process.env.TRIAL_SECRET)
+  checks.push({
+    label: 'Trial secret',
+    ok: hasTrialSecret,
+    detail: hasTrialSecret
+      ? 'TRIAL_SECRET is set'
+      : 'TRIAL_SECRET is missing - the app cannot run without it',
+    fix: hasTrialSecret
+      ? undefined
+      : 'Generate a random value by running:  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"  then add it as TRIAL_SECRET in Vercel → Settings → Environment Variables and redeploy.',
+  })
+
+  // 3. License key
   const license = await resolveLicense()
   checks.push({
     label: 'License key',
