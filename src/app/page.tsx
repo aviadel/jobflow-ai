@@ -117,12 +117,20 @@ export default async function LandingPage({
           {LOGO}
           <span style={{ fontSize: 17, fontWeight: 600, color: TEXT, letterSpacing: '-.01em' }}>JobFlow</span>
         </div>
-        <Link
-          href="/setup"
-          style={{ fontSize: 13, fontWeight: 500, color: MUTED, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
-        >
-          Open app →
-        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Link
+            href="/how-it-works"
+            style={{ fontSize: 13, fontWeight: 500, color: MUTED, textDecoration: 'none', padding: '6px 14px' }}
+          >
+            How it works
+          </Link>
+          <Link
+            href="/setup"
+            style={{ fontSize: 13, fontWeight: 500, color: MUTED, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
+          >
+            Open app →
+          </Link>
+        </div>
       </nav>
 
       {/* Hero */}
