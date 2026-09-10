@@ -156,6 +156,8 @@ One-time purchase. No subscription. Claude API usage is billed to your own Anthr
 
 **License key rejected** — Check for stray whitespace when pasting, confirm you redeployed after adding it, and note that env var changes only take effect on a new deployment.
 
+**"This license key has reached its activation limit"** — Your key is registered to more instances than its limit allows. In Lemon Squeezy, open **My Orders → your JobFlow order → Manage license**, deactivate an instance you no longer use, then redeploy. Each deployment that stores its data permanently counts as one instance; redeploying the same project does not consume another.
+
 **Changes to environment variables seem ignored** — Vercel only picks them up on redeploy. Trigger one from the Deployments tab.
 
 ---

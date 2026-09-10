@@ -46,11 +46,13 @@ async function runChecks(): Promise<Check[]> {
     detail: license.valid
       ? `Valid - ${license.tier} tier`
       : process.env.JOBFLOW_LICENSE_KEY
-        ? 'License key could not be verified'
+        ? license.error ?? 'License key could not be verified'
         : 'No license key set - running on the free trial',
     fix: license.valid
       ? undefined
-      : 'Set JOBFLOW_LICENSE_KEY in Vercel environment variables to the key from your purchase email, then redeploy.',
+      : license.error
+        ? undefined
+        : 'Set JOBFLOW_LICENSE_KEY in Vercel environment variables to the key from your purchase email, then redeploy.',
   })
 
   // 3. Storage
@@ -89,10 +91,13 @@ async function runChecks(): Promise<Check[]> {
         sheets: 'Check GOOGLE_SHEETS_SPREADSHEET_ID and GOOGLE_SERVICE_ACCOUNT_JSON in Vercel environment variables.',
         json: 'The /tmp directory is unavailable — try redeploying.',
       }
+      // Deliberately not rendering err.message - a Postgres connection failure
+      // echoes the database hostname onto the page. Detail goes to the server log.
+      console.error('[setup] storage check failed:', err)
       checks.push({
         label: 'Storage',
         ok: false,
-        detail: `${providerLabel[providerName] ?? providerName} error: ${err instanceof Error ? err.message : String(err)}`,
+        detail: `${providerLabel[providerName] ?? providerName} could not be reached`,
         fix: fixes[providerName],
       })
     }

@@ -75,4 +75,6 @@ export interface LicenseCache {
   valid: boolean
   tier: 'starter' | 'professional' | 'lifetime' | null
   checkedAt: number
+  /** Actionable reason the key was rejected, surfaced on /setup. */
+  error?: string
 }

@@ -2,10 +2,13 @@ import { createHmac, timingSafeEqual } from 'crypto'
 import { NextRequest } from 'next/server'
 import { createDataProvider } from '@/lib/db'
 import {
+  ACTIVATION_LIMIT_MESSAGE,
   LICENSE_GRACE_MS,
   LICENSE_REVALIDATE_MS,
   activateLemonLicense,
+  isActivationLimitError,
   isSignedLicense,
+  storageIsPersistent,
   validateLemonLicense,
   validateLicense,
 } from '@/lib/license'
@@ -62,9 +65,28 @@ export async function GET(req: NextRequest) {
 
   // Stale, missing, or for a different key - ask LZ.
   try {
-    const result = cacheMatchesKey && cache?.instanceId
-      ? await validateLemonLicense(key, cache.instanceId)
-      : await activateLemonLicense(key, new URL(req.url).host)
+    let result
+    if (cacheMatchesKey && cache?.instanceId) {
+      // Already activated on this instance - re-check without consuming a slot.
+      result = await validateLemonLicense(key, cache.instanceId)
+    } else if (storageIsPersistent()) {
+      // First sight of this key and we can remember the outcome, so claim an
+      // activation slot. This is what makes the per-product activation limit
+      // actually enforce anything.
+      result = await activateLemonLicense(key, new URL(req.url).host)
+    } else {
+      // Ephemeral storage (DATA_PROVIDER=json): /tmp is wiped on every cold
+      // start, so activating here would burn a fresh slot each time and lock
+      // the buyer out within days. Validate only - weaker sharing enforcement,
+      // but it never bricks a paying customer.
+      result = await validateLemonLicense(key, null)
+    }
+
+    // Replace LZ's terse wording with something the buyer can act on. Cached
+    // alongside the verdict so /setup can show it instead of a bare failure.
+    const error = isActivationLimitError(result.error)
+      ? ACTIVATION_LIMIT_MESSAGE
+      : result.error
 
     try {
       await db.setLicenseCache({
@@ -73,12 +95,13 @@ export async function GET(req: NextRequest) {
         valid: result.valid,
         tier: result.tier,
         checkedAt: now,
+        ...(error ? { error } : {}),
       })
     } catch {
       // Verdict is still good even if we could not persist it.
     }
 
-    return verdict(result.valid, result.tier, 'lemonsqueezy', result.error)
+    return verdict(result.valid, result.tier, 'lemonsqueezy', error)
   } catch {
     // LZ unreachable. Honour a previously-good verdict rather than locking out
     // a paying customer because someone else's API is down.

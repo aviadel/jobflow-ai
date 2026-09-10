@@ -92,6 +92,25 @@ export function isSignedLicense(token: string): boolean {
   return token.split('.').length === 3
 }
 
+/** Storage backends that survive a server restart. Activation consumes one of
+ *  the buyer's limited slots, so it is only safe where we can remember having
+ *  done it - on ephemeral storage every cold start would burn another slot. */
+const PERSISTENT_PROVIDERS = new Set(['postgres', 'sheets'])
+
+export function storageIsPersistent(): boolean {
+  return PERSISTENT_PROVIDERS.has(process.env.DATA_PROVIDER ?? 'json')
+}
+
+/** True when LZ refused an activation because the key is already on the
+ *  maximum number of machines, as opposed to the key being bad. */
+export function isActivationLimitError(error: string | undefined): boolean {
+  return /activation limit|too many|limit reached/i.test(error ?? '')
+}
+
+export const ACTIVATION_LIMIT_MESSAGE =
+  'This license key has reached its activation limit. Open your Lemon Squeezy ' +
+  'account, deactivate an instance you no longer use, then redeploy.'
+
 /** Maps an LZ product name to a tier. Unrecognised names fall back to the
  *  lowest tier, so a renamed product can never silently grant Professional. */
 function tierFromProductName(name: string | undefined): LicenseTier {

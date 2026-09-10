@@ -9,6 +9,8 @@ import {
 export interface ResolvedLicense {
   valid: boolean
   tier: LicenseTier | null
+  /** Actionable reason for a rejection, when we have one worth showing. */
+  error?: string
 }
 
 /**
@@ -31,12 +33,11 @@ export async function resolveLicense(): Promise<ResolvedLicense> {
 
   try {
     const cache = await createDataProvider().getLicenseCache()
-    if (
-      cache?.key === key &&
-      cache.valid &&
-      Date.now() - cache.checkedAt < LICENSE_GRACE_MS
-    ) {
-      return { valid: true, tier: cache.tier }
+    if (cache?.key === key) {
+      if (cache.valid && Date.now() - cache.checkedAt < LICENSE_GRACE_MS) {
+        return { valid: true, tier: cache.tier }
+      }
+      return { valid: false, tier: null, error: cache.error }
     }
   } catch {
     // Storage unavailable - treat as unlicensed rather than granting access.
