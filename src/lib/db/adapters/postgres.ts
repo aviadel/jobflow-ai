@@ -4,6 +4,7 @@ import type {
   Application,
   GeneratedDocument,
   JobSuggestion,
+  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from '../types'
@@ -159,6 +160,20 @@ export class PostgresProvider implements DataProvider {
     await this.init()
     await this.sql`
       INSERT INTO jf_instance (key, value) VALUES ('trial_start', ${String(ts)})
+      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`
+  }
+
+  async getLicenseCache(): Promise<LicenseCache | null> {
+    await this.init()
+    const rows = await this.sql`SELECT value FROM jf_instance WHERE key = 'license_cache'`
+    if (!rows[0]) return null
+    try { return JSON.parse(rows[0].value as string) as LicenseCache } catch { return null }
+  }
+
+  async setLicenseCache(c: LicenseCache): Promise<void> {
+    await this.init()
+    await this.sql`
+      INSERT INTO jf_instance (key, value) VALUES ('license_cache', ${JSON.stringify(c)})
       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`
   }
 }

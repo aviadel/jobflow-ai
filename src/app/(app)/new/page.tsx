@@ -1,8 +1,8 @@
-import { validateLicense } from '@/lib/license'
+import { resolveLicense } from '@/lib/license-server'
 import { NewClient } from './client'
 
-export default function NewPage() {
-  const license = validateLicense(process.env.JOBFLOW_LICENSE_KEY)
+export default async function NewPage() {
+  const license = await resolveLicense()
   const tier = license.valid ? (license.tier ?? 'starter') : 'trial'
   return <NewClient tier={tier} />
 }

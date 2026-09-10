@@ -1,11 +1,11 @@
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { validateLicense, parseTrialCookie, TRIAL_COOKIE } from '@/lib/license'
+import { parseTrialCookie, TRIAL_COOKIE } from '@/lib/license'
+import { resolveLicense } from '@/lib/license-server'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
-  const licenseKey = process.env.JOBFLOW_LICENSE_KEY
-  const isLicensed = licenseKey ? validateLicense(licenseKey).valid : false
+  const isLicensed = (await resolveLicense()).valid
 
   let trialDaysLeft: number | null = null
   if (!isLicensed) {

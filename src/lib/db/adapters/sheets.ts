@@ -5,6 +5,7 @@ import type {
   ApplicationStatus,
   GeneratedDocument,
   JobSuggestion,
+  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from '../types'
@@ -272,6 +273,23 @@ export class SheetsProvider implements DataProvider {
     await sheetsPut(
       `/${this.id}/values/config!A1?valueInputOption=RAW`,
       { values: [[String(ts)]] },
+    )
+  }
+
+  async getLicenseCache(): Promise<LicenseCache | null> {
+    await ensureSheets(this.id)
+    const res = await sheetsGet(`/${this.id}/values/config!A2`)
+    const data = await res.json() as { values?: string[][] }
+    const raw = data.values?.[0]?.[0]
+    if (!raw) return null
+    try { return JSON.parse(raw) as LicenseCache } catch { return null }
+  }
+
+  async setLicenseCache(c: LicenseCache): Promise<void> {
+    await ensureSheets(this.id)
+    await sheetsPut(
+      `/${this.id}/values/config!A2?valueInputOption=RAW`,
+      { values: [[JSON.stringify(c)]] },
     )
   }
 }

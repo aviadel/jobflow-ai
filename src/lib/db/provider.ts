@@ -2,6 +2,7 @@ import type {
   Application,
   GeneratedDocument,
   JobSuggestion,
+  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from './types'
@@ -29,4 +30,8 @@ export interface DataProvider {
   // Instance config (trial)
   getTrialStart(): Promise<number | null>
   setTrialStart(ts: number): Promise<void>
+
+  // Cached Lemon Squeezy license verdict
+  getLicenseCache(): Promise<LicenseCache | null>
+  setLicenseCache(c: LicenseCache): Promise<void>
 }

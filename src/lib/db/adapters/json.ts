@@ -6,6 +6,7 @@ import type {
   Application,
   GeneratedDocument,
   JobSuggestion,
+  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from '../types'
@@ -133,12 +134,27 @@ export class JsonProvider implements DataProvider {
 
   // ── Instance config (trial) ───────────────────────────────
 
+  private instanceFile() { return join(this.dir, 'instance.json') }
+
+  private async readInstance(): Promise<{ trialStart?: number; licenseCache?: LicenseCache }> {
+    return readJson(this.instanceFile(), {})
+  }
+
   async getTrialStart(): Promise<number | null> {
-    const data = await readJson<{ trialStart?: number }>(join(this.dir, 'instance.json'), {})
-    return data.trialStart ?? null
+    return (await this.readInstance()).trialStart ?? null
   }
 
   async setTrialStart(ts: number): Promise<void> {
-    await writeJson(join(this.dir, 'instance.json'), { trialStart: ts })
+    const data = await this.readInstance()
+    await writeJson(this.instanceFile(), { ...data, trialStart: ts })
+  }
+
+  async getLicenseCache(): Promise<LicenseCache | null> {
+    return (await this.readInstance()).licenseCache ?? null
+  }
+
+  async setLicenseCache(c: LicenseCache): Promise<void> {
+    const data = await this.readInstance()
+    await writeJson(this.instanceFile(), { ...data, licenseCache: c })
   }
 }

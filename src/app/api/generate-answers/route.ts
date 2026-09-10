@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { claudeComplete } from '@/lib/claude'
 import { buildSystemPrompt, buildAnswersPrompt } from '@/lib/prompts'
-import { validateLicense } from '@/lib/license'
+import { resolveLicense } from '@/lib/license-server'
 import { createDataProvider } from '@/lib/db'
 
 export const runtime = 'nodejs'
@@ -9,7 +9,7 @@ export const runtime = 'nodejs'
 export async function POST(req: NextRequest) {
   try {
     // Professional+ feature gate
-    const license = validateLicense(process.env.JOBFLOW_LICENSE_KEY)
+    const license = await resolveLicense()
     if (!license.valid || (license.tier !== 'professional' && license.tier !== 'lifetime')) {
       return NextResponse.json({ error: 'Application question answering requires a Professional or Lifetime license.' }, { status: 403 })
     }

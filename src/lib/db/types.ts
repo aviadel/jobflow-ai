@@ -65,3 +65,14 @@ export interface GeneratedDocument {
   version: number
   createdAt: string
 }
+
+/** Cached verdict from the Lemon Squeezy license API. */
+export interface LicenseCache {
+  /** The license key this verdict belongs to; a different key invalidates the cache. */
+  key: string
+  /** LZ instance id from activation, needed for subsequent validate calls. */
+  instanceId: string | null
+  valid: boolean
+  tier: 'starter' | 'professional' | 'lifetime' | null
+  checkedAt: number
+}

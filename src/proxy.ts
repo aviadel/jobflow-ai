@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
-import { validateLicense } from '@/lib/license'
+import { isSignedLicense, validateLicense } from '@/lib/license'
 
-const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms', '/how-it-works', '/api/trial'])
+const PUBLIC_PATHS = new Set([
+  '/', '/favicon.ico', '/terms', '/how-it-works', '/api/trial', '/api/license',
+])
 const PUBLIC_PREFIXES = ['/_next/', '/features/']
 
 const TRIAL_DAYS = 7
@@ -56,6 +58,19 @@ async function fetchTrialStart(origin: string, secret: string): Promise<number |
   }
 }
 
+async function isLemonLicenseValid(origin: string, secret: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${origin}/api/license`, {
+      headers: { 'x-internal-secret': secret },
+    })
+    if (!res.ok) return false
+    const data = await res.json() as { valid: boolean }
+    return data.valid
+  } catch {
+    return false
+  }
+}
+
 async function createTrialInDb(origin: string, secret: string): Promise<number> {
   try {
     const res = await fetch(`${origin}/api/trial`, {
@@ -100,7 +115,20 @@ export async function proxy(request: NextRequest) {
   }
 
   // ── Valid license bypasses trial entirely ───────────────────────────────────
-  if (validateLicense(process.env.JOBFLOW_LICENSE_KEY).valid) return NextResponse.next()
+  const licenseKey = process.env.JOBFLOW_LICENSE_KEY
+  const secret = internalSecret()
+  if (licenseKey) {
+    if (isSignedLicense(licenseKey)) {
+      // Our own Ed25519 key - verified locally, no network call.
+      if (validateLicense(licenseKey).valid) return NextResponse.next()
+    } else if (secret) {
+      // Lemon Squeezy key - verdict is cached server-side, so this is a
+      // local hop that only reaches LZ once a week.
+      if (await isLemonLicenseValid(request.nextUrl.origin, secret)) {
+        return NextResponse.next()
+      }
+    }
+  }
 
   // ── Trial check ─────────────────────────────────────────────────────────────
   const trialVal = request.cookies.get(TRIAL_COOKIE)?.value
@@ -114,7 +142,6 @@ export async function proxy(request: NextRequest) {
   }
 
   // ── DB check: cookie absent or expired — verify against server-side record ──
-  const secret = internalSecret()
   if (secret) {
     const origin = request.nextUrl.origin
     const dbStart = await fetchTrialStart(origin, secret)

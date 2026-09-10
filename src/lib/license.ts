@@ -75,6 +75,101 @@ export function validateLicense(token: string | undefined): LicenseResult {
   return { valid: true, tier: payload.tier, issued: payload.issued ?? null }
 }
 
+// ── Lemon Squeezy license keys ────────────────────────────────────────────────
+// Keys issued by LZ on purchase are opaque UUID-style strings, not signed
+// tokens, so they can only be checked by asking LZ. Callers are expected to
+// cache the verdict (see /api/license) — never call this per request.
+
+const LZ_API = 'https://api.lemonsqueezy.com/v1/licenses'
+
+/** How long a cached verdict is trusted before we re-check with LZ. */
+export const LICENSE_REVALIDATE_MS = 7 * 86_400_000
+/** How long a cached verdict still counts if LZ cannot be reached at all. */
+export const LICENSE_GRACE_MS = 30 * 86_400_000
+
+/** Any key containing two dots is one of our own signed tokens. */
+export function isSignedLicense(token: string): boolean {
+  return token.split('.').length === 3
+}
+
+/** Maps an LZ product name to a tier. Unrecognised names fall back to the
+ *  lowest tier, so a renamed product can never silently grant Professional. */
+function tierFromProductName(name: string | undefined): LicenseTier {
+  const n = (name ?? '').toLowerCase()
+  if (n.includes('lifetime')) return 'lifetime'
+  if (n.includes('professional')) return 'professional'
+  return 'starter'
+}
+
+interface LzResponse {
+  valid?: boolean
+  activated?: boolean
+  error?: string | null
+  license_key?: { status?: string }
+  instance?: { id?: string } | null
+  meta?: { product_name?: string }
+}
+
+async function lzPost(path: string, body: Record<string, string>): Promise<LzResponse> {
+  const res = await fetch(`${LZ_API}${path}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(body).toString(),
+    signal: AbortSignal.timeout(8000),
+  })
+  // LZ returns 400/404 with a JSON body for invalid keys - that is a verdict,
+  // not a transport failure, so parse it rather than throwing.
+  return await res.json() as LzResponse
+}
+
+export interface LzCheckResult {
+  valid: boolean
+  tier: LicenseTier | null
+  instanceId: string | null
+  error?: string
+}
+
+/**
+ * Activates a license key against LZ, claiming one activation slot.
+ * Used the first time an instance sees a given key.
+ */
+export async function activateLemonLicense(
+  key: string,
+  instanceName: string,
+): Promise<LzCheckResult> {
+  const data = await lzPost('/activate', { license_key: key, instance_name: instanceName })
+  if (!data.activated) {
+    return { valid: false, tier: null, instanceId: null, error: data.error ?? 'Activation failed' }
+  }
+  return {
+    valid: true,
+    tier: tierFromProductName(data.meta?.product_name),
+    instanceId: data.instance?.id ?? null,
+  }
+}
+
+/** Re-checks an already-activated key. */
+export async function validateLemonLicense(
+  key: string,
+  instanceId: string | null,
+): Promise<LzCheckResult> {
+  const data = await lzPost('/validate', {
+    license_key: key,
+    ...(instanceId ? { instance_id: instanceId } : {}),
+  })
+  if (!data.valid) {
+    return { valid: false, tier: null, instanceId, error: data.error ?? 'Invalid license key' }
+  }
+  return {
+    valid: true,
+    tier: tierFromProductName(data.meta?.product_name),
+    instanceId,
+  }
+}
+
 export const TRIAL_DAYS = 7
 export const TRIAL_COOKIE = 'jf_trial'
 

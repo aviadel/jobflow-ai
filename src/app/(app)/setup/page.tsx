@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { validateLicense } from '@/lib/license'
+import { resolveLicense } from '@/lib/license-server'
 import { createDataProvider } from '@/lib/db'
 
 export const metadata = { title: 'Setup — JobFlow' }
@@ -26,16 +26,18 @@ async function runChecks(): Promise<Check[]> {
   })
 
   // 2. License key
-  const license = validateLicense(process.env.JOBFLOW_LICENSE_KEY)
+  const license = await resolveLicense()
   checks.push({
     label: 'License key',
     ok: license.valid,
     detail: license.valid
-      ? `Valid - ${license.tier} tier, issued ${license.issued}`
-      : license.error ?? 'Invalid license key',
+      ? `Valid - ${license.tier} tier`
+      : process.env.JOBFLOW_LICENSE_KEY
+        ? 'License key could not be verified'
+        : 'No license key set - running on the free trial',
     fix: license.valid
       ? undefined
-      : 'Set JOBFLOW_LICENSE_KEY in Vercel environment variables to the JWT from your purchase email.',
+      : 'Set JOBFLOW_LICENSE_KEY in Vercel environment variables to the key from your purchase email, then redeploy.',
   })
 
   // 3. Storage
