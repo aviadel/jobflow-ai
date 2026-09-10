@@ -142,12 +142,13 @@ export default function HowItWorksPage() {
             title="JD Decode"
             path="/new"
             steps={[
-              <>Open <Path>/new</Path> and paste the full job description into the textarea. The more complete the JD, the better the output.</>,
-              <>Click <strong style={{ color: TEXT }}>Decode</strong>. JobFlow extracts the role title, core requirements, nice-to-haves, and a fit verdict against your profile. This takes about 5 seconds.</>,
+              <>Open <Path>/new</Path>. You will see two input modes: <strong style={{ color: TEXT }}>Paste URL</strong> and <strong style={{ color: TEXT }}>Paste JD text</strong>.</>,
+              <><strong style={{ color: TEXT }}>URL mode (faster):</strong> paste the job posting link and click <strong style={{ color: TEXT }}>Analyze JD</strong>. JobFlow fetches the page and extracts the role, requirements, nice-to-haves, and a fit verdict against your profile.</>,
+              <><strong style={{ color: TEXT }}>If the URL fails</strong> - some platforms (Workday, Greenhouse, Lever, LinkedIn Easy Apply) block automated access. If you see an error, switch to <strong style={{ color: TEXT }}>Paste JD text</strong>, copy the full job description text from the platform manually, paste it into the box, and click <strong style={{ color: TEXT }}>Analyze JD</strong> again.</>,
               <>Review the decoded summary. The fit verdict tells you how well your background matches before you commit time to a full application.</>,
-              <>If the role looks good, proceed to Generate CV below. The decode result is already loaded and will be used automatically.</>,
+              <>If the role looks good, proceed to Generate CV. The analysis result is already loaded and will be used automatically.</>,
             ]}
-            tip="Run JD Decode before generating a CV. It lets you quickly triage a role in seconds - only generate when the fit looks strong."
+            tip="When copy-pasting text, include everything visible on the job page: title, responsibilities, requirements, and any nice-to-haves. More text gives a better fit verdict and a more targeted CV."
           />
 
           <Feature
