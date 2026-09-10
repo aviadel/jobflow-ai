@@ -410,19 +410,34 @@ export default async function LandingPage({
           <div className="jf-pricing-grid">
 
             {/* Starter */}
-            <div style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '28px 24px' }}>
+            <div style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 12, padding: '28px 24px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED, marginBottom: 14 }}>Starter</div>
               <div style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-.03em', color: TEXT, lineHeight: 1, marginBottom: 4 }}>€25</div>
               <div style={{ fontSize: 12, color: MUTED, marginBottom: 24 }}>one-time</div>
-              {['CV generation', 'Cover letters', 'JD Decode', 'Application tracker', '6 months updates'].map((f) => (
-                <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
-                  <span style={{ color: GREEN, flexShrink: 0 }}>✓</span>{f}
-                </div>
-              ))}
+              <div style={{ flex: 1 }}>
+                {['CV generation', 'Cover letters', 'JD Decode', 'Application tracker', '6 months updates'].map((f) => (
+                  <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
+                    <span style={{ color: GREEN, flexShrink: 0 }}>✓</span>{f}
+                  </div>
+                ))}
+              </div>
+              <a
+                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/45026184-0495-48d7-835b-678a9e1e059d"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block', textAlign: 'center', marginTop: 24,
+                  background: SURFACE, color: TEXT, padding: '10px 0', borderRadius: 6,
+                  fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                  border: `1px solid ${BORDER2}`,
+                }}
+              >
+                Buy Starter →
+              </a>
             </div>
 
             {/* Professional */}
-            <div style={{ background: BG, border: `2px solid ${ACCENT}`, borderRadius: 12, padding: '28px 24px', position: 'relative' }}>
+            <div style={{ background: BG, border: `2px solid ${ACCENT}`, borderRadius: 12, padding: '28px 24px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
               <div style={{
                 position: 'absolute', top: -11, left: 20,
                 background: ACCENT, color: '#fff',
@@ -434,11 +449,25 @@ export default async function LandingPage({
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED, marginBottom: 14 }}>Professional</div>
               <div style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-.03em', color: TEXT, lineHeight: 1, marginBottom: 4 }}>€49</div>
               <div style={{ fontSize: 12, color: MUTED, marginBottom: 24 }}>one-time</div>
-              {['Everything in Starter', 'Resume audit', 'Application Q&A', 'Postgres + Sheets storage', '12 months updates'].map((f) => (
-                <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
-                  <span style={{ color: GREEN, flexShrink: 0 }}>✓</span>{f}
-                </div>
-              ))}
+              <div style={{ flex: 1 }}>
+                {['Everything in Starter', 'Resume audit', 'Application Q&A', 'Postgres + Sheets storage', '12 months updates'].map((f) => (
+                  <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
+                    <span style={{ color: GREEN, flexShrink: 0 }}>✓</span>{f}
+                  </div>
+                ))}
+              </div>
+              <a
+                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/5b696784-4b16-4ecb-94b6-537e5dd35227"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block', textAlign: 'center', marginTop: 24,
+                  background: ACCENT, color: '#fff', padding: '10px 0', borderRadius: 6,
+                  fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                }}
+              >
+                Buy Professional →
+              </a>
             </div>
 
             {/* Lifetime - coming soon */}
