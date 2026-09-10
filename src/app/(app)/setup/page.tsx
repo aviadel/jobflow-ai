@@ -40,7 +40,7 @@ async function runChecks(): Promise<Check[]> {
 
   // 3. Storage
   const providerName = process.env.DATA_PROVIDER ?? 'json'
-  const knownProviders = ['json', 'sheets', 'supabase']
+  const knownProviders = ['json', 'postgres', 'sheets']
   if (!knownProviders.includes(providerName)) {
     checks.push({
       label: 'Storage',
@@ -49,19 +49,36 @@ async function runChecks(): Promise<Check[]> {
       fix: `Set DATA_PROVIDER to one of: ${knownProviders.join(', ')}.`,
     })
   } else {
+    const providerLabel: Record<string, string> = {
+      json: 'Temporary (json)',
+      postgres: 'Postgres',
+      sheets: 'Google Sheets',
+    }
     try {
       const db = createDataProvider()
       await db.getProfile()
-      checks.push({ label: 'Storage', ok: true, detail: `${providerName} provider connected` })
+      const warning = providerName === 'json'
+        ? ' — data is not persisted across server restarts. Set DATA_PROVIDER=postgres for permanent storage.'
+        : ''
+      checks.push({
+        label: 'Storage',
+        ok: providerName !== 'json',
+        detail: `${providerLabel[providerName] ?? providerName} connected${warning}`,
+        fix: providerName === 'json'
+          ? 'In your Vercel dashboard: Storage → Create Database → Postgres. Then set DATA_PROVIDER=postgres and POSTGRES_URL (auto-filled by Vercel) and redeploy.'
+          : undefined,
+      })
     } catch (err) {
+      const fixes: Record<string, string> = {
+        postgres: 'Set POSTGRES_URL in Vercel environment variables. Go to Vercel dashboard → Storage → Create Database → Postgres, then redeploy.',
+        sheets: 'Check GOOGLE_SHEETS_SPREADSHEET_ID and GOOGLE_SERVICE_ACCOUNT_JSON in Vercel environment variables.',
+        json: 'The /tmp directory is unavailable — try redeploying.',
+      }
       checks.push({
         label: 'Storage',
         ok: false,
-        detail: `${providerName} provider error: ${err instanceof Error ? err.message : String(err)}`,
-        fix:
-          providerName === 'json'
-            ? 'The /tmp directory is unavailable. This is unexpected on Vercel — try redeploying.'
-            : `Check your ${providerName} credentials in Vercel environment variables.`,
+        detail: `${providerLabel[providerName] ?? providerName} error: ${err instanceof Error ? err.message : String(err)}`,
+        fix: fixes[providerName],
       })
     }
   }
