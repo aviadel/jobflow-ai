@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
+import { validateLicense } from '@/lib/license'
 
 const PUBLIC_PATHS = new Set(['/', '/favicon.ico', '/terms', '/how-it-works', '/api/trial'])
 const PUBLIC_PREFIXES = ['/_next/', '/features/']
@@ -9,8 +10,8 @@ const TRIAL_DAYS = 7
 const TRIAL_COOKIE = 'jf_trial'
 
 function trialSecret(): string {
-  const s = process.env.LICENSE_SIGNING_SECRET
-  if (!s) throw new Error('LICENSE_SIGNING_SECRET is not set')
+  const s = process.env.TRIAL_SECRET
+  if (!s) throw new Error('TRIAL_SECRET is not set')
   return s
 }
 
@@ -36,24 +37,8 @@ function verifyTrialCookie(value: string): { valid: boolean; startedAt: number }
   return { valid: true, startedAt }
 }
 
-function isLicenseValid(): boolean {
-  const key = process.env.JOBFLOW_LICENSE_KEY
-  const secret = process.env.LICENSE_SIGNING_SECRET
-  if (!key || !secret) return false
-  const parts = key.split('.')
-  if (parts.length !== 3) return false
-  const [header, payload, sigB64] = parts
-  const expectedBuf = createHmac('sha256', secret).update(`${header}.${payload}`).digest()
-  const b64 = sigB64.replace(/-/g, '+').replace(/_/g, '/')
-  const pad = (4 - (b64.length % 4)) % 4
-  let receivedBuf: Buffer
-  try { receivedBuf = Buffer.from(b64 + '='.repeat(pad), 'base64') } catch { return false }
-  if (expectedBuf.length !== receivedBuf.length) return false
-  return timingSafeEqual(expectedBuf, receivedBuf)
-}
-
 function internalSecret(): string | null {
-  const s = process.env.LICENSE_SIGNING_SECRET
+  const s = process.env.TRIAL_SECRET
   if (!s) return null
   return createHmac('sha256', s).update('trial-internal').digest('hex')
 }
@@ -115,7 +100,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // ── Valid license bypasses trial entirely ───────────────────────────────────
-  if (isLicenseValid()) return NextResponse.next()
+  if (validateLicense(process.env.JOBFLOW_LICENSE_KEY).valid) return NextResponse.next()
 
   // ── Trial check ─────────────────────────────────────────────────────────────
   const trialVal = request.cookies.get(TRIAL_COOKIE)?.value
@@ -166,7 +151,7 @@ export async function proxy(request: NextRequest) {
     return res
   }
 
-  // ── Fallback: no LICENSE_SIGNING_SECRET configured ──────────────────────────
+  // ── Fallback: no TRIAL_SECRET configured ────────────────────────────────────
   if (trialVal) {
     // Cookie was present but expired/tampered (we fell through from above)
     const url = request.nextUrl.clone()

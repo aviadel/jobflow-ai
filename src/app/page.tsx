@@ -260,7 +260,7 @@ export default async function LandingPage({
                 Click &quot;Deploy free&quot; above and follow the Vercel clone flow. Add your three required keys, then go to Vercel <strong style={{ color: TEXT }}>Storage → Create Database → Postgres</strong> (free tier) — Vercel sets <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>POSTGRES_URL</span> automatically. Add <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>DATA_PROVIDER=postgres</span> and redeploy.
               </p>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'LICENSE_SIGNING_SECRET', 'DATA_PROVIDER'].map((v) => (
+                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'TRIAL_SECRET', 'DATA_PROVIDER'].map((v) => (
                   <span key={v} style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 10.5, background: SURFACE, border: `1px solid ${BORDER2}`, borderRadius: 4, padding: '3px 7px', color: TEXT }}>{v}</span>
                 ))}
               </div>
@@ -273,7 +273,7 @@ export default async function LandingPage({
               {[
                 { k: 'ANTHROPIC_API_KEY',       v: 'sk-ant-api03-••••••••••••••••' },
                 { k: 'APP_PASSWORD',             v: '••••••••••' },
-                { k: 'LICENSE_SIGNING_SECRET',   v: '••••••••••••••••••••••' },
+                { k: 'TRIAL_SECRET',             v: '••••••••••••••••••••••' },
                 { k: 'DATA_PROVIDER',            v: 'postgres' },
                 { k: 'POSTGRES_URL',             v: 'postgres://••••@••••/verceldb' },
               ].map(({ k, v }) => (

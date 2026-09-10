@@ -158,7 +158,7 @@ export default function HowItWorksPage() {
             steps={[
               <>After decoding a JD, click <strong style={{ color: TEXT }}>Generate CV</strong>. JobFlow writes each section of your CV tailored to that specific role.</>,
               <>Once generated, review each section. If a section does not read well, click <strong style={{ color: TEXT }}>Regenerate</strong> on that section to get a new version without touching the others.</>,
-              <>Add optional instructions in the section prompt field before regenerating - for example "emphasise team leadership" or "mention the fintech context".</>,
+              <>Add optional instructions in the section prompt field before regenerating - for example &quot;emphasise team leadership&quot; or &quot;mention the fintech context&quot;.</>,
               <>When satisfied, click <strong style={{ color: TEXT }}>Download .docx</strong> to get the final CV file, ready to submit.</>,
               <>The application is auto-saved to your tracker at <Path>/tracker</Path>.</>,
             ]}
@@ -172,7 +172,7 @@ export default function HowItWorksPage() {
             steps={[
               <>After generating a CV, switch to the <strong style={{ color: TEXT }}>Cover letter</strong> tab on the same page. A draft is already written based on the same JD decode.</>,
               <>Read through the letter. It is structured as: opening hook, why this role, why you, closing call to action.</>,
-              <>To rewrite a paragraph, click <strong style={{ color: TEXT }}>Regenerate</strong> next to it. Add instructions in the prompt field to adjust the tone or focus - for example "more formal" or "highlight the startup experience".</>,
+              <>To rewrite a paragraph, click <strong style={{ color: TEXT }}>Regenerate</strong> next to it. Add instructions in the prompt field to adjust the tone or focus - for example &quot;more formal&quot; or &quot;highlight the startup experience&quot;.</>,
               <>Download as .docx when done. The cover letter is saved alongside the CV in your tracker entry.</>,
             ]}
             tip="The cover letter uses the same JD decode as the CV. Decode once, get both documents."

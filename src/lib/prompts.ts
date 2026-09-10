@@ -72,7 +72,7 @@ export function buildDecodePrompt(input: string, profile?: UserProfile): string 
 ${profile ? `The candidate is targeting: ${targetRoles}. Preferred locations: ${locations}.` : ''}
 
 Job description:
-${input}
+${input.slice(0, 6000)}
 
 Return ONLY a valid JSON object with these exact fields:
 {

@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from 'crypto'
+import { createHmac, createPublicKey, timingSafeEqual, verify } from 'crypto'
 
 export type LicenseTier = 'starter' | 'professional' | 'lifetime'
 
@@ -15,10 +15,14 @@ interface LicensePayload {
   email?: string
 }
 
+// Ed25519 public key. Verification only - it cannot create licenses.
+// The matching private key is held by the developer and never ships.
+const LICENSE_PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEAVszt9VnLTzFHU/kImbr0juaY0rXA3K13GA9DzRBtRTo=
+-----END PUBLIC KEY-----`
+
 function b64urlDecode(str: string): string {
-  const b64 = str.replace(/-/g, '+').replace(/_/g, '/')
-  const pad = (4 - (b64.length % 4)) % 4
-  return Buffer.from(b64 + '='.repeat(pad), 'base64').toString('utf-8')
+  return b64urlDecodeBuffer(str).toString('utf-8')
 }
 
 function b64urlDecodeBuffer(str: string): Buffer {
@@ -34,23 +38,26 @@ export function validateLicense(token: string | undefined): LicenseResult {
     return { valid: false, tier: null, issued: null, error: 'No license key provided' }
   }
 
-  const secret = process.env.LICENSE_SIGNING_SECRET
-  if (!secret) {
-    return { valid: false, tier: null, issued: null, error: 'LICENSE_SIGNING_SECRET not configured' }
-  }
-
   const parts = token.split('.')
   if (parts.length !== 3) {
     return { valid: false, tier: null, issued: null, error: 'Invalid token format' }
   }
 
   const [headerB64, payloadB64, sigB64] = parts
-  const signingInput = `${headerB64}.${payloadB64}`
 
-  const expected = createHmac('sha256', secret).update(signingInput).digest()
-  const received = b64urlDecodeBuffer(sigB64)
+  let signatureOk = false
+  try {
+    signatureOk = verify(
+      null,
+      Buffer.from(`${headerB64}.${payloadB64}`),
+      createPublicKey(LICENSE_PUBLIC_KEY_PEM),
+      b64urlDecodeBuffer(sigB64),
+    )
+  } catch {
+    return { valid: false, tier: null, issued: null, error: 'Invalid signature' }
+  }
 
-  if (expected.length !== received.length || !timingSafeEqual(expected, received)) {
+  if (!signatureOk) {
     return { valid: false, tier: null, issued: null, error: 'Invalid signature' }
   }
 
@@ -74,13 +81,13 @@ export const TRIAL_COOKIE = 'jf_trial'
 /**
  * Returns how many full days are left in the trial, or null if the cookie is
  * absent / tampered / already expired. Pass the raw cookie value and the
- * same secret used in proxy.ts (LICENSE_SIGNING_SECRET ?? fallback).
+ * instance's TRIAL_SECRET.
  */
 export function parseTrialCookie(
   value: string | undefined,
   secret: string,
 ): { daysLeft: number } | null {
-  if (!value) return null
+  if (!value || !secret) return null
   const dot = value.indexOf('.')
   if (dot === -1) return null
   const ts = value.slice(0, dot)
@@ -93,22 +100,4 @@ export function parseTrialCookie(
   if (isNaN(startedAt) || startedAt <= 0) return null
   const daysLeft = Math.max(0, TRIAL_DAYS - Math.floor((Date.now() - startedAt) / 86_400_000))
   return daysLeft > 0 ? { daysLeft } : null
-}
-
-/** Generates a signed JWT for a given tier. Used by the license key generator script. */
-export function signLicense(tier: LicenseTier, email?: string): string {
-  const secret = process.env.LICENSE_SIGNING_SECRET
-  if (!secret) throw new Error('LICENSE_SIGNING_SECRET not set')
-
-  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
-    .toString('base64url')
-  const payload = Buffer.from(
-    JSON.stringify({ tier, issued: new Date().toISOString().slice(0, 10), ...(email ? { email } : {}) }),
-  ).toString('base64url')
-
-  const sig = createHmac('sha256', secret)
-    .update(`${header}.${payload}`)
-    .digest('base64url')
-
-  return `${header}.${payload}.${sig}`
 }

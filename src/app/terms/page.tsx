@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export const metadata = {
   title: 'Terms & Conditions - JobFlow',
   description: 'JobFlow terms of use, license grant, and purchase policy.',
@@ -14,9 +16,9 @@ export default function TermsPage() {
     }}>
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
 
-        <a href="/" style={{ fontSize: 13, color: '#7d8590', textDecoration: 'none', display: 'inline-block', marginBottom: 40 }}>
+        <Link href="/" style={{ fontSize: 13, color: '#7d8590', textDecoration: 'none', display: 'inline-block', marginBottom: 40 }}>
           ← Back to home
-        </a>
+        </Link>
 
         <h1 style={{ fontSize: 30, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 8 }}>
           Terms &amp; Conditions

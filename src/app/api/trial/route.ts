@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 import { createDataProvider } from '@/lib/db'
 
 function validateSecret(req: NextRequest): boolean {
-  const secret = process.env.LICENSE_SIGNING_SECRET
+  const secret = process.env.TRIAL_SECRET
   if (!secret) return false
   const provided = req.headers.get('x-internal-secret')
   if (!provided) return false

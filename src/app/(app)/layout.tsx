@@ -12,7 +12,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     const trialCookieVal = cookieStore.get(TRIAL_COOKIE)?.value
     const trial = parseTrialCookie(
       trialCookieVal,
-      process.env.LICENSE_SIGNING_SECRET ?? '',
+      process.env.TRIAL_SECRET ?? '',
     )
     trialDaysLeft = trial?.daysLeft ?? null
   }

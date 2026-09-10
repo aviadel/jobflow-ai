@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# License signing key — NEVER commit this
+license-private-key.pem
+*.pem
