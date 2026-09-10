@@ -474,7 +474,7 @@ export default async function LandingPage({
           <span style={{ fontSize: 14, fontWeight: 600, color: MUTED }}>JobFlow</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <a href="mailto:info@jobflow-ai.app" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>info@jobflow-ai.app</a>
+          <span style={{ fontSize: 12, color: MUTED }}>info@jobflow-ai.app</span>
           <Link href="/terms" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Terms &amp; Conditions</Link>
           <span style={{ fontSize: 12, color: MUTED }}>Self-hosted · Vercel + Claude API · One-time purchase</span>
         </div>

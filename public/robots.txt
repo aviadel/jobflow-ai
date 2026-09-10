@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /features/
+Allow: /terms
+Allow: /how-it-works
+
+Disallow: /api/
+Disallow: /new
+Disallow: /setup
+Disallow: /onboarding
+Disallow: /dashboard
+Disallow: /tracker
+Disallow: /audit
+Disallow: /profile
