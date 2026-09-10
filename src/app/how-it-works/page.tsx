@@ -188,6 +188,7 @@ export default function HowItWorksPage() {
               <>Add notes to any entry - interview feedback, recruiter name, follow-up date, anything you want to remember about this application.</>,
               <>Click through to re-open the generated CV or cover letter for that application at any time.</>,
             ]}
+            tip="Tracker data is stored in your own database. With Postgres configured (recommended - free on Vercel), all your applications persist permanently. Without it, data is temporary and may be lost when the server restarts. Set DATA_PROVIDER=postgres in your Vercel environment variables to enable persistent storage."
           />
 
           <Feature

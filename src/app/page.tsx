@@ -257,10 +257,10 @@ export default async function LandingPage({
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, fontWeight: 600, letterSpacing: '.1em', color: ACCENT, display: 'block', marginBottom: 10 }}>01</span>
               <h3 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 10, color: TEXT }}>Deploy to Vercel</h3>
               <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.7, marginBottom: 16 }}>
-                Click &quot;Deploy free&quot; above and follow the Vercel clone flow. On the environment variables step, add your three keys. Vercel builds and deploys in about 90 seconds.
+                Click &quot;Deploy free&quot; above and follow the Vercel clone flow. Add your three required keys, then go to Vercel <strong style={{ color: TEXT }}>Storage → Create Database → Postgres</strong> (free tier) — Vercel sets <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>POSTGRES_URL</span> automatically. Add <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>DATA_PROVIDER=postgres</span> and redeploy.
               </p>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'LICENSE_SIGNING_SECRET'].map((v) => (
+                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'LICENSE_SIGNING_SECRET', 'DATA_PROVIDER'].map((v) => (
                   <span key={v} style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 10.5, background: SURFACE, border: `1px solid ${BORDER2}`, borderRadius: 4, padding: '3px 7px', color: TEXT }}>{v}</span>
                 ))}
               </div>
@@ -274,6 +274,8 @@ export default async function LandingPage({
                 { k: 'ANTHROPIC_API_KEY',       v: 'sk-ant-api03-••••••••••••••••' },
                 { k: 'APP_PASSWORD',             v: '••••••••••' },
                 { k: 'LICENSE_SIGNING_SECRET',   v: '••••••••••••••••••••••' },
+                { k: 'DATA_PROVIDER',            v: 'postgres' },
+                { k: 'POSTGRES_URL',             v: 'postgres://••••@••••/verceldb' },
               ].map(({ k, v }) => (
                 <div key={k} style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', borderBottom: `1px solid ${BORDER}`, padding: '9px 14px', gap: 12, alignItems: 'center' }}>
                   <span style={{ fontFamily: 'var(--font-geist-mono), monospace', color: TEXT, fontSize: 11, fontWeight: 500 }}>{k}</span>
@@ -305,7 +307,7 @@ export default async function LandingPage({
                 {[
                   { label: 'Claude API key',  detail: 'ANTHROPIC_API_KEY is set' },
                   { label: 'License key',     detail: 'Valid - starter tier' },
-                  { label: 'Storage',         detail: 'json provider connected' },
+                  { label: 'Storage',         detail: 'Postgres connected' },
                   { label: 'App password',    detail: 'APP_PASSWORD is set' },
                 ].map(({ label, detail }) => (
                   <div key={label} style={{ background: 'rgba(63,185,80,.08)', border: '1px solid rgba(63,185,80,.25)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -432,7 +434,7 @@ export default async function LandingPage({
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED, marginBottom: 14 }}>Professional</div>
               <div style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-.03em', color: TEXT, lineHeight: 1, marginBottom: 4 }}>€49</div>
               <div style={{ fontSize: 12, color: MUTED, marginBottom: 24 }}>one-time</div>
-              {['Everything in Starter', 'Resume audit', 'Application Q&A', 'Google Sheets adapter', '12 months updates'].map((f) => (
+              {['Everything in Starter', 'Resume audit', 'Application Q&A', 'Postgres + Sheets storage', '12 months updates'].map((f) => (
                 <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
                   <span style={{ color: GREEN, flexShrink: 0 }}>✓</span>{f}
                 </div>
@@ -452,7 +454,7 @@ export default async function LandingPage({
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED, marginBottom: 14 }}>Lifetime</div>
               <div style={{ fontSize: 44, fontWeight: 700, letterSpacing: '-.03em', color: MUTED, lineHeight: 1, marginBottom: 4 }}>-</div>
               <div style={{ fontSize: 12, color: MUTED, marginBottom: 24 }}>one-time</div>
-              {['Everything in Professional', 'AI job suggestions', 'Supabase adapter', 'Updates forever'].map((f) => (
+              {['Everything in Professional', 'AI job suggestions', 'Custom integrations', 'Updates forever'].map((f) => (
                 <div key={f} style={{ fontSize: 13, color: MUTED, padding: '4px 0', display: 'flex', gap: 9, alignItems: 'baseline' }}>
                   <span style={{ color: BORDER2, flexShrink: 0 }}>-</span>{f}
                 </div>
