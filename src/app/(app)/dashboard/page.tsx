@@ -117,7 +117,7 @@ export default async function DashboardPage() {
           View tracker ({total})
         </Link>
         <Link
-          href="/onboarding"
+          href="/profile"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             background: '#F8F7F4', color: '#6B6660', padding: '10px 20px',

@@ -132,7 +132,7 @@ export default function HowItWorksPage() {
           How it works
         </h1>
         <p style={{ fontSize: 15, color: MUTED, maxWidth: 480, lineHeight: 1.65, marginBottom: 56 }}>
-          Step-by-step instructions for every feature. If you have not set up your profile yet, start at <Path>/onboarding</Path> first.
+          Step-by-step instructions for every feature. New here? Start at <Path>/onboarding</Path>. To update your profile later, go to <Path>/profile</Path>.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
@@ -198,8 +198,8 @@ export default function HowItWorksPage() {
             pro
             steps={[
               <>Go to <Path>/audit</Path>. JobFlow scores your current profile CV for ATS (applicant tracking system) compatibility.</>,
-              <>Review the keyword gap analysis - it compares your profile against the target roles you set at <Path>/onboarding</Path>.</>,
-              <>Fix the flagged issues: go to <Path>/onboarding</Path>, update the relevant sections (skills, experience bullets, summary), then save.</>,
+              <>Review the keyword gap analysis - it compares your profile against the target roles you set at <Path>/profile</Path>.</>,
+              <>Fix the flagged issues: go to <Path>/profile</Path>, update the relevant sections (skills, experience bullets, summary), then save.</>,
               <>Come back to <Path>/audit</Path> and re-run the audit to see your updated score.</>,
             ]}
             tip="Run the audit after completing your profile, and again after any major profile update. Target a score above 75 before applying to competitive roles."

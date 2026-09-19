@@ -71,13 +71,38 @@ export default function OnboardingPage() {
   // File states
   const [cvFile, setCvFile] = useState<File | null>(null)
   const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [photoData, setPhotoData] = useState<string | null>(null)
   const [liPdfFile, setLiPdfFile] = useState<File | null>(null)
 
   const [cvDrag, setCvDrag] = useState(false)
   const [photoDrag, setPhotoDrag] = useState(false)
   const [liDrag, setLiDrag] = useState(false)
 
+  const [cvWithPhoto, setCvWithPhoto] = useState(true)
+
   const [pending, setPending] = useState(false)
+
+  async function downscalePhoto(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      img.onload = () => {
+        const size = 200
+        const canvas = document.createElement('canvas')
+        canvas.width = size
+        canvas.height = size
+        const ctx = canvas.getContext('2d')!
+        // Crop to square from center
+        const min = Math.min(img.width, img.height)
+        const sx = (img.width - min) / 2
+        const sy = (img.height - min) / 2
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size)
+        URL.revokeObjectURL(url)
+        resolve(canvas.toDataURL('image/jpeg', 0.85))
+      }
+      img.src = url
+    })
+  }
 
   const completedCount = Object.values(filled).filter(Boolean).length
   const circumference = 2 * Math.PI * 13 // r=13
@@ -101,6 +126,8 @@ export default function OnboardingPage() {
     fd.set('companyStages', JSON.stringify(stages))
     if (cvFile) fd.set('cv', cvFile)
     if (photoFile) fd.set('photoFileName', photoFile.name)
+    if (photoData) fd.set('photoData', photoData)
+    fd.set('cvWithPhoto', String(cvWithPhoto))
     if (liPdfFile) fd.set('linkedinPdfName', liPdfFile.name)
     await saveProfile(fd)
   }
@@ -147,21 +174,98 @@ export default function OnboardingPage() {
       <style>{RESPONSIVE}</style>
       <form ref={formRef} onSubmit={handleSubmit}>
 
+        {/* ── CARD: Contact ───────────────────────────── */}
+        <Card icon="📋" title="Contact details" subtitle="Appears at the top of your generated CV" badge="Optional">
+          <Field label="Full name">
+            <input
+              name="name"
+              type="text"
+              placeholder="e.g. Aviad Elisha"
+              style={inputStyle}
+            />
+          </Field>
+          <div className="jf-two-col" style={{ marginBottom: 0 }}>
+            <Field label="Email" style={{ marginBottom: 0 }}>
+              <input
+                name="email"
+                type="email"
+                placeholder="aviad@example.com"
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Phone" style={{ marginBottom: 0 }}>
+              <input
+                name="phone"
+                type="tel"
+                placeholder="+972 50 000 0000"
+                style={inputStyle}
+              />
+            </Field>
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <Field label="City &amp; country" style={{ marginBottom: 0 }}>
+              <input
+                name="city"
+                type="text"
+                placeholder="e.g. Tel Aviv, Israel"
+                style={inputStyle}
+              />
+              <FieldNote>City and country only - no street address needed.</FieldNote>
+            </Field>
+          </div>
+        </Card>
+
         {/* ── CARD: Photo ─────────────────────────────── */}
         <Card icon="🪪" title="Profile photo" subtitle="Used on your generated CVs" badge="Optional">
           <UploadZone
             accept="image/png,image/jpeg,image/webp"
             file={photoFile}
-            onFile={(f) => setPhotoFile(f)}
-            onRemove={() => setPhotoFile(null)}
+            onFile={async (f) => {
+              setPhotoFile(f)
+              const data = await downscalePhoto(f)
+              setPhotoData(data)
+            }}
+            onRemove={() => { setPhotoFile(null); setPhotoData(null) }}
             isDragging={photoDrag}
             onDragOver={() => setPhotoDrag(true)}
             onDragLeave={() => setPhotoDrag(false)}
             label="Drop your photo here, or click to browse"
-            sub="Square works best — at least 300×300 px"
+            sub="Square works best - at least 300x300 px"
             types={['.jpg', '.png', '.webp']}
             icon="🖼️"
+            preview={photoData ?? undefined}
           />
+          {photoFile && (
+            <div style={{ marginTop: 16 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: '#1A1917', display: 'block', marginBottom: 10 }}>
+                CV template
+              </label>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {[
+                  { value: true, label: 'With photo', desc: 'Photo in top-right corner' },
+                  { value: false, label: 'Without photo', desc: 'Clean text-only layout' },
+                ].map(({ value, label, desc }) => (
+                  <button
+                    key={String(value)}
+                    type="button"
+                    onClick={() => setCvWithPhoto(value)}
+                    style={{
+                      flex: 1, padding: '10px 14px', borderRadius: 8, cursor: 'pointer',
+                      border: `2px solid ${cvWithPhoto === value ? '#2362D4' : '#D9D6CE'}`,
+                      background: cvWithPhoto === value ? '#EBF0FC' : '#F8F7F4',
+                      textAlign: 'left', transition: 'all 0.12s',
+                    }}
+                  >
+                    <div style={{ fontSize: 13, fontWeight: 600, color: cvWithPhoto === value ? '#2362D4' : '#1A1917' }}>{label}</div>
+                    <div style={{ fontSize: 12, color: '#6B6660', marginTop: 2 }}>{desc}</div>
+                  </button>
+                ))}
+              </div>
+              <p style={{ fontSize: 12, color: '#A8A29E', marginTop: 8 }}>
+                Israeli market typically prefers without photo. European market often includes one.
+              </p>
+            </div>
+          )}
         </Card>
 
         {/* ── CARD: CV Upload ──────────────────────────── */}
@@ -450,7 +554,7 @@ function Card({
 function UploadZone({
   accept, file, onFile, onRemove,
   isDragging, onDragOver, onDragLeave,
-  label, sub, types, icon, compact,
+  label, sub, types, icon, compact, preview,
 }: {
   accept: string
   file: File | null
@@ -464,6 +568,7 @@ function UploadZone({
   types: string[]
   icon: string
   compact?: boolean
+  preview?: string
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -474,10 +579,15 @@ function UploadZone({
         padding: '14px 18px', borderRadius: 8,
         background: '#F0FDF4', border: '1px solid #BBF7D0',
       }}>
-        <span style={{ fontSize: 20 }}>{icon}</span>
+        {preview
+          ? <img src={preview} alt="Profile photo" style={{ width: 48, height: 48, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+          : <span style={{ fontSize: 20 }}>{icon}</span>
+        }
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>{file.name}</div>
-          <div style={{ fontSize: 12, color: '#14532D', marginTop: 2 }}>✓ Text will be extracted on save — Claude uses this for every generation</div>
+          <div style={{ fontSize: 12, color: '#14532D', marginTop: 2 }}>
+            {preview ? '✓ Photo will be included in your CV' : '✓ Text will be extracted on save - Claude uses this for every generation'}
+          </div>
         </div>
         <button
           type="button"

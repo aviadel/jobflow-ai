@@ -25,15 +25,20 @@ export interface Application {
 
 export interface UserProfile {
   name?: string
-  cvText?: string          // parsed plain text from the uploaded CV
+  email?: string
+  phone?: string
+  city?: string             // city + country, e.g. "Tel Aviv, Israel"
+  cvText?: string           // parsed plain text from the uploaded CV
   targetRoles: string[]
   careerLevel: string
   workArrangement: string
   preferredIndustries: string[]
   companyStages: string[]
   locations: string[]
-  jobSectionsCount?: number   // how many job sections to generate (2-6, default 3)
+  jobSectionsCount?: number  // how many job sections to generate (2-6, default 3)
+  cvWithPhoto?: boolean      // whether to include photo in generated CV
   cvFileName?: string
+  photoData?: string         // base64 data URL of the downscaled profile photo (~200x200)
   photoFileName?: string
   linkedinAbout?: string
   linkedinSkills?: string

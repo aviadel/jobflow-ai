@@ -18,13 +18,26 @@ const RESPONSIVE = `
 
 // ── DOCX download ─────────────────────────────────────────────────────────────
 
+interface ProfileMeta {
+  name?: string
+  email?: string
+  phone?: string
+  city?: string
+  photoData?: string
+  cvWithPhoto?: boolean
+}
+
 async function downloadDocx(
   sections: Record<string, string>,
   role: string,
   company: string,
   type: 'cv' | 'cl',
+  profile?: ProfileMeta,
 ) {
-  const { Document, Paragraph, TextRun, HeadingLevel, Packer } = await import('docx')
+  const {
+    Document, Paragraph, TextRun, HeadingLevel, Packer,
+    AlignmentType, ImageRun, TableRow, TableCell, Table, WidthType, BorderStyle,
+  } = await import('docx')
 
   function textParagraphs(text: string, heading?: string) {
     const items: InstanceType<typeof Paragraph>[] = []
@@ -42,26 +55,109 @@ async function downloadDocx(
     return items
   }
 
-  let children: InstanceType<typeof Paragraph>[]
+  // Convert a base64 data URL to Uint8Array for ImageRun
+  async function dataUrlToBuffer(dataUrl: string): Promise<Uint8Array> {
+    const res = await fetch(dataUrl)
+    const buf = await res.arrayBuffer()
+    return new Uint8Array(buf)
+  }
+
+  let children: InstanceType<typeof Paragraph | typeof Table>[]
 
   if (type === 'cv') {
-    children = [
-      new Paragraph({
-        children: [new TextRun({ text: `${role} · ${company}`, bold: true, size: 32 })],
-        spacing: { after: 200 },
-      }),
-      ...textParagraphs(sections['summary'] ?? '', 'Summary'),
-      ...Object.keys(sections)
-        .filter(k => /^job\d+$/.test(k))
-        .sort((a, b) => parseInt(a.slice(3)) - parseInt(b.slice(3)))
-        .flatMap((k, i) => textParagraphs(sections[k], `Experience ${i + 1}`)),
-    ]
+    const showPhoto = profile?.cvWithPhoto && profile?.photoData
+    const contactLine = [profile?.email, profile?.phone, profile?.city].filter(Boolean).join('  |  ')
+
+    if (showPhoto && profile?.photoData) {
+      // Two-column header: text left, photo right
+      const imgBuf = await dataUrlToBuffer(profile.photoData)
+      const noBorder = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' }
+      const headerTable = new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                borders: { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder },
+                width: { size: 80, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: profile.name ?? `${role} · ${company}`, bold: true, size: 36 })],
+                    spacing: { after: 60 },
+                  }),
+                  new Paragraph({
+                    children: [new TextRun({ text: `${role} at ${company}`, size: 22, color: '555555' })],
+                    spacing: { after: 60 },
+                  }),
+                  ...(contactLine ? [new Paragraph({
+                    children: [new TextRun({ text: contactLine, size: 18, color: '777777' })],
+                    spacing: { after: 0 },
+                  })] : []),
+                ],
+              }),
+              new TableCell({
+                borders: { top: noBorder, bottom: noBorder, left: noBorder, right: noBorder },
+                width: { size: 20, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.RIGHT,
+                    children: [new ImageRun({ data: imgBuf, transformation: { width: 80, height: 80 }, type: 'jpg' })],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      })
+      children = [
+        headerTable,
+        new Paragraph({ text: '', spacing: { after: 120 } }),
+        ...textParagraphs(sections['summary'] ?? '', 'Summary'),
+        ...Object.keys(sections)
+          .filter(k => /^job\d+$/.test(k))
+          .sort((a, b) => parseInt(a.slice(3)) - parseInt(b.slice(3)))
+          .flatMap((k, i) => textParagraphs(sections[k], `Experience ${i + 1}`)),
+      ]
+    } else {
+      // Text-only layout
+      children = [
+        ...(profile?.name ? [
+          new Paragraph({
+            children: [new TextRun({ text: profile.name, bold: true, size: 36 })],
+            spacing: { after: 40 },
+          }),
+          new Paragraph({
+            children: [new TextRun({ text: `${role} at ${company}`, size: 22, color: '555555' })],
+            spacing: { after: contactLine ? 40 : 160 },
+          }),
+          ...(contactLine ? [new Paragraph({
+            children: [new TextRun({ text: contactLine, size: 18, color: '777777' })],
+            spacing: { after: 160 },
+          })] : []),
+        ] : [
+          new Paragraph({
+            children: [new TextRun({ text: `${role} · ${company}`, bold: true, size: 32 })],
+            spacing: { after: 200 },
+          }),
+        ]),
+        ...textParagraphs(sections['summary'] ?? '', 'Summary'),
+        ...Object.keys(sections)
+          .filter(k => /^job\d+$/.test(k))
+          .sort((a, b) => parseInt(a.slice(3)) - parseInt(b.slice(3)))
+          .flatMap((k, i) => textParagraphs(sections[k], `Experience ${i + 1}`)),
+      ]
+    }
   } else {
     children = [
       new Paragraph({
-        children: [new TextRun({ text: `Cover Letter — ${role} at ${company}`, bold: true, size: 28 })],
+        children: [new TextRun({ text: `Cover Letter - ${role} at ${company}`, bold: true, size: 28 })],
         spacing: { after: 200 },
       }),
+      ...(profile?.name ? [new Paragraph({
+        children: [new TextRun({ text: profile.name, size: 22, color: '555555' })],
+        spacing: { after: 160 },
+      })] : []),
       ...textParagraphs(sections['coverLetter'] ?? ''),
     ]
   }
@@ -201,7 +297,23 @@ function ProLock({ feature }: { feature: string }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function NewClient({ tier }: { tier: Tier }) {
+export function NewClient({
+  tier,
+  profileName,
+  profileEmail,
+  profilePhone,
+  profileCity,
+  photoData,
+  cvWithPhoto,
+}: {
+  tier: Tier
+  profileName?: string
+  profileEmail?: string
+  profilePhone?: string
+  profileCity?: string
+  photoData?: string
+  cvWithPhoto?: boolean
+}) {
   // Phase 1 — JD input
   const [inputMode, setInputMode] = useState<'url' | 'text'>('url')
   const [jdUrl, setJdUrl] = useState('')
@@ -612,14 +724,14 @@ export function NewClient({ tier }: { tier: Tier }) {
         <div className="jf-action-bar-downloads">
           <button
             style={{ ...btn, fontSize: 12 }}
-            onClick={() => downloadDocx(content, role, company, 'cv')}
+            onClick={() => downloadDocx(content, role, company, 'cv', { name: profileName, email: profileEmail, phone: profilePhone, city: profileCity, photoData, cvWithPhoto })}
             title="Download CV as Word document"
           >
             ↓ CV
           </button>
           <button
             style={{ ...btn, fontSize: 12 }}
-            onClick={() => downloadDocx(content, role, company, 'cl')}
+            onClick={() => downloadDocx(content, role, company, 'cl', { name: profileName, email: profileEmail, phone: profilePhone, city: profileCity })}
             disabled={!content['coverLetter']}
             title="Download cover letter as Word document"
           >
