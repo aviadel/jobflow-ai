@@ -493,6 +493,7 @@ export default function LandingPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: MUTED }}>info@jobflow-ai.app</span>
+          <Link href="/install" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Install guide</Link>
           <Link href="/terms" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Terms &amp; Conditions</Link>
           <span style={{ fontSize: 12, color: MUTED }}>Self-hosted · Vercel + Claude API · One-time purchase</span>
         </div>

@@ -3,6 +3,7 @@ Allow: /
 Allow: /features/
 Allow: /terms
 Allow: /how-it-works
+Allow: /install
 
 Disallow: /api/
 Disallow: /new
