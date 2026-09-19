@@ -1,4 +1,4 @@
-import { createHmac, createPublicKey, timingSafeEqual, verify } from 'crypto'
+import { createPublicKey, verify } from 'crypto'
 
 export type LicenseTier = 'starter' | 'professional' | 'lifetime'
 
@@ -198,35 +198,4 @@ export async function validateLemonLicense(
     tier: tierFromProductName(data.meta?.product_name),
     instanceId,
   }
-}
-
-export const TRIAL_DAYS = 7
-export const TRIAL_COOKIE = 'jf_trial'
-
-/**
- * Returns how many full days are left in the trial, or null if the cookie is
- * absent / tampered / already expired. Pass the raw cookie value and the
- * instance's TRIAL_SECRET.
- */
-export function parseTrialCookie(
-  value: string | undefined,
-  secret: string,
-): { daysLeft: number } | null {
-  if (!value || !secret) return null
-  const dot = value.indexOf('.')
-  if (dot === -1) return null
-  const ts = value.slice(0, dot)
-  const sig = value.slice(dot + 1)
-  const expectedBuf = createHmac('sha256', secret).update(ts).digest()
-  let sigBuf: Buffer
-  try { sigBuf = Buffer.from(sig, 'hex') } catch { return null }
-  if (sigBuf.length !== expectedBuf.length || !timingSafeEqual(sigBuf, expectedBuf)) return null
-  const startedAt = parseInt(ts, 10)
-  if (isNaN(startedAt) || startedAt <= 0) return null
-  // Clamp elapsed time at zero: a start date in the future (clock skew, or a
-  // forged cookie) would otherwise subtract a negative and report more than a
-  // full trial remaining.
-  const elapsed = Math.max(0, Date.now() - startedAt)
-  const daysLeft = Math.max(0, TRIAL_DAYS - Math.floor(elapsed / 86_400_000))
-  return daysLeft > 0 ? { daysLeft } : null
 }

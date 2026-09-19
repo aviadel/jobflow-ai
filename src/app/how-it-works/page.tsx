@@ -198,8 +198,8 @@ export default function HowItWorksPage() {
             pro
             steps={[
               <>Go to <Path>/audit</Path>. JobFlow scores your current profile CV for ATS (applicant tracking system) compatibility.</>,
-              <>Review the keyword gap analysis - it compares your profile against the target roles you set at <Path>/profile</Path>.</>,
-              <>Fix the flagged issues: go to <Path>/profile</Path>, update the relevant sections (skills, experience bullets, summary), then save.</>,
+              <>Review the keyword gap analysis - it compares your profile against the target roles you set at <Path>/onboarding</Path>.</>,
+              <>Fix the flagged issues: go to <Path>/onboarding</Path>, update the relevant sections (skills, experience bullets, summary), then save.</>,
               <>Come back to <Path>/audit</Path> and re-run the audit to see your updated score.</>,
             ]}
             tip="Run the audit after completing your profile, and again after any major profile update. Target a score above 75 before applying to competitive roles."

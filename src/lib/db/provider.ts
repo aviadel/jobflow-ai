@@ -27,10 +27,6 @@ export interface DataProvider {
   saveDocument(doc: GeneratedDocument): Promise<GeneratedDocument>
   listDocuments(applicationId: string): Promise<GeneratedDocument[]>
 
-  // Instance config (trial)
-  getTrialStart(): Promise<number | null>
-  setTrialStart(ts: number): Promise<void>
-
   // Cached Lemon Squeezy license verdict
   getLicenseCache(): Promise<LicenseCache | null>
   setLicenseCache(c: LicenseCache): Promise<void>

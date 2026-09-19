@@ -1,8 +1,16 @@
 import Link from 'next/link'
+import { isSignedLicense } from '@/lib/license'
 import { resolveLicense } from '@/lib/license-server'
 import { createDataProvider } from '@/lib/db'
 
 export const metadata = { title: 'Setup — JobFlow' }
+
+// This page exists to report the LIVE configuration. Without this it renders
+// once at build time and then reports whatever the environment looked like
+// during `next build` - so a buyer who fixes a variable and redeploys from
+// cache would still be told it is broken. Verified: with it removed, the page
+// reported ANTHROPIC_API_KEY as set when it was absent at runtime.
+export const dynamic = 'force-dynamic'
 
 interface Check {
   label: string
@@ -25,37 +33,40 @@ async function runChecks(): Promise<Check[]> {
       : 'Add ANTHROPIC_API_KEY to your Vercel project → Settings → Environment Variables. Get a key at console.anthropic.com.',
   })
 
-  // 2. Trial secret — without it the trial gate cannot run at all
-  const hasTrialSecret = Boolean(process.env.TRIAL_SECRET)
-  checks.push({
-    label: 'Trial secret',
-    ok: hasTrialSecret,
-    detail: hasTrialSecret
-      ? 'TRIAL_SECRET is set'
-      : 'TRIAL_SECRET is missing - the app cannot run without it',
-    fix: hasTrialSecret
-      ? undefined
-      : 'Generate a random value by running:  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"  then add it as TRIAL_SECRET in Vercel → Settings → Environment Variables and redeploy.',
-  })
-
-  // 3. License key
+  // 2. License key — JobFlow is paid-only, nothing works without one
   const license = await resolveLicense()
   checks.push({
     label: 'License key',
     ok: license.valid,
     detail: license.valid
       ? `Valid - ${license.tier} tier`
-      : process.env.JOBFLOW_LICENSE_KEY
-        ? license.error ?? 'License key could not be verified'
-        : 'No license key set - running on the free trial',
+      : license.hasKey
+        ? license.error ?? 'License key is set but could not be verified'
+        : 'No license key set - JobFlow requires a license to run',
     fix: license.valid
       ? undefined
-      : license.error
-        ? undefined
-        : 'Set JOBFLOW_LICENSE_KEY in Vercel environment variables to the key from your purchase email, then redeploy.',
+      : license.hasKey
+        ? 'Check the key was pasted in full with no stray spaces, and that you redeployed after setting it. Env var changes only apply on a new deployment.'
+        : 'Buy a license at jobflow-ai.app, then set JOBFLOW_LICENSE_KEY in Vercel → Settings → Environment Variables to the key from your purchase email and redeploy.',
   })
 
-  // 3. Storage
+  // 3. Internal secret — protects the middleware's license-check endpoint
+  const hasInternalSecret = Boolean(process.env.INTERNAL_SECRET)
+  const needsInternalSecret = !isSignedLicense(process.env.JOBFLOW_LICENSE_KEY ?? '')
+  checks.push({
+    label: 'Internal secret',
+    ok: hasInternalSecret || !needsInternalSecret,
+    detail: hasInternalSecret
+      ? 'INTERNAL_SECRET is set'
+      : needsInternalSecret
+        ? 'INTERNAL_SECRET is missing - required to verify your license key'
+        : 'Not required for this license type',
+    fix: hasInternalSecret || !needsInternalSecret
+      ? undefined
+      : 'Generate a random value by running:  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"  then add it as INTERNAL_SECRET in Vercel → Settings → Environment Variables and redeploy.',
+  })
+
+  // 4. Storage
   const providerName = process.env.DATA_PROVIDER ?? 'json'
   const knownProviders = ['json', 'postgres', 'sheets']
   if (!knownProviders.includes(providerName)) {

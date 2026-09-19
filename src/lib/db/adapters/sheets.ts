@@ -256,25 +256,7 @@ export class SheetsProvider implements DataProvider {
     return this._docs.get(applicationId) ?? []
   }
 
-  // ── Instance config (trial) ───────────────────────────────
-
-  async getTrialStart(): Promise<number | null> {
-    await ensureSheets(this.id)
-    const res = await sheetsGet(`/${this.id}/values/config!A1`)
-    const data = await res.json() as { values?: string[][] }
-    const raw = data.values?.[0]?.[0]
-    if (!raw) return null
-    const n = parseInt(raw, 10)
-    return isNaN(n) ? null : n
-  }
-
-  async setTrialStart(ts: number): Promise<void> {
-    await ensureSheets(this.id)
-    await sheetsPut(
-      `/${this.id}/values/config!A1?valueInputOption=RAW`,
-      { values: [[String(ts)]] },
-    )
-  }
+  // ── Cached license verdict ────────────────────────────────
 
   async getLicenseCache(): Promise<LicenseCache | null> {
     await ensureSheets(this.id)

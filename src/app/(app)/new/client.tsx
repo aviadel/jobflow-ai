@@ -80,7 +80,7 @@ async function downloadDocx(
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type Tier = LicenseTier | 'trial'
+type Tier = LicenseTier
 
 type JDAnalysis = {
   company: string

@@ -11,4 +11,3 @@ Disallow: /onboarding
 Disallow: /dashboard
 Disallow: /tracker
 Disallow: /audit
-Disallow: /profile

@@ -93,23 +93,10 @@ export const metadata = {
   description: 'Generate tailored CVs and cover letters for every application. Self-hosted, one-time purchase, powered by Claude.',
 }
 
-export default async function LandingPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ expired?: string }>
-}) {
-  const { expired } = await searchParams
-
+export default function LandingPage() {
   return (
     <div style={{ fontFamily: 'var(--font-geist-sans), system-ui, sans-serif', background: BG, minHeight: '100vh', color: TEXT }}>
       <style>{RESPONSIVE}</style>
-
-      {/* Trial-expired banner */}
-      {expired && (
-        <div style={{ background: '#7f1d1d', color: '#fff', padding: '10px 24px', textAlign: 'center', fontSize: 14, fontWeight: 500 }}>
-          Your 7-day free trial has ended - purchase a license below to continue.
-        </div>
-      )}
 
       {/* Nav */}
       <nav style={{ maxWidth: 1080, margin: '0 auto', padding: '18px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${BORDER}` }}>
@@ -159,29 +146,29 @@ export default async function LandingPage({
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
             <a
-              href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai&env=ANTHROPIC_API_KEY,APP_PASSWORD,TRIAL_SECRET&envDescription=Your%20Claude%20API%20key%2C%20a%20password%20to%20protect%20your%20instance%2C%20and%20a%20random%20string%20for%20the%20trial%20gate&envLink=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai%23environment-variables&project-name=jobflow-ai&repository-name=jobflow-ai"
+              href="#pricing"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 background: ACCENT, color: '#fff', padding: '10px 20px', borderRadius: 6,
                 fontSize: 14, fontWeight: 600, textDecoration: 'none', border: `1px solid #1f6feb`,
               }}
             >
-              Deploy free &nbsp;↗
+              Get JobFlow - from €25
             </a>
-            <Link
-              href="/setup"
+            <a
+              href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai&env=ANTHROPIC_API_KEY,APP_PASSWORD,INTERNAL_SECRET,JOBFLOW_LICENSE_KEY&envDescription=Your%20Claude%20API%20key%2C%20a%20password%20to%20protect%20your%20instance%2C%20a%20random%20string%2C%20and%20your%20license%20key&envLink=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai%23environment-variables&project-name=jobflow-ai&repository-name=jobflow-ai"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 background: SURFACE, color: TEXT, padding: '10px 20px', borderRadius: 6,
                 fontSize: 14, fontWeight: 500, textDecoration: 'none', border: `1px solid ${BORDER2}`,
               }}
             >
-              Open app →
-            </Link>
+              Deploy to Vercel &nbsp;↗
+            </a>
           </div>
 
           <p style={{ marginTop: 16, fontSize: 12, color: MUTED }}>
-            → 7-day free trial - no credit card required.
+            → One-time purchase. Bring your own Claude API key.
           </p>
         </div>
       </div>
@@ -191,7 +178,7 @@ export default async function LandingPage({
         <div style={{ maxWidth: 1080, margin: '0 auto', padding: '0 32px', display: 'flex', overflowX: 'auto' }}>
           {[
             { num: '< 2 min',  label: 'per application' },
-            { num: '7',        label: 'day free trial' },
+            { num: '1',        label: 'one-time payment' },
             { num: '0',        label: 'subscriptions, ever' },
             { num: '∞',        label: 'applications per month' },
           ].map((s, i, arr) => (
@@ -257,10 +244,10 @@ export default async function LandingPage({
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, fontWeight: 600, letterSpacing: '.1em', color: ACCENT, display: 'block', marginBottom: 10 }}>01</span>
               <h3 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 10, color: TEXT }}>Deploy to Vercel</h3>
               <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.7, marginBottom: 16 }}>
-                Click &quot;Deploy free&quot; above and follow the Vercel clone flow. Add your three required keys, then go to Vercel <strong style={{ color: TEXT }}>Storage → Create Database → Postgres</strong> (free tier) — Vercel sets <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>POSTGRES_URL</span> automatically. Add <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>DATA_PROVIDER=postgres</span> and redeploy.
+                Click &quot;Deploy to Vercel&quot; above and follow the Vercel clone flow. Add your keys - including the license key from your purchase email - then go to Vercel <strong style={{ color: TEXT }}>Storage → Create Database → Postgres</strong> (free tier) — Vercel sets <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>POSTGRES_URL</span> automatically. Add <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11.5, color: TEXT }}>DATA_PROVIDER=postgres</span> and redeploy.
               </p>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'TRIAL_SECRET', 'DATA_PROVIDER'].map((v) => (
+                {['ANTHROPIC_API_KEY', 'APP_PASSWORD', 'INTERNAL_SECRET', 'JOBFLOW_LICENSE_KEY'].map((v) => (
                   <span key={v} style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 10.5, background: SURFACE, border: `1px solid ${BORDER2}`, borderRadius: 4, padding: '3px 7px', color: TEXT }}>{v}</span>
                 ))}
               </div>
@@ -273,7 +260,7 @@ export default async function LandingPage({
               {[
                 { k: 'ANTHROPIC_API_KEY',       v: 'sk-ant-api03-••••••••••••••••' },
                 { k: 'APP_PASSWORD',             v: '••••••••••' },
-                { k: 'TRIAL_SECRET',             v: '••••••••••••••••••••••' },
+                { k: 'INTERNAL_SECRET',          v: '••••••••••••••••••••••' },
                 { k: 'DATA_PROVIDER',            v: 'postgres' },
                 { k: 'POSTGRES_URL',             v: 'postgres://••••@••••/verceldb' },
               ].map(({ k, v }) => (
@@ -295,7 +282,7 @@ export default async function LandingPage({
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, fontWeight: 600, letterSpacing: '.1em', color: ACCENT, display: 'block', marginBottom: 10 }}>02</span>
               <h3 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 10, color: TEXT }}>Verify your config</h3>
               <p style={{ fontSize: 13.5, color: MUTED, lineHeight: 1.7, marginBottom: 16 }}>
-                Visit your Vercel URL and sign in with <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 12.5, color: TEXT }}>APP_PASSWORD</span> when prompted. You land on the config check - everything must be green before you continue. Your 7-day free trial starts on first visit.
+                Visit your Vercel URL and sign in with <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 12.5, color: TEXT }}>APP_PASSWORD</span> when prompted. You land on the config check - everything must be green before you continue.
               </p>
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: 11, color: MUTED, display: 'inline-block', background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 4, padding: '3px 8px' }}>/setup</span>
             </div>
@@ -398,7 +385,7 @@ export default async function LandingPage({
       </section>
 
       {/* Pricing */}
-      <section style={{ borderTop: `1px solid ${BORDER}`, background: SURFACE }}>
+      <section id="pricing" style={{ borderTop: `1px solid ${BORDER}`, background: SURFACE, scrollMarginTop: 0 }}>
         <div style={{ maxWidth: 1080, margin: '0 auto', padding: '72px 32px 80px' }}>
           <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 38px)', fontWeight: 700, letterSpacing: '-.025em', marginBottom: 10 }}>
             One-time purchase.

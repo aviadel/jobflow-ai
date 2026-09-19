@@ -136,17 +136,8 @@ export class JsonProvider implements DataProvider {
 
   private instanceFile() { return join(this.dir, 'instance.json') }
 
-  private async readInstance(): Promise<{ trialStart?: number; licenseCache?: LicenseCache }> {
+  private async readInstance(): Promise<{ licenseCache?: LicenseCache }> {
     return readJson(this.instanceFile(), {})
-  }
-
-  async getTrialStart(): Promise<number | null> {
-    return (await this.readInstance()).trialStart ?? null
-  }
-
-  async setTrialStart(ts: number): Promise<void> {
-    const data = await this.readInstance()
-    await writeJson(this.instanceFile(), { ...data, trialStart: ts })
   }
 
   async getLicenseCache(): Promise<LicenseCache | null> {

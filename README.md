@@ -18,15 +18,18 @@ While you're there, set a spend limit under **Settings → Limits**. JobFlow typ
 
 ### 2. Deploy to Vercel
 
-Click **Deploy** on the [JobFlow site](https://jobflow-ai.app), or use the Vercel import flow directly. You'll be asked for three values:
+Buy a license at [jobflow-ai.app](https://jobflow-ai.app) first — JobFlow is paid-only and your key arrives by email straight after purchase.
+
+Then click **Deploy to Vercel**, or use the Vercel import flow directly. You'll be asked for four values:
 
 | Variable | What to put |
 |---|---|
 | `ANTHROPIC_API_KEY` | The key from step 1 |
+| `JOBFLOW_LICENSE_KEY` | The key from your purchase email |
 | `APP_PASSWORD` | Any password you choose — your browser prompts for it on first visit |
-| `TRIAL_SECRET` | A random string, see below |
+| `INTERNAL_SECRET` | A random string, see below |
 
-Generate `TRIAL_SECRET` with either of these:
+Generate `INTERNAL_SECRET` with either of these:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -36,7 +39,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 openssl rand -hex 32
 ```
 
-It's unique to your instance, isn't shared with anyone, and you never need to look at it again.
+It's unique to your instance and you never need to look at it again. It stops anyone else from poking the endpoint your app uses to check your license.
 
 ### 3. Add a database
 
@@ -80,7 +83,8 @@ This is what every generated document is built from, so it's worth doing properl
 |---|---|
 | `ANTHROPIC_API_KEY` | Your Claude API key |
 | `APP_PASSWORD` | Protects your instance behind a browser password prompt |
-| `TRIAL_SECRET` | Random per-instance string that signs your trial cookie |
+| `JOBFLOW_LICENSE_KEY` | Your key from the purchase email |
+| `INTERNAL_SECRET` | Random per-instance string protecting the license-check endpoint |
 
 **Storage** — pick one
 
@@ -95,7 +99,6 @@ This is what every generated document is built from, so it's worth doing properl
 
 | Variable | Purpose |
 |---|---|
-| `JOBFLOW_LICENSE_KEY` | Your key from the purchase email. Leave unset to use the 7-day trial |
 | `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics beacon token |
 
 See `.env.example` for the annotated version.
@@ -120,11 +123,11 @@ Full walkthrough at [/how-it-works](https://jobflow-ai.app/how-it-works). The sh
 
 ---
 
-## Trial and licensing
+## Licensing
 
-New instances get **7 days free**, starting on your first visit to a protected page. The start date is recorded server-side, so clearing cookies won't extend it.
+JobFlow is paid-only — there is no free trial. A valid license key is required before the app will do anything.
 
-After that you'll need a license key from [jobflow-ai.app](https://jobflow-ai.app). It arrives by email after purchase — set it as `JOBFLOW_LICENSE_KEY` in Vercel and redeploy.
+Buy at [jobflow-ai.app](https://jobflow-ai.app); the key arrives by email. Set it as `JOBFLOW_LICENSE_KEY` in Vercel and redeploy.
 
 | Tier | Includes |
 |---|---|
@@ -146,7 +149,7 @@ One-time purchase. No subscription. Claude API usage is billed to your own Anthr
 
 ## Troubleshooting
 
-**Every page redirects to `/setup`** — `TRIAL_SECRET` isn't set. See step 2.
+**Every page redirects to `/setup`** — Your license key is missing or invalid. Open `/setup`; the License key row says which. Remember that env var changes only apply after a redeploy.
 
 **"Storage" is amber on `/setup`** — You're on the default `json` provider and your data won't survive a restart. See step 3.
 

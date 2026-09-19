@@ -14,11 +14,11 @@ import { decideLicenseCheck, decideOnUnreachable } from '@/lib/license-check'
 import type { LicenseCache } from '@/lib/db/types'
 
 function validateSecret(req: NextRequest): boolean {
-  const secret = process.env.TRIAL_SECRET
+  const secret = process.env.INTERNAL_SECRET
   if (!secret) return false
   const provided = req.headers.get('x-internal-secret')
   if (!provided) return false
-  const expected = createHmac('sha256', secret).update('trial-internal').digest('hex')
+  const expected = createHmac('sha256', secret).update('license-internal').digest('hex')
   try {
     const providedBuf = Buffer.from(provided, 'hex')
     const expectedBuf = Buffer.from(expected, 'hex')

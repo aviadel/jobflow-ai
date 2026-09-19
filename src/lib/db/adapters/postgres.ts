@@ -146,22 +146,7 @@ export class PostgresProvider implements DataProvider {
     return rows.map(r => r.data as GeneratedDocument)
   }
 
-  // ── Instance config (trial) ───────────────────────────────
-
-  async getTrialStart(): Promise<number | null> {
-    await this.init()
-    const rows = await this.sql`SELECT value FROM jf_instance WHERE key = 'trial_start'`
-    if (!rows[0]) return null
-    const n = parseInt(rows[0].value as string, 10)
-    return isNaN(n) ? null : n
-  }
-
-  async setTrialStart(ts: number): Promise<void> {
-    await this.init()
-    await this.sql`
-      INSERT INTO jf_instance (key, value) VALUES ('trial_start', ${String(ts)})
-      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`
-  }
+  // ── Cached license verdict ────────────────────────────────
 
   async getLicenseCache(): Promise<LicenseCache | null> {
     await this.init()
