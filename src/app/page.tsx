@@ -64,6 +64,7 @@ const RESPONSIVE = `
     .jf-pricing-grid { grid-template-columns: 1fr; }
     .jf-howto-step { grid-template-columns: 1fr; gap: 24px; }
   }
+  .jf-email::after { content: attr(data-u) "\40" attr(data-d); font-size: 12px; color: #7d8590; }
 `
 
 const LOGO = (
@@ -493,7 +494,7 @@ export default function LandingPage() {
           <span style={{ fontSize: 14, fontWeight: 600, color: MUTED }}>JobFlow</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 12, color: MUTED }}>info@jobflow-ai.app</span>
+          <span className="jf-email" data-u="info" data-d="jobflow-ai.app" />
           <Link href="/install" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Install guide</Link>
           <Link href="/terms" style={{ fontSize: 12, color: MUTED, textDecoration: 'none' }}>Terms &amp; Conditions</Link>
           <span style={{ fontSize: 12, color: MUTED }}>Self-hosted · Vercel + Claude API · One-time purchase</span>
