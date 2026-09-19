@@ -39,8 +39,7 @@ export async function POST(req: NextRequest) {
     const answers = JSON.parse(match[0]) as { question: string; answer: string }[]
     return NextResponse.json({ answers })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    console.error('generate-answers error:', msg)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('generate-answers error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Answer generation failed — try again.' }, { status: 500 })
   }
 }

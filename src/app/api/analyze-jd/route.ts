@@ -5,7 +5,7 @@ import { createDataProvider } from '@/lib/db'
 
 export const runtime = 'nodejs'
 
-const PRIVATE_IP = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.)/
+const PRIVATE_IP = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|::1$|::ffff:)/i
 
 function isSafeUrl(raw: string): boolean {
   try {

@@ -21,9 +21,13 @@ export async function saveProfile(formData: FormData) {
     cvText = await parseCvToText(cvFile) || undefined
   }
 
-  // Photo: client sends a base64 data URL in 'photoData' after downscaling
+  // Photo: client sends a base64 data URL in 'photoData' after downscaling.
+  // Cap at 200 KB — a properly downscaled 200x200 JPEG is ~20 KB.
+  const PHOTO_MAX_BYTES = 200_000
   const photoDataRaw = formData.get('photoData') as string | null
-  const photoData = photoDataRaw && photoDataRaw.startsWith('data:image/')
+  const photoData = photoDataRaw
+    && photoDataRaw.startsWith('data:image/')
+    && photoDataRaw.length <= PHOTO_MAX_BYTES
     ? photoDataRaw
     : existing?.photoData
 
@@ -78,8 +82,11 @@ export async function updateProfile(formData: FormData) {
     cvText = await parseCvToText(cvFile) || undefined
   }
 
+  const PHOTO_MAX_BYTES = 200_000
   const photoDataRaw = formData.get('photoData') as string | null
-  const photoData = photoDataRaw && photoDataRaw.startsWith('data:image/')
+  const photoData = photoDataRaw
+    && photoDataRaw.startsWith('data:image/')
+    && photoDataRaw.length <= PHOTO_MAX_BYTES
     ? photoDataRaw
     : existing?.photoData
 

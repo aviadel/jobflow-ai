@@ -68,8 +68,7 @@ export async function POST(req: NextRequest) {
       _validationIssues: issues.length > 0 ? issues : undefined,
     })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err)
-    console.error('generate error:', msg)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('generate error:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Generation failed — try again.' }, { status: 500 })
   }
 }
