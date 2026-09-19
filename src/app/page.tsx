@@ -196,7 +196,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features */}
-      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '72px 32px 60px' }}>
+      <div id="features" style={{ maxWidth: 1080, margin: '0 auto', padding: '72px 32px 60px' }}>
         <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: MUTED, marginBottom: 24 }}>
           What&apos;s included
         </p>
@@ -259,10 +259,10 @@ export default function LandingPage() {
               </div>
               {[
                 { k: 'ANTHROPIC_API_KEY',       v: 'sk-ant-api03-••••••••••••••••' },
+                { k: 'JOBFLOW_LICENSE_KEY',      v: '••••••••••••••••••••••' },
                 { k: 'APP_PASSWORD',             v: '••••••••••' },
                 { k: 'INTERNAL_SECRET',          v: '••••••••••••••••••••••' },
                 { k: 'DATA_PROVIDER',            v: 'postgres' },
-                { k: 'POSTGRES_URL',             v: 'postgres://••••@••••/verceldb' },
               ].map(({ k, v }) => (
                 <div key={k} style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', borderBottom: `1px solid ${BORDER}`, padding: '9px 14px', gap: 12, alignItems: 'center' }}>
                   <span style={{ fontFamily: 'var(--font-geist-mono), monospace', color: TEXT, fontSize: 11, fontWeight: 500 }}>{k}</span>
@@ -292,10 +292,11 @@ export default function LandingPage() {
               </div>
               <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {[
-                  { label: 'Claude API key',  detail: 'ANTHROPIC_API_KEY is set' },
-                  { label: 'License key',     detail: 'Valid - starter tier' },
-                  { label: 'Storage',         detail: 'Postgres connected' },
-                  { label: 'App password',    detail: 'APP_PASSWORD is set' },
+                  { label: 'Claude API key',   detail: 'ANTHROPIC_API_KEY is set' },
+                  { label: 'License key',      detail: 'Valid - starter tier' },
+                  { label: 'Internal secret',  detail: 'INTERNAL_SECRET is set' },
+                  { label: 'Storage',          detail: 'Postgres connected' },
+                  { label: 'App password',     detail: 'APP_PASSWORD is set' },
                 ].map(({ label, detail }) => (
                   <div key={label} style={{ background: 'rgba(63,185,80,.08)', border: '1px solid rgba(63,185,80,.25)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ width: 16, height: 16, borderRadius: '50%', background: '#14532d', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, flexShrink: 0 }}>✓</span>

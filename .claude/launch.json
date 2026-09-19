@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "jobflow-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "name": "jobflow-marketing",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "-p", "3210"],
+      "port": 3210
     }
   ]
 }
