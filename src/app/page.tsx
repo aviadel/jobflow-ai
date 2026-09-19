@@ -410,7 +410,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <a
-                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/45026184-0495-48d7-835b-678a9e1e059d"
+                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/8c94e194-a3ca-40e2-af28-48dc88d72b4c"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -445,7 +445,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <a
-                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/5b696784-4b16-4ecb-94b6-537e5dd35227"
+                href="https://jobflow-ai.lemonsqueezy.com/checkout/buy/fe106e14-4419-48f2-b4e9-678a041ce8dc"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
