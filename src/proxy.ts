@@ -4,9 +4,16 @@ import { createHmac } from 'crypto'
 import { isSignedLicense, validateLicense } from '@/lib/license'
 
 const PUBLIC_PATHS = new Set([
-  '/', '/favicon.ico', '/terms', '/how-it-works', '/api/license',
+  '/', '/favicon.ico', '/icon.svg', '/opengraph-image', '/robots.txt',
+  '/terms', '/how-it-works', '/api/license',
 ])
 const PUBLIC_PREFIXES = ['/_next/', '/features/']
+
+/** Static assets are public by nature. Returning 401 for one is not a quiet
+ *  failure: the browser reacts to WWW-Authenticate by throwing a sign-in
+ *  dialog over whatever page requested it, including the public landing page.
+ *  Matching by extension also covers metadata routes added later. */
+const PUBLIC_FILE = /\.(svg|png|jpe?g|gif|webp|avif|ico|txt|xml|webmanifest|woff2?|ttf)$/i
 
 /** Shared secret for the middleware -> /api/license hop. That route sits in
  *  PUBLIC_PATHS to avoid recursing through this proxy, so the header is the
@@ -42,7 +49,8 @@ export async function proxy(request: NextRequest) {
 
   if (
     PUBLIC_PATHS.has(pathname) ||
-    PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))
+    PUBLIC_PREFIXES.some((p) => pathname.startsWith(p)) ||
+    PUBLIC_FILE.test(pathname)
   ) {
     return NextResponse.next()
   }
