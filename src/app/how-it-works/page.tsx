@@ -115,10 +115,10 @@ export default function HowItWorksPage() {
           <span style={{ fontSize: 15, fontWeight: 600, color: TEXT, letterSpacing: '-.01em' }}>JobFlow</span>
         </Link>
         <Link
-          href="/setup"
-          style={{ fontSize: 13, fontWeight: 500, color: MUTED, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
+          href="/#pricing"
+          style={{ fontSize: 13, fontWeight: 500, color: TEXT, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
         >
-          Open app →
+          Get JobFlow
         </Link>
       </nav>
 
@@ -225,7 +225,7 @@ export default function HowItWorksPage() {
         {/* Footer nav */}
         <div style={{ marginTop: 72, paddingTop: 32, borderTop: `1px solid ${BORDER}`, display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
           <Link href="/" style={{ fontSize: 13, color: MUTED, textDecoration: 'none' }}>← Back to home</Link>
-          <Link href="/setup" style={{ fontSize: 13, color: ACCENT, textDecoration: 'none', fontWeight: 500 }}>Open app →</Link>
+          <Link href="/#pricing" style={{ fontSize: 13, color: ACCENT, textDecoration: 'none', fontWeight: 500 }}>Get JobFlow →</Link>
         </div>
 
       </div>

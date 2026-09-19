@@ -111,12 +111,12 @@ export default function LandingPage() {
           >
             How it works
           </Link>
-          <Link
-            href="/setup"
-            style={{ fontSize: 13, fontWeight: 500, color: MUTED, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
+          <a
+            href="#pricing"
+            style={{ fontSize: 13, fontWeight: 500, color: TEXT, textDecoration: 'none', padding: '6px 14px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}
           >
-            Open app →
-          </Link>
+            Get JobFlow
+          </a>
         </div>
       </nav>
 
