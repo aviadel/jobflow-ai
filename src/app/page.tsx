@@ -64,7 +64,7 @@ const RESPONSIVE = `
     .jf-pricing-grid { grid-template-columns: 1fr; }
     .jf-howto-step { grid-template-columns: 1fr; gap: 24px; }
   }
-  .jf-email::after { content: attr(data-u) "\40" attr(data-d); font-size: 12px; color: #7d8590; }
+  .jf-email::after { content: attr(data-u) "\\40" attr(data-d); font-size: 12px; color: #7d8590; }
 `
 
 const LOGO = (

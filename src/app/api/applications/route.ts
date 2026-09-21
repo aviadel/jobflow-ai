@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createDataProvider } from '@/lib/db'
 import type { Application } from '@/lib/db/types'
 import { randomUUID } from 'crypto'
+import { resolveLicense } from '@/lib/license-server'
 
 export async function GET() {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const db = createDataProvider()
     const apps = await db.listApplications()
     return NextResponse.json(apps)
@@ -16,6 +20,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const body = await req.json()
     const { company, role, location, jdUrl, summary, coverLetter, notes } = body
 

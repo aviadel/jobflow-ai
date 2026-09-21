@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { claudeComplete } from '@/lib/claude'
 import { buildSystemPrompt, buildCoverLetterPrompt, buildRegeneratePrompt, validateCoverLetter } from '@/lib/prompts'
 import { createDataProvider } from '@/lib/db'
+import { resolveLicense } from '@/lib/license-server'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const body = await req.json()
     const { company, role, location, track, keywords, cvSummary, jdText, companyContext } = body
 
@@ -52,7 +56,7 @@ export async function POST(req: NextRequest) {
       _validationIssues: issues.length > 0 ? issues : undefined,
     })
   } catch (err) {
-    console.error('generate-cl error:', err)
+    console.error('generate-cl error:', err instanceof Error ? err.message : String(err))
     return NextResponse.json({ error: 'Failed to generate cover letter. Please try again.' }, { status: 500 })
   }
 }

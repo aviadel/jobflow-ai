@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createDataProvider } from '@/lib/db'
+import { resolveLicense } from '@/lib/license-server'
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const { id } = await params
     const db = createDataProvider()
     const existing = await db.getApplication(id)
@@ -35,6 +39,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const { id } = await params
     const db = createDataProvider()
     await db.deleteApplication(id)

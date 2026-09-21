@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { claudeComplete } from '@/lib/claude'
 import { buildSystemPrompt, buildRegeneratePrompt } from '@/lib/prompts'
 import { createDataProvider } from '@/lib/db'
+import { resolveLicense } from '@/lib/license-server'
 
 export async function POST(req: NextRequest) {
   try {
+    const license = await resolveLicense()
+    if (!license.valid) return NextResponse.json({ error: 'Valid license required.' }, { status: 403 })
+
     const { section, company, role, track, currentText, prompt: userPrompt, keywords, jdText, companyContext } = await req.json()
 
     if (!section || !currentText) {

@@ -3,9 +3,17 @@
 import { redirect } from 'next/navigation'
 import { createDataProvider } from '@/lib/db'
 import { parseCvToText } from '@/lib/parse-cv'
+import { resolveLicense } from '@/lib/license-server'
 import type { UserProfile } from '@/lib/db/types'
 
+function cap(value: string | null | undefined, max: number): string {
+  return ((value as string) || '').trim().slice(0, max)
+}
+
 export async function saveProfile(formData: FormData) {
+  const license = await resolveLicense()
+  if (!license.valid) redirect('/setup')
+
   const db = createDataProvider()
 
   const now = new Date().toISOString()
@@ -39,10 +47,10 @@ export async function saveProfile(formData: FormData) {
     : (existing?.cvWithPhoto ?? true)
 
   const profile: UserProfile = {
-    name: (formData.get('name') as string) || existing?.name,
-    email: (formData.get('email') as string) || undefined,
-    phone: (formData.get('phone') as string) || undefined,
-    city: (formData.get('city') as string) || undefined,
+    name: cap(formData.get('name') as string, 200) || existing?.name,
+    email: cap(formData.get('email') as string, 254) || undefined,
+    phone: cap(formData.get('phone') as string, 50) || undefined,
+    city: cap(formData.get('city') as string, 200) || undefined,
     targetRoles: splitComma(formData.get('targetRoles') as string),
     careerLevel: (formData.get('careerLevel') as string) ?? '',
     workArrangement: (formData.get('workArrangement') as string) ?? '',
@@ -51,8 +59,8 @@ export async function saveProfile(formData: FormData) {
     locations: splitComma(formData.get('locations') as string),
     jobSectionsCount: isNaN(jobSectionsRaw) ? 3 : Math.min(Math.max(jobSectionsRaw, 2), 6),
     cvWithPhoto,
-    linkedinAbout: (formData.get('linkedinAbout') as string) || undefined,
-    linkedinSkills: (formData.get('linkedinSkills') as string) || undefined,
+    linkedinAbout: cap(formData.get('linkedinAbout') as string, 12_000) || undefined,
+    linkedinSkills: cap(formData.get('linkedinSkills') as string, 5_000) || undefined,
     cvFileName,
     cvText,
     photoData,
@@ -67,6 +75,9 @@ export async function saveProfile(formData: FormData) {
 }
 
 export async function updateProfile(formData: FormData) {
+  const license = await resolveLicense()
+  if (!license.valid) redirect('/setup')
+
   const db = createDataProvider()
 
   const now = new Date().toISOString()
@@ -99,10 +110,10 @@ export async function updateProfile(formData: FormData) {
 
   const profile: UserProfile = {
     ...existing,
-    name: (formData.get('name') as string) || existing?.name,
-    email: (formData.get('email') as string) || undefined,
-    phone: (formData.get('phone') as string) || undefined,
-    city: (formData.get('city') as string) || undefined,
+    name: cap(formData.get('name') as string, 200) || existing?.name,
+    email: cap(formData.get('email') as string, 254) || undefined,
+    phone: cap(formData.get('phone') as string, 50) || undefined,
+    city: cap(formData.get('city') as string, 200) || undefined,
     targetRoles: splitComma(formData.get('targetRoles') as string) || existing?.targetRoles || [],
     careerLevel: (formData.get('careerLevel') as string) || existing?.careerLevel || '',
     workArrangement: (formData.get('workArrangement') as string) || existing?.workArrangement || '',
@@ -115,8 +126,8 @@ export async function updateProfile(formData: FormData) {
     locations: splitComma(formData.get('locations') as string) || existing?.locations || [],
     jobSectionsCount: isNaN(jobSectionsRaw) ? (existing?.jobSectionsCount ?? 3) : Math.min(Math.max(jobSectionsRaw, 2), 6),
     cvWithPhoto,
-    linkedinAbout: (formData.get('linkedinAbout') as string) || existing?.linkedinAbout,
-    linkedinSkills: (formData.get('linkedinSkills') as string) || existing?.linkedinSkills,
+    linkedinAbout: cap(formData.get('linkedinAbout') as string, 12_000) || existing?.linkedinAbout,
+    linkedinSkills: cap(formData.get('linkedinSkills') as string, 5_000) || existing?.linkedinSkills,
     cvFileName,
     cvText,
     photoData,
