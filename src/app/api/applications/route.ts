@@ -13,7 +13,7 @@ export async function GET() {
     const apps = await db.listApplications()
     return NextResponse.json(apps)
   } catch (err) {
-    console.error('applications GET error:', err)
+    console.error('applications GET error:', err instanceof Error ? err.message : String(err))
     return NextResponse.json({ error: 'Failed to load applications.' }, { status: 500 })
   }
 }
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     await db.upsertApplication(app)
     return NextResponse.json({ id: app.id })
   } catch (err) {
-    console.error('applications POST error:', err)
+    console.error('applications POST error:', err instanceof Error ? err.message : String(err))
     return NextResponse.json({ error: 'Failed to save application.' }, { status: 500 })
   }
 }
