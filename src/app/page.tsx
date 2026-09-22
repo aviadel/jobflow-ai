@@ -110,7 +110,7 @@ a{color:inherit;text-decoration:none}
 .jbdot{width:6px;height:6px;background:var(--ok);border-radius:50%;animation:jdp 2s infinite;display:inline-block}
 @keyframes jdp{0%,100%{opacity:1}50%{opacity:.45}}
 .jhero h1{font-family:var(--fd);font-size:clamp(1.85rem,4vw,3rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:16px;text-wrap:balance}
-.jgr{background:linear-gradient(135deg,var(--b),var(--bl),var(--am));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.jgr{background:linear-gradient(135deg,var(--b),var(--pu),var(--am));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .jhsub{font-size:.98rem;color:var(--t2);line-height:1.75;max-width:490px;margin-bottom:26px}
 .jctas{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
 .jbp{display:inline-flex;align-items:center;gap:6px;padding:11px 22px;background:linear-gradient(135deg,var(--b),#6D28D9);color:#fff;border-radius:var(--r2);font-weight:700;font-size:.92rem;box-shadow:0 4px 12px rgba(109,40,217,.2);transition:all .2s}

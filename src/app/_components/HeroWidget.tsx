@@ -16,7 +16,7 @@ const CSS = `
 .tw-logo{width:72px;height:72px;background:linear-gradient(145deg,#1E293B,#0F172A);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.3),0 0 0 2px rgba(96,165,250,.2),inset 0 1px 0 rgba(255,255,255,.05);animation:twbob 3s ease-in-out infinite;margin:0 auto}
 .tw-lsvg{width:36px;height:36px}
 .tw-label{font-size:.6rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
-.tw-arms{display:flex;justify-content:center;gap:52px;margin-top:-8px}
+.tw-arms{display:flex;justify-content:center;gap:52px;margin-top:4px}
 .tw-arm{width:18px;height:18px;background:linear-gradient(145deg,#1E293B,#0F172A);border-radius:50%;animation:twarm .35s ease-in-out infinite alternate;box-shadow:0 3px 8px rgba(0,0,0,.25),0 0 0 1.5px rgba(96,165,250,.12)}
 .tw-arm:nth-child(2){animation-delay:.18s}
 .tw-arm-pause{animation:none!important}
