@@ -27,18 +27,20 @@ const CSS = `
 .tw-machine{position:relative;margin-top:68px}
 .tw-roller{background:var(--ca);border:1.5px solid var(--bo);border-radius:var(--r2) var(--r2) 0 0;height:12px;display:flex;align-items:center;justify-content:center;gap:5px}
 .tw-rdot{width:5px;height:5px;border-radius:50%;background:var(--bo)}
-.tw-slot{position:relative;overflow:hidden;height:260px;z-index:2;perspective:800px;margin:0 10px}
+.tw-slot{position:relative;overflow:hidden;height:260px;z-index:2;perspective:800px;margin:0 10px;background:var(--bg2);border-left:1.5px solid var(--bo);border-right:1.5px solid var(--bo)}
 
 /* paper */
 .tw-paper{position:absolute;bottom:0;left:0;right:0;min-height:400px;transform-style:preserve-3d}
 .tw-pback,.tw-pfront{position:absolute;top:0;left:0;right:0;bottom:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--bo);border-radius:2px}
-.tw-pback{background:linear-gradient(180deg,#fafaf9,#f5f5f4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:30px}
+.tw-pback{background:linear-gradient(180deg,#fafaf9,#f5f5f4);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:11px;padding:24px 30px}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tw-pback{background:linear-gradient(180deg,#1e2d42,#1a2636)}}
 :root[data-theme="dark"] .tw-pback{background:linear-gradient(180deg,#1e2d42,#1a2636)}
 .tw-pfront{background:#fff;padding:20px 18px;transform:rotateY(180deg)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tw-pfront{background:#1a2332}}
 :root[data-theme="dark"] .tw-pfront{background:#1a2332}
-.tw-pline{height:2px;background:var(--bo);border-radius:1px;opacity:0;transition:opacity .3s}
+.tw-pline{height:2.5px;background:rgba(100,116,139,.35);border-radius:1px;opacity:0;transition:opacity .3s}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tw-pline{background:rgba(148,163,184,.25)}}
+:root[data-theme="dark"] .tw-pline{background:rgba(148,163,184,.25)}
 .tw-pline-v{opacity:1}
 
 /* cv content */
