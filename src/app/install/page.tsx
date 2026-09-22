@@ -116,7 +116,7 @@ export default function InstallPage() {
         WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '1px solid var(--bo)',
       }}>
-        <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 62 }}>
+        <div style={{ maxWidth: 1120, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 62 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--fd)', fontWeight: 700, fontSize: '1rem', color: 'var(--t1)' }}>
             <span style={{ width: 30, height: 30, background: 'linear-gradient(135deg,#2563EB,#7C3AED)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <LogoSvg />
@@ -129,7 +129,7 @@ export default function InstallPage() {
         </div>
       </nav>
 
-      <div style={{ maxWidth: 820, margin: '0 auto', padding: '56px 24px 96px' }}>
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '56px 24px 96px' }}>
 
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--ok)', marginBottom: 12 }}>
           <span style={{ width: 16, height: 2, background: 'var(--ok)', borderRadius: 1, display: 'inline-block' }} />
