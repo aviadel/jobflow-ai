@@ -6,7 +6,6 @@ export const metadata = {
 }
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 :root{
   --b:#2563EB;--b50:#EFF6FF;--b100:#DBEAFE;
   --bg:#F8FAFC;--bg2:#F1F5F9;--ca:#FFFFFF;--bo:#CBD5E1;
