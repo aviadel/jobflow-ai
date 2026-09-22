@@ -287,7 +287,7 @@ function ProLock({ feature }: { feature: string }) {
           </div>
           <p style={{ fontSize: 12, color: '#6B6660' }}>Upgrade your license to unlock this feature.</p>
         </div>
-        <Link href="/" style={{ ...btn, textDecoration: 'none', flexShrink: 0, fontSize: 12 }}>
+        <Link href="/#pricing" style={{ ...btn, textDecoration: 'none', flexShrink: 0, fontSize: 12 }}>
           Upgrade →
         </Link>
       </div>

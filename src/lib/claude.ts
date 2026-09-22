@@ -13,7 +13,7 @@ export function getClaudeClient(): Anthropic {
 const MODEL_FAST = 'claude-sonnet-4-6'
 
 // Opus: long-form generation (CV bullets, cover letter) — best prose quality
-const MODEL_QUALITY = 'claude-opus-4-8'
+const MODEL_QUALITY = 'claude-opus-5'
 
 export async function claudeComplete(
   system: string,
