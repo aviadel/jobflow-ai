@@ -83,7 +83,7 @@ export default function TermsPage() {
           Terms &amp; Conditions
         </h1>
         <p style={{ fontSize: 13, color: 'var(--t3)', marginBottom: 48 }}>
-          Last updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+          Last updated: 22 September 2026
         </p>
 
         <Section title="1. What you are buying">
@@ -96,17 +96,19 @@ export default function TermsPage() {
 
         <Section title="2. License grant">
           <p>
-            Your license is personal and non-transferable. It covers one active Vercel deployment. You may re-deploy (for example,
-            after a reset or migration) using the same key. You may not resell, sublicense, or redistribute the software or your
-            license key.
+            Your license is personal and non-transferable. It covers one active Vercel deployment at a time. If you need to
+            re-deploy (for example, after a project reset or a migration to a new Vercel account), contact us at{' '}
+            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a> and we will reactivate
+            your license. You may not resell, sublicense, or redistribute the software or your license key. All intellectual
+            property in the software remains owned by JobFlow.
           </p>
         </Section>
 
         <Section title="3. One-time payment">
           <p>
             The purchase price is a single, one-time charge. There are no recurring fees, no subscriptions, and no hidden costs.
-            Your Anthropic API usage is billed directly by Anthropic under your own API key - that cost is separate and outside
-            this agreement.
+            Payments are processed by Lemon Squeezy, our third-party payment processor. Your Anthropic API usage is billed
+            directly by Anthropic under your own API key - that cost is separate and outside this agreement.
           </p>
         </Section>
 
@@ -118,12 +120,13 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="5. No refunds">
+        <Section title="5. Refund policy">
           <p>
-            All purchases are final. Because JobFlow is a digital product that is immediately accessible upon payment, we do not
-            offer refunds. If you have a technical issue preventing you from running the software, contact us at{' '}
-            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a> and we will do our best to
-            help you resolve it.
+            If you are not satisfied with your purchase, you may request a full refund within 14 days of the purchase date, no
+            questions asked. To request a refund, email{' '}
+            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a> with your order details
+            and we will process it promptly. After 14 days, purchases are final and no refunds will be issued. If you have a
+            technical issue at any time, please contact us - we will do our best to help you resolve it.
           </p>
         </Section>
 
@@ -166,7 +169,15 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="11. Contact">
+        <Section title="11. Changes to these terms">
+          <p>
+            We may update these terms from time to time. When we do, we will update the &quot;Last updated&quot; date at the
+            top of this page. Your continued use of the software after an update constitutes acceptance of the revised terms.
+            Material changes will be announced via the email address associated with your purchase where possible.
+          </p>
+        </Section>
+
+        <Section title="12. Contact">
           <p>
             Questions about these terms?{' '}
             <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a>
