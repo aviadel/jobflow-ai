@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import HeroWidget from './_components/HeroWidget'
 
 export const metadata = {
   title: 'JobFlow - AI-powered job application toolkit',
@@ -121,7 +122,30 @@ a{color:inherit;text-decoration:none}
 .jck{color:var(--ok);font-weight:700}
 
 /* TYPEWRITER WIDGET */
-.jtw{background:var(--bg2);border:1.5px solid var(--bo);border-radius:var(--r3);padding:16px;box-shadow:var(--sl)}
+.jtw{background:var(--bg2);border:1.5px solid var(--bo);border-radius:var(--r3);padding:16px;box-shadow:var(--sl);min-height:280px}
+/* loading badge */
+.jtwbadge-ld{font-size:.62rem;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--b50);color:var(--b);border:1px solid var(--b100);display:inline-flex;align-items:center;gap:5px}
+.jdbt{width:6px;height:6px;border-radius:50%;background:var(--b);display:inline-block;animation:jdblp 1.1s ease-in-out infinite}
+@keyframes jdblp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+/* phase 0: JD decode */
+.jjdc{background:var(--ca);border:1px solid var(--bo);border-radius:var(--r2);padding:12px;margin-bottom:9px}
+.jjdtop{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px}
+.jjdic{font-size:18px;line-height:1;flex-shrink:0}
+.jjdtitle{font-size:.72rem;font-weight:700;color:var(--t1)}
+.jjdco{font-size:.6rem;color:var(--t3);margin-top:1px}
+.jjtags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.jjtag{font-size:.57rem;font-weight:600;color:var(--b);background:var(--b50);border:1px solid var(--b100);border-radius:999px;padding:1px 7px}
+.jjfit{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.jjfitl{font-size:.6rem;font-weight:700;color:var(--t3);width:18px;flex-shrink:0}
+.jjfitbar{flex:1;height:5px;background:var(--bg2);border-radius:999px;overflow:hidden}
+.jjfitfill{height:100%;width:0;background:var(--ok);border-radius:999px;animation:jffin .9s .15s ease-out forwards}
+@keyframes jffin{to{width:82%}}
+.jjfitp{font-size:.62rem;font-weight:700;color:var(--ok)}
+.jjfitmatch{font-size:.6rem;color:var(--ok);font-weight:600}
+/* phase 1: cursor + loading dot */
+.jcursor{display:inline-block;width:1.5px;height:.8em;background:var(--b);margin-left:2px;vertical-align:text-bottom;animation:jcblink .75s step-end infinite}
+@keyframes jcblink{0%,100%{opacity:1}50%{opacity:0}}
+.jsdot-ld{background:var(--b)!important;animation:jdblp 1.1s ease-in-out infinite!important}
 .jtwh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
 .jtwwho{display:flex;align-items:center;gap:8px}
 .jtwav{width:28px;height:28px;background:linear-gradient(135deg,#1E293B,#0F172A);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -429,69 +453,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Typewriter widget - end state */}
-              <div className="jtw" role="img" aria-label="JobFlow AI generating a tailored CV">
-                <div className="jtwh">
-                  <div className="jtwwho">
-                    <div className="jtwav">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="18" cy="5" r="3" fill="#93C5FD"/>
-                        <circle cx="6" cy="12" r="3" fill="#93C5FD"/>
-                        <circle cx="18" cy="19" r="3" fill="#93C5FD"/>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="#93C5FD" strokeWidth="1.8" strokeLinecap="round"/>
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="#93C5FD" strokeWidth="1.8" strokeLinecap="round"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="jtwname">JobFlow AI</div>
-                      <div className="jtwsub">Generating&hellip;</div>
-                    </div>
-                  </div>
-                  <span className="jtwbadge">&#10003; Done</span>
-                </div>
-                <div className="jpaper">
-                  <div className="jcvn">Alex Rivera</div>
-                  <div className="jcvm">Senior Software Engineer &middot; London, UK</div>
-                  <div className="jcvd" />
-                  <div className="jcvs">Professional Summary</div>
-                  <div className="jcvl">Senior engineer with 8+ years building distributed systems. Go, AWS, Kubernetes. Led team delivering 40% API latency reduction.</div>
-                  <div className="jcvd" />
-                  <div className="jcvs">Technical Skills</div>
-                  <div className="jcvl">Go &middot; Python &middot; TypeScript &middot; AWS &middot; GCP &middot; Kubernetes &middot; PostgreSQL &middot; Redis</div>
-                  <div className="jcvd" />
-                  <div className="jcvs">Experience</div>
-                  <div className="jcvl">Lead Engineer - Acme Corp (2019-2024) - Microservices migration, reduced API latency 40%, mentored 4 junior engineers</div>
-                </div>
-                <div className="jkeys" aria-hidden="true">
-                  {['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V'].map((k, i) => (
-                    <div key={i} className={`jkey${['E','T','I','S','K','C'].includes(k) ? ' jon' : ''}`}>{k}</div>
-                  ))}
-                </div>
-                <div className="jtwst">
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div className="jsdot" />
-                    <span className="jstxt">Done - documents ready</span>
-                  </div>
-                  <span className="jstm">1.8s</span>
-                </div>
-                <div className="jcvout">
-                  <div className="jcvouth">
-                    <div className="jcvic">&#128196;</div>
-                    <div className="jcvinfo">
-                      <h4>senior_engineer_cv.docx</h4>
-                      <span>&#10003; Ready to download</span>
-                    </div>
-                  </div>
-                  <div className="jcvbtns">
-                    <button className="jcvb jcvbp">.docx &#8595;</button>
-                    <button className="jcvb jcvbg">Preview</button>
-                  </div>
-                  <div className="jclr">
-                    <div className="jclic">&#9993;</div>
-                    <span><strong>cover_letter.docx</strong>&nbsp;&nbsp;&#10003; Generated</span>
-                  </div>
-                </div>
-              </div>
+              <HeroWidget />
             </div>
           </div>
         </section>
