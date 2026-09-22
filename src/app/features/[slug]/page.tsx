@@ -1,26 +1,57 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-const BG      = '#0d1117'
-const SURFACE = '#161b22'
-const BORDER  = '#21262d'
-const BORDER2 = '#30363d'
-const TEXT    = '#e6edf3'
-const MUTED   = '#7d8590'
-const ACCENT  = '#4493f8'
-const GREEN   = '#3fb950'
-const PURPLE  = '#a371f7'
+// Mock UI uses the app's own dark color palette - kept intentionally
+const APP_BG    = '#0d1117'
+const APP_SURF  = '#161b22'
+const APP_BDR   = '#21262d'
+const APP_BDR2  = '#30363d'
+const APP_TEXT  = '#e6edf3'
+const APP_MUTED = '#7d8590'
+const APP_BLUE  = '#4493f8'
+const APP_GREEN = '#3fb950'
 
-const LOGO = (
-  <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="32" height="32" rx="7" fill={SURFACE}/>
-    <circle cx="8.5" cy="16" r="3" fill={GREEN}/>
-    <circle cx="23.5" cy="9" r="3" fill={GREEN}/>
-    <circle cx="23.5" cy="23" r="3" fill={GREEN}/>
-    <line x1="11.5" y1="14.5" x2="20" y2="10.5" stroke={GREEN} strokeWidth="1.6" strokeLinecap="round"/>
-    <polygon points="21,9.7 22.5,9 21.3,10.7" fill={GREEN}/>
-    <line x1="11.5" y1="17.5" x2="20" y2="21.5" stroke={GREEN} strokeWidth="1.6" strokeLinecap="round"/>
-    <polygon points="21,22.3 22.5,23 21.3,21.3" fill={GREEN}/>
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+:root{
+  --b:#2563EB;--bl:#3B82F6;--b50:#EFF6FF;--b100:#DBEAFE;
+  --am:#D97706;--pu:#7C3AED;--pul:#EDE9FE;
+  --ok:#059669;--okl:#D1FAE5;
+  --bg:#F8FAFC;--bg2:#F1F5F9;--ca:#FFFFFF;--bo:#CBD5E1;--bo2:#E2E8F0;
+  --t1:#0F172A;--t2:#475569;--t3:#64748B;--t4:#94A3B8;
+  --nb:rgba(248,250,252,0.93);
+  --r1:6px;--r2:10px;--r3:16px;
+  --fd:'Outfit',system-ui,sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --b:#60A5FA;--b50:#172554;--b100:#1E3A5F;
+  --am:#FBBF24;--pu:#A78BFA;--pul:#2E1065;
+  --ok:#34D399;--okl:#064E3B;
+  --bg:#0B1120;--bg2:#111827;--ca:#1E293B;--bo:#334155;--bo2:#1E293B;
+  --t1:#F1F5F9;--t2:#94A3B8;--t3:#64748B;--t4:#475569;--nb:rgba(11,17,32,0.93);
+}}
+:root[data-theme="dark"]{
+  --b:#60A5FA;--b50:#172554;--b100:#1E3A5F;
+  --am:#FBBF24;--pu:#A78BFA;--pul:#2E1065;
+  --ok:#34D399;--okl:#064E3B;
+  --bg:#0B1120;--bg2:#111827;--ca:#1E293B;--bo:#334155;--bo2:#1E293B;
+  --t1:#F1F5F9;--t2:#94A3B8;--t3:#64748B;--t4:#475569;--nb:rgba(11,17,32,0.93);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+@keyframes jf-pane-a{0%,35%{opacity:1;transform:translateY(0)}45%,100%{opacity:0;transform:translateY(-4px)}}
+@keyframes jf-pane-b{0%,35%{opacity:0;transform:translateY(4px)}45%,100%{opacity:1;transform:translateY(0)}}
+@keyframes jf-click-pulse{0%,30%{box-shadow:0 0 0 0 rgba(68,147,248,.4)}40%{box-shadow:0 0 0 4px rgba(68,147,248,0)}100%{box-shadow:0 0 0 0 rgba(68,147,248,0)}}
+`
+
+const LogoSvg = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <circle cx="18" cy="5" r="3" fill="white"/>
+    <circle cx="6" cy="12" r="3" fill="white"/>
+    <circle cx="18" cy="19" r="3" fill="white"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
   </svg>
 )
 
@@ -36,7 +67,7 @@ type Feature = {
   mock: React.ReactNode
 }
 
-// ── Shell components ──────────────────────────────────────────────────────────
+// ── Shell components (app UI preview - intentionally dark) ────────────────────
 
 const NAV_ITEMS = ['Dashboard', 'Applications', 'JD Decode', 'Tracker', 'Career tools']
 
@@ -62,12 +93,12 @@ function ShellSidebar({ active }: { active: string }) {
 function Shell({ active, children }: { active: string; children: React.ReactNode }) {
   return (
     <div style={{
-      background: BG, border: `1px solid ${BORDER}`, borderRadius: 10,
+      background: APP_BG, border: `1px solid ${APP_BDR}`, borderRadius: 10,
       overflow: 'hidden', aspectRatio: '16/11', display: 'flex',
-      fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+      fontFamily: 'system-ui, sans-serif',
     }}>
       <ShellSidebar active={active} />
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: BG }}>
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', background: APP_BG }}>
         {children}
       </div>
     </div>
@@ -92,28 +123,28 @@ const ttl = (text: string) => (
   <div style={{ fontSize: 8.5, fontWeight: 700, color: '#F2F5F9', marginBottom: 8 }}>{text}</div>
 )
 function Card({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 5, padding: '7px 8px', marginBottom: 4 }}>{children}</div>
+  return <div style={{ background: APP_SURF, border: `1px solid ${APP_BDR}`, borderRadius: 5, padding: '7px 8px', marginBottom: 4 }}>{children}</div>
 }
 function CardHeader({ label, ok }: { label: string; ok?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
       <span style={{ fontSize: 5.5, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '.05em', color: '#7DB0FF' }}>{label}</span>
-      {ok && <span style={{ fontSize: 5, color: '#2DC891', fontWeight: 700 }}>✓ Approved</span>}
+      {ok && <span style={{ fontSize: 5, color: '#2DC891', fontWeight: 700 }}>&#10003; Approved</span>}
     </div>
   )
 }
 function Bar({ w, green }: { w: number; green?: boolean }) {
-  return <div style={{ height: 4, background: green ? '#2DC891' : '#21262d', opacity: green ? 0.7 : 1, borderRadius: 2, width: `${w}%`, marginBottom: 2 }} />
+  return <div style={{ height: 4, background: green ? '#2DC891' : APP_BDR, opacity: green ? 0.7 : 1, borderRadius: 2, width: `${w}%`, marginBottom: 2 }} />
 }
 function GenBtn({ label = 'Generate →' }: { label?: string }) {
-  return <div style={{ display: 'inline-block', background: ACCENT, borderRadius: 4, padding: '4px 10px', fontSize: 6, fontWeight: 600, color: '#fff', animation: 'jf-click-pulse 8s ease-in-out infinite', cursor: 'default' }}>{label}</div>
+  return <div style={{ display: 'inline-block', background: APP_BLUE, borderRadius: 4, padding: '4px 10px', fontSize: 6, fontWeight: 600, color: '#fff', animation: 'jf-click-pulse 8s ease-in-out infinite', cursor: 'default' }}>{label}</div>
 }
 function Tag({ text, match }: { text: string; match?: boolean }) {
   return (
     <span style={{
       fontSize: 5, padding: '1px 4px', borderRadius: 3,
-      background: match ? 'rgba(63,185,80,.12)' : '#21262d',
-      color: match ? '#3fb950' : '#7d8590',
+      background: match ? 'rgba(63,185,80,.12)' : APP_BDR,
+      color: match ? APP_GREEN : APP_MUTED,
       border: match ? '1px solid rgba(63,185,80,.15)' : 'none',
     }}>{text}</span>
   )
@@ -165,7 +196,7 @@ function CoverLetterMock() {
             <CardHeader label="Tone" />
             <div style={{ display: 'flex', gap: 4, marginBottom: 4 }}>
               {['Professional', 'Conversational', 'Confident'].map((t, i) => (
-                <span key={t} style={{ fontSize: 5.5, padding: '2px 6px', borderRadius: 3, background: i === 0 ? 'rgba(88,174,255,.2)' : '#21262d', color: i === 0 ? '#7DB0FF' : '#5A6278', border: i === 0 ? '1px solid rgba(88,174,255,.3)' : 'none' }}>{t}</span>
+                <span key={t} style={{ fontSize: 5.5, padding: '2px 6px', borderRadius: 3, background: i === 0 ? 'rgba(88,174,255,.2)' : APP_BDR, color: i === 0 ? '#7DB0FF' : '#5A6278', border: i === 0 ? '1px solid rgba(88,174,255,.3)' : 'none' }}>{t}</span>
               ))}
             </div>
           </Card>
@@ -192,7 +223,7 @@ function JdDecodeMock() {
       before={
         <>
           {lbl('JD Decode · Paste job description')}
-          <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 5, padding: '7px 8px', marginBottom: 8, minHeight: 60 }}>
+          <div style={{ background: APP_SURF, border: `1px solid ${APP_BDR}`, borderRadius: 5, padding: '7px 8px', marginBottom: 8, minHeight: 60 }}>
             <div style={{ fontSize: 5.5, color: '#5A6278', lineHeight: 1.6 }}>
               We are looking for a Senior Software Engineer to join...
             </div>
@@ -240,7 +271,7 @@ function TrackerMock() {
               { co: 'Nova Labs', role: 'Lead Engineer', status: 'Applied', color: '#7DB0FF', bg: 'rgba(88,174,255,.1)' },
               { co: 'Apex Systems', role: 'Engineer', status: 'Rejected', color: '#FF6B6B', bg: 'rgba(255,107,107,.1)' },
             ].map(a => (
-              <div key={a.co} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 7px', borderBottom: '1px solid #21262d', fontSize: 6 }}>
+              <div key={a.co} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 7px', borderBottom: `1px solid ${APP_BDR}`, fontSize: 6 }}>
                 <div>
                   <div style={{ color: '#E2E8F2', fontWeight: 600, marginBottom: 1 }}>{a.co}</div>
                   <div style={{ color: '#5A6278' }}>{a.role}</div>
@@ -256,11 +287,11 @@ function TrackerMock() {
           {lbl('Application tracker')}
           <div style={{ marginBottom: 6 }}>
             {[
-              { co: 'Meridian Alliance', role: 'Sr Engineer', status: 'Interview', color: '#3fb950', bg: 'rgba(63,185,80,.1)' },
+              { co: 'Meridian Alliance', role: 'Sr Engineer', status: 'Interview', color: APP_GREEN, bg: 'rgba(63,185,80,.1)' },
               { co: 'Nova Labs', role: 'Lead Engineer', status: 'Applied', color: '#7DB0FF', bg: 'rgba(88,174,255,.1)' },
               { co: 'Apex Systems', role: 'Engineer', status: 'Rejected', color: '#FF6B6B', bg: 'rgba(255,107,107,.1)' },
             ].map(a => (
-              <div key={a.co} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 7px', borderBottom: '1px solid #21262d', fontSize: 6 }}>
+              <div key={a.co} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 7px', borderBottom: `1px solid ${APP_BDR}`, fontSize: 6 }}>
                 <div>
                   <div style={{ color: '#E2E8F2', fontWeight: 600, marginBottom: 1 }}>{a.co}</div>
                   <div style={{ color: '#5A6278' }}>{a.role}</div>
@@ -271,7 +302,7 @@ function TrackerMock() {
           </div>
           <Card>
             <CardHeader label="Meridian Alliance · Note" />
-            <div style={{ fontSize: 5.5, color: '#7d8590' }}>Recruiter replied - interview Thu 10am</div>
+            <div style={{ fontSize: 5.5, color: APP_MUTED }}>Recruiter replied - interview Thu 10am</div>
           </Card>
         </>
       }
@@ -289,8 +320,8 @@ function AuditMock() {
           {ttl('Meridian Alliance · Senior Engineer')}
           <Card>
             <CardHeader label="Documents" />
-            <div style={{ fontSize: 6, color: '#2DC891', marginBottom: 2 }}>✓ CV attached</div>
-            <div style={{ fontSize: 6, color: '#2DC891' }}>✓ Cover letter attached</div>
+            <div style={{ fontSize: 6, color: '#2DC891', marginBottom: 2 }}>&#10003; CV attached</div>
+            <div style={{ fontSize: 6, color: '#2DC891' }}>&#10003; Cover letter attached</div>
           </Card>
           <div style={{ marginTop: 8 }}><GenBtn label="Run audit →" /></div>
         </>
@@ -300,15 +331,15 @@ function AuditMock() {
           {lbl('Resume audit · Results')}
           <Card>
             <CardHeader label="ATS formatting" />
-            <div style={{ fontSize: 5.5, color: '#2DC891', marginBottom: 2 }}>✓ No tables or columns detected</div>
-            <div style={{ fontSize: 5.5, color: '#2DC891' }}>✓ Clean heading structure</div>
+            <div style={{ fontSize: 5.5, color: '#2DC891', marginBottom: 2 }}>&#10003; No tables or columns detected</div>
+            <div style={{ fontSize: 5.5, color: '#2DC891' }}>&#10003; Clean heading structure</div>
           </Card>
           <Card>
             <CardHeader label="Keyword coverage" />
             <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 3, marginBottom: 4 }}>
               <Tag text="TypeScript" match /><Tag text="React" match /><Tag text="Kubernetes" /><Tag text="GraphQL" />
             </div>
-            <div style={{ fontSize: 5.5, color: '#E09348' }}>⚠ 2 keywords missing - add to Skills section</div>
+            <div style={{ fontSize: 5.5, color: '#E09348' }}>&#9888; 2 keywords missing - add to Skills section</div>
           </Card>
         </>
       }
@@ -470,52 +501,69 @@ export default async function FeaturePage({ params }: { params: Promise<{ slug: 
   const next = FEATURES[idx + 1] ?? null
 
   return (
-    <div style={{ fontFamily: 'var(--font-geist-sans), system-ui, sans-serif', background: BG, minHeight: '100vh', color: TEXT }}>
+    <div style={{ fontFamily: 'var(--fb)', background: 'var(--bg)', minHeight: '100vh', color: 'var(--t1)' }}>
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* Nav */}
-      <nav style={{ maxWidth: 1080, margin: '0 auto', padding: '18px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${BORDER}` }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-          {LOGO}
-          <span style={{ fontSize: 17, fontWeight: 600, color: TEXT, letterSpacing: '-.01em' }}>JobFlow</span>
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {prev && (
-            <Link href={`/features/${prev.slug}`} style={{ fontSize: 12, color: MUTED, textDecoration: 'none', padding: '5px 12px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}>
-              ← {prev.title}
-            </Link>
-          )}
-          {next && (
-            <Link href={`/features/${next.slug}`} style={{ fontSize: 12, color: MUTED, textDecoration: 'none', padding: '5px 12px', border: `1px solid ${BORDER2}`, borderRadius: 6 }}>
-              {next.title} →
-            </Link>
-          )}
+      <nav style={{
+        position: 'sticky', top: 0, zIndex: 100,
+        background: 'var(--nb)', backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--bo)',
+      }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 62 }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--fd)', fontWeight: 700, fontSize: '1rem', color: 'var(--t1)' }}>
+            <span style={{ width: 30, height: 30, background: 'linear-gradient(135deg,#2563EB,#7C3AED)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <LogoSvg />
+            </span>
+            JobFlow AI
+          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {prev && (
+              <Link href={`/features/${prev.slug}`} style={{ fontSize: 12.5, color: 'var(--t3)', padding: '5px 12px', border: '1px solid var(--bo)', borderRadius: 'var(--r1)' }}>
+                &larr; {prev.title}
+              </Link>
+            )}
+            {next && (
+              <Link href={`/features/${next.slug}`} style={{ fontSize: 12.5, color: 'var(--t3)', padding: '5px 12px', border: '1px solid var(--bo)', borderRadius: 'var(--r1)' }}>
+                {next.title} &rarr;
+              </Link>
+            )}
+          </div>
         </div>
       </nav>
 
-      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 32px 80px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 24px 80px' }}>
 
         {/* Back */}
-        <Link href="/#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: MUTED, textDecoration: 'none', marginBottom: 36 }}>
-          ← What&apos;s included
+        <Link href="/#features" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--t3)', marginBottom: 36 }}>
+          &larr; What&apos;s included
         </Link>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18, marginBottom: 48 }}>
-          <div style={{ width: 56, height: 56, background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0, lineHeight: 1 }}>
+          <div style={{
+            width: 56, height: 56, background: 'var(--b50)', border: '1px solid var(--b100)',
+            borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 26, flexShrink: 0, lineHeight: 1,
+          }}>
             {feature.icon}
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <h1 style={{ fontSize: 'clamp(22px, 3.5vw, 32px)', fontWeight: 700, letterSpacing: '-.025em', color: TEXT, lineHeight: 1.1 }}>
+              <h1 style={{ fontFamily: 'var(--fd)', fontSize: 'clamp(22px,3.5vw,32px)', fontWeight: 800, letterSpacing: '-.025em', color: 'var(--t1)', lineHeight: 1.1 }}>
                 {feature.title}
               </h1>
               {feature.pro && (
-                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase', color: PURPLE, background: 'rgba(163,113,247,.15)', borderRadius: 4, padding: '2px 8px', border: '1px solid rgba(163,113,247,.25)', flexShrink: 0 }}>
-                  Pro
-                </span>
+                <span style={{
+                  fontSize: 10, fontWeight: 700, letterSpacing: '.05em',
+                  textTransform: 'uppercase' as const,
+                  color: 'var(--pu)', background: 'var(--pul)', borderRadius: 4,
+                  padding: '2px 8px', border: '1px solid rgba(124,58,237,.25)', flexShrink: 0,
+                }}>Pro</span>
               )}
             </div>
-            <p style={{ fontSize: 15, color: MUTED, lineHeight: 1.6, maxWidth: 560 }}>{feature.tagline}</p>
+            <p style={{ fontSize: 15, color: 'var(--t2)', lineHeight: 1.65, maxWidth: 560 }}>{feature.tagline}</p>
           </div>
         </div>
 
@@ -524,23 +572,29 @@ export default async function FeaturePage({ params }: { params: Promise<{ slug: 
 
           <div>
             {feature.paragraphs.map((p, i) => (
-              <p key={i} style={{ fontSize: 14, color: MUTED, lineHeight: 1.8, marginBottom: 18 }}>{p}</p>
+              <p key={i} style={{ fontSize: 14.5, color: 'var(--t2)', lineHeight: 1.8, marginBottom: 18 }}>{p}</p>
             ))}
 
             {/* Badges */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, marginBottom: feature.comingSoon.length ? 28 : 0 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, marginTop: 8, marginBottom: feature.comingSoon.length ? 28 : 0 }}>
               {feature.badges.map(b => (
-                <span key={b} style={{ fontSize: 11, color: GREEN, background: 'rgba(63,185,80,.1)', border: '1px solid rgba(63,185,80,.18)', borderRadius: 5, padding: '3px 10px' }}>{b}</span>
+                <span key={b} style={{
+                  fontSize: 11.5, color: 'var(--b)',
+                  background: 'var(--b50)', border: '1px solid var(--b100)',
+                  borderRadius: 'var(--r1)', padding: '3px 10px',
+                }}>{b}</span>
               ))}
             </div>
 
             {/* Coming soon */}
             {feature.comingSoon.length > 0 && (
               <div>
-                <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: MUTED, marginBottom: 10 }}>Coming soon</div>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase' as const, color: 'var(--t4)', marginBottom: 10 }}>
+                  Coming soon
+                </div>
                 {feature.comingSoon.map(item => (
-                  <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: MUTED, marginBottom: 6 }}>
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: BORDER2, flexShrink: 0, display: 'inline-block' }} />
+                  <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, color: 'var(--t3)', marginBottom: 6 }}>
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--bo)', flexShrink: 0, display: 'inline-block' }} />
                     {item}
                   </div>
                 ))}
@@ -548,31 +602,35 @@ export default async function FeaturePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {/* Mock */}
+          {/* Mock (app preview - dark) */}
           <div>{feature.mock}</div>
         </div>
 
         {/* Bottom nav */}
-        <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ borderTop: '1px solid var(--bo)', paddingTop: 28, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             {prev ? (
-              <Link href={`/features/${prev.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: MUTED, textDecoration: 'none', padding: '8px 16px', border: `1px solid ${BORDER}`, borderRadius: 6 }}>
-                ← {prev.title}
+              <Link href={`/features/${prev.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--t2)', padding: '8px 16px', border: '1px solid var(--bo)', borderRadius: 'var(--r1)' }}>
+                &larr; {prev.title}
               </Link>
             ) : <span />}
           </div>
 
-          {/* Dots */}
+          {/* Progress dots */}
           <div style={{ display: 'flex', gap: 6 }}>
             {FEATURES.map((f, i) => (
-              <Link key={f.slug} href={`/features/${f.slug}`} style={{ width: 7, height: 7, borderRadius: '50%', background: i === idx ? ACCENT : BORDER2, display: 'block', flexShrink: 0 }} />
+              <Link key={f.slug} href={`/features/${f.slug}`} style={{
+                width: 7, height: 7, borderRadius: '50%',
+                background: i === idx ? 'var(--b)' : 'var(--bo2)',
+                display: 'block', flexShrink: 0,
+              }} />
             ))}
           </div>
 
           <div>
             {next ? (
-              <Link href={`/features/${next.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: MUTED, textDecoration: 'none', padding: '8px 16px', border: `1px solid ${BORDER}`, borderRadius: 6 }}>
-                {next.title} →
+              <Link href={`/features/${next.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--t2)', padding: '8px 16px', border: '1px solid var(--bo)', borderRadius: 'var(--r1)' }}>
+                {next.title} &rarr;
               </Link>
             ) : <span />}
           </div>
