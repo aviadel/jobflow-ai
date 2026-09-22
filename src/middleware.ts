@@ -54,7 +54,7 @@ function toSetup(request: NextRequest) {
   return NextResponse.redirect(url)
 }
 
-export async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // ── Marketing-only deployment ───────────────────────────────────────────────
