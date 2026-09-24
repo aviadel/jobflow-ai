@@ -192,6 +192,8 @@ a{color:inherit;text-decoration:none}
 .jpbs{background:var(--bg2);color:var(--t1)}.jpbs:hover{background:var(--b50);color:var(--b)}
 .jpbd{background:var(--bg2);color:var(--t3);cursor:not-allowed;opacity:.65}
 .jpcnote{text-align:center;margin-top:22px;font-size:.84rem;color:var(--t3)}
+.jpcinstall{display:block;text-align:center;font-size:.78rem;color:var(--b);font-weight:500;margin-top:10px;padding-top:10px;border-top:1px solid var(--bo2)}
+.jpcinstall:hover{text-decoration:underline}
 
 /* FAQ */
 .jfaql{max-width:680px;margin-inline:auto;display:flex;flex-direction:column;gap:8px}
@@ -326,6 +328,7 @@ export default function Home() {
               <li><a href="#why-saas">Why Not SaaS</a></li>
               <li><a href="#pricing">Pricing</a></li>
               <li><a href="#faq">FAQ</a></li>
+              <li><Link href="/install">Install guide</Link></li>
               <li><a href="#pricing" className="jncta">Get JobFlow</a></li>
             </ul>
           </div>
@@ -496,6 +499,7 @@ export default function Home() {
                   <li><span className="jpck">&#10003;</span> Application tracker</li>
                 </ul>
                 <a href={STARTER_URL} className="jpcbtn jpbs" target="_blank" rel="noopener noreferrer">Buy Starter &rarr;</a>
+                <Link href="/install" className="jpcinstall">Already have a key? Install guide &rarr;</Link>
               </div>
               <div className="jpc jpcf">
                 <div className="jpcbadge">&#9733; Best Value</div>
@@ -509,6 +513,7 @@ export default function Home() {
                   <li><span className="jpck">&#10003;</span> Postgres + Sheets storage</li>
                 </ul>
                 <a href={PRO_URL} className="jpcbtn jpbp" target="_blank" rel="noopener noreferrer">Buy Professional &rarr;</a>
+                <Link href="/install" className="jpcinstall">Already have a key? Install guide &rarr;</Link>
               </div>
               <div className="jpc">
                 <div className="jpctier">Lifetime</div>
