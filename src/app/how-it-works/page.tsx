@@ -149,12 +149,17 @@ export default function HowItWorksPage() {
             </span>
             JobFlow AI
           </Link>
-          <Link
-            href="/#pricing"
-            style={{ fontSize: 13, fontWeight: 600, color: '#fff', padding: '7px 16px', background: 'var(--b)', borderRadius: 'var(--r1)', lineHeight: 1 }}
-          >
-            Get JobFlow
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Link href="/" style={{ fontSize: 13, fontWeight: 500, color: 'var(--t2)', padding: '7px 12px', border: '1px solid var(--bo)', borderRadius: 'var(--r1)', lineHeight: 1 }}>
+              &larr; Back
+            </Link>
+            <Link
+              href="/#pricing"
+              style={{ fontSize: 13, fontWeight: 600, color: '#fff', padding: '7px 16px', background: 'var(--b)', borderRadius: 'var(--r1)', lineHeight: 1 }}
+            >
+              Get JobFlow
+            </Link>
+          </div>
         </div>
       </nav>
 
