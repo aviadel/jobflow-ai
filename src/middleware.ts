@@ -99,16 +99,22 @@ export default async function middleware(request: NextRequest) {
   // ── License check ───────────────────────────────────────────────────────────
   // JobFlow is paid-only: no valid license, no access. Failures land on /setup,
   // which is always reachable so its config check can explain what is missing.
-  if (pathname === '/setup') return NextResponse.next()
+  if (pathname.toLowerCase() === '/setup') return NextResponse.next()
 
   const licenseKey = process.env.JOBFLOW_LICENSE_KEY
   if (!licenseKey) return toSetup(request)
 
   if (isSignedLicense(licenseKey)) {
     // One of our own Ed25519 keys - verified locally, no network call.
-    return validateLicense(licenseKey).valid
-      ? NextResponse.next()
-      : toSetup(request)
+    // Wrapped in try/catch: Edge runtime may not support the Node.js asymmetric
+    // crypto APIs used by validateLicense; redirect to /setup rather than crash.
+    try {
+      return validateLicense(licenseKey).valid
+        ? NextResponse.next()
+        : toSetup(request)
+    } catch {
+      return toSetup(request)
+    }
   }
 
   // Lemon Squeezy key. The verdict is cached server-side, so this is a local
