@@ -17,6 +17,7 @@ interface Check {
   source?: string
   fix?: string
   generate?: true
+  isNew?: true
 }
 
 async function runChecks(): Promise<Check[]> {
@@ -103,6 +104,7 @@ async function runChecks(): Promise<Check[]> {
         fix: providerName === 'json'
           ? 'Create a free Neon database in your Vercel project, then set DATA_PROVIDER=postgres and redeploy.'
           : undefined,
+        isNew: providerName === 'json' ? true : undefined,
       })
     } catch (err) {
       console.error('[setup] storage check failed:', err)
@@ -251,7 +253,7 @@ export default async function SetupPage() {
           </h1>
           <p style={{ fontSize: 14, color: 'var(--t2)', margin: 0, lineHeight: 1.6 }}>
             Everything here must be green before JobFlow can generate CVs.
-            {!allGreen && ' Fix each red item, then redeploy your Vercel project.'}
+            {!allGreen && ' Most values were set when you deployed — if something is red, correct the existing value in Vercel rather than adding a new one.'}
           </p>
         </div>
 
@@ -332,9 +334,20 @@ export default async function SetupPage() {
                     marginTop: 14, padding: '10px 12px', borderRadius: 6,
                     background: 'rgba(0,0,0,.04)', fontSize: 12.5, color: 'var(--t2)', lineHeight: 1.6,
                   }}>
-                    <strong style={{ color: 'var(--t1)' }}>Add it in Vercel:</strong>{' '}
-                    Go to your Vercel project &rarr; <strong>Settings</strong> &rarr; <strong>Environment Variables</strong> &rarr; <strong>Add New</strong>.
-                    Then go to the <strong>Deployments</strong> tab and click <strong>Redeploy</strong>.
+                    {c.isNew ? (
+                      <>
+                        <strong style={{ color: 'var(--t1)' }}>Add it in Vercel:</strong>{' '}
+                        Go to your Vercel project &rarr; <strong>Settings</strong> &rarr; <strong>Environment Variables</strong> &rarr; <strong>Add New</strong>.
+                        Then go to <strong>Deployments</strong> and click <strong>Redeploy</strong>.
+                      </>
+                    ) : (
+                      <>
+                        <strong style={{ color: 'var(--t1)' }}>Fix it in Vercel:</strong>{' '}
+                        Go to your Vercel project &rarr; <strong>Settings</strong> &rarr; <strong>Environment Variables</strong>.
+                        Find <code style={{ fontFamily: 'ui-monospace,monospace', fontSize: 11 }}>{c.envVar}</code>, click it to edit, update the value, and save.
+                        Then go to <strong>Deployments</strong> and click <strong>Redeploy</strong>.
+                      </>
+                    )}
                   </div>
                 </div>
               )}
@@ -386,9 +399,9 @@ export default async function SetupPage() {
                 What to do next
               </p>
               <ol style={{ margin: 0, paddingLeft: 18, fontSize: 13.5, color: 'var(--t2)', lineHeight: 1.8 }}>
-                <li>Fix each red item above (expand it to see exactly what to add)</li>
+                <li>Correct each red item above (expand it to see what to fix)</li>
                 <li>
-                  In Vercel: <strong style={{ color: 'var(--t1)' }}>Settings &rarr; Environment Variables &rarr; Add New</strong>
+                  In Vercel: <strong style={{ color: 'var(--t1)' }}>Settings &rarr; Environment Variables</strong> &mdash; find the setting and update it
                 </li>
                 <li>
                   Go to <strong style={{ color: 'var(--t1)' }}>Deployments</strong> &rarr; click <strong style={{ color: 'var(--t1)' }}>Redeploy</strong> on the latest deployment
