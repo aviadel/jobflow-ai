@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 export const metadata = {
   title: 'Install JobFlow',
-  description: 'Set up your own JobFlow instance in about ten minutes. Step-by-step guide for non-technical buyers.',
+  description: 'Set up your own JobFlow instance in about ten minutes. Step-by-step guide for non-technical users.',
 }
 
 const DEPLOY_URL =
   'https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai' +
-  '&env=ANTHROPIC_API_KEY,APP_PASSWORD,INTERNAL_SECRET,JOBFLOW_LICENSE_KEY' +
-  '&envDescription=Your%20Claude%20API%20key%2C%20a%20password%20you%20choose%2C%20a%20random%20security%20string%2C%20and%20your%20license%20key' +
+  '&env=ANTHROPIC_API_KEY,APP_PASSWORD' +
+  '&envDescription=Your%20Claude%20API%20key%20and%20a%20password%20you%20choose' +
   '&envLink=https%3A%2F%2Fjobflow-ai.app%2Finstall' +
   '&project-name=jobflow-ai&repository-name=jobflow-ai'
 
@@ -65,16 +65,6 @@ function Code({ children }: { children: React.ReactNode }) {
       background: 'var(--bg2)', border: '1px solid var(--bo)', borderRadius: 4,
       padding: '1px 6px', color: 'var(--t1)', wordBreak: 'break-all' as const,
     }}>{children}</code>
-  )
-}
-
-function Block({ children }: { children: string }) {
-  return (
-    <pre style={{
-      background: 'var(--bg2)', border: '1px solid var(--bo)', borderRadius: 'var(--r1)',
-      padding: '12px 14px', fontSize: 12.5, color: 'var(--t1)', overflowX: 'auto' as const,
-      fontFamily: 'ui-monospace,monospace', margin: '10px 0 0', lineHeight: 1.5,
-    }}><code>{children}</code></pre>
   )
 }
 
@@ -179,7 +169,7 @@ export default function InstallPage() {
 
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--ok)', marginBottom: 12 }}>
           <span style={{ width: 16, height: 2, background: 'var(--ok)', borderRadius: 1, display: 'inline-block' }} />
-          Thanks for your purchase
+          Free &amp; open source
         </div>
         <h1 style={{ fontFamily: 'var(--fd)', fontSize: 'clamp(26px,4vw,38px)', fontWeight: 800, letterSpacing: '-.025em', marginBottom: 14, color: 'var(--t1)' }}>
           Install JobFlow
@@ -188,14 +178,8 @@ export default function InstallPage() {
           About ten minutes, most of it waiting for Vercel to build. Follow each step in order - do not skip step 3.
         </p>
         <p style={{ fontSize: 14, color: 'var(--t3)', marginBottom: 20 }}>
-          You will need: your license key (emailed to you after purchase), and a credit card or free account on Anthropic.
+          You will need: a free Anthropic account (for your Claude API key). That&apos;s it - no license, no purchase.
         </p>
-
-        <Callout title="No license key email?">
-          Check your spam folder first - it is sent by Lemon Squeezy right after payment.
-          The subject line contains &quot;JobFlow&quot;. If it has not arrived after five minutes,
-          email us at info@jobflow-ai.app and we will resend it.
-        </Callout>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 36, marginTop: 44 }}>
 
@@ -229,7 +213,7 @@ export default function InstallPage() {
           <Section n={2} title="Deploy your own copy">
             <p>
               Click the button below. Vercel will copy the JobFlow code into your own GitHub account and
-              deploy it as your private app. It will ask for four settings before it starts.
+              deploy it as your private app. It will ask for two settings before it starts.
             </p>
             <div style={{ marginTop: 4, marginBottom: 4 }}>
               <a
@@ -247,11 +231,11 @@ export default function InstallPage() {
               </a>
             </div>
 
-            <ScreenLabel>Vercel will ask you to fill in these four fields:</ScreenLabel>
+            <ScreenLabel>Vercel will ask you to fill in these two fields:</ScreenLabel>
             <div style={{ background: 'var(--ca)', border: '1.5px solid var(--bo)', borderRadius: 'var(--r2)', overflow: 'hidden' }}>
               <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--bo)', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--t1)' }}>Environment Variables</span>
-                <span style={{ fontSize: 12, color: 'var(--t3)' }}>- fill in all four before clicking Deploy</span>
+                <span style={{ fontSize: 12, color: 'var(--t3)' }}>- fill in both before clicking Deploy</span>
               </div>
               <div style={{ padding: '0 16px' }}>
                 <EnvField
@@ -266,29 +250,7 @@ export default function InstallPage() {
                   desc="A password you invent right now. Your browser will ask for it every time you open your app. Write it down - you will need it again."
                   tag="you choose this"
                 />
-                <EnvField
-                  name="INTERNAL_SECRET"
-                  placeholder="e.g. 3a8f5c2b9d4e1f7a6b3c8..."
-                  desc="A random security string. Generate it using one of the commands below and paste the result here."
-                  tag="generate below"
-                />
-                <EnvField
-                  name="JOBFLOW_LICENSE_KEY"
-                  placeholder="e.g. a1b2c3d4-e5f6-7890-abcd-ef1234567890"
-                  desc="Your license key from the Lemon Squeezy purchase email. It looks like groups of letters and numbers separated by dashes."
-                  tag="from email"
-                />
               </div>
-            </div>
-
-            <div style={{ marginTop: 4 }}>
-              <p style={{ fontWeight: 600, color: 'var(--t1)', marginBottom: 6 }}>Generating INTERNAL_SECRET:</p>
-              <p>Copy one of these commands, run it in your terminal, and paste the output into the field above. If you do not have a terminal, ask a friend - or use any online random hex generator.</p>
-              <Block>{`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`}</Block>
-              <Block>{`openssl rand -hex 32`}</Block>
-              <p style={{ fontSize: 12.5, color: 'var(--t3)', marginTop: 6 }}>
-                The result will be a 64-character string of letters and numbers. Any random string works - it does not have to be generated this way.
-              </p>
             </div>
 
             <Callout tone="warn" title="If Vercel asks you to create a team:">
@@ -386,7 +348,7 @@ export default function InstallPage() {
             </Callout>
 
             <p style={{ marginTop: 4 }}>
-              Once logged in, the <Code>/setup</Code> page runs five checks. Every row should show a green checkmark.
+              Once logged in, the <Code>/setup</Code> page runs three checks. Every row should show a green checkmark.
               If any row is red, it will tell you exactly what to fix.
             </p>
 
@@ -447,20 +409,10 @@ export default function InstallPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
             <div style={{ background: 'var(--ca)', border: '1px solid var(--bo)', borderRadius: 'var(--r2)', padding: '16px 18px' }}>
-              <p style={{ fontWeight: 700, color: 'var(--t1)', marginBottom: 6 }}>500 error / &quot;Routing Middleware failed&quot;</p>
+              <p style={{ fontWeight: 700, color: 'var(--t1)', marginBottom: 6 }}>500 error on any page</p>
               <p style={{ fontSize: 14, color: 'var(--t2)', lineHeight: 1.75 }}>
-                Make sure you are going to <Code>/setup</Code> (lowercase) - not <Code>/SETUP</Code>.
-                If the error persists, your <Code>INTERNAL_SECRET</Code> may be missing or set incorrectly.
-                Check it in Vercel Settings and redeploy.
-              </p>
-            </div>
-
-            <div style={{ background: 'var(--ca)', border: '1px solid var(--bo)', borderRadius: 'var(--r2)', padding: '16px 18px' }}>
-              <p style={{ fontWeight: 700, color: 'var(--t1)', marginBottom: 6 }}>Every page sends me to /setup</p>
-              <p style={{ fontSize: 14, color: 'var(--t2)', lineHeight: 1.75 }}>
-                Your license key is missing, invalid, or could not be verified. Open <Code>/setup</Code> and
-                look at the License key row - it will say which. Make sure the key was pasted with no
-                extra spaces, and that you redeployed after adding it.
+                Check <Code>/setup</Code> for a red row - it will say exactly which environment variable is
+                missing or wrong. Fix it in Vercel Settings and redeploy.
               </p>
             </div>
 
@@ -470,24 +422,6 @@ export default function InstallPage() {
                 You skipped or did not complete Step 3. Go back and add a Neon (Postgres) database,
                 set <Code>DATA_PROVIDER</Code> to <Code>postgres</Code>, and redeploy. Data will
                 persist permanently after this.
-              </p>
-            </div>
-
-            <div style={{ background: 'var(--ca)', border: '1px solid var(--bo)', borderRadius: 'var(--r2)', padding: '16px 18px' }}>
-              <p style={{ fontWeight: 700, color: 'var(--t1)', marginBottom: 6 }}>License key rejected</p>
-              <p style={{ fontSize: 14, color: 'var(--t2)', lineHeight: 1.75 }}>
-                Check it was pasted in full with no trailing spaces. The key from your purchase email
-                is a long string of letters, numbers, and dashes. If it still fails, email us with
-                your order number and we will check it.
-              </p>
-            </div>
-
-            <div style={{ background: 'var(--ca)', border: '1px solid var(--bo)', borderRadius: 'var(--r2)', padding: '16px 18px' }}>
-              <p style={{ fontWeight: 700, color: 'var(--t1)', marginBottom: 6 }}>Activation limit reached</p>
-              <p style={{ fontSize: 14, color: 'var(--t2)', lineHeight: 1.75 }}>
-                Your key is registered to more instances than its limit allows. Log into Lemon Squeezy,
-                go to <strong style={{ color: 'var(--t1)', fontWeight: 600 }}>My Orders &rarr; Manage license</strong>,
-                and deactivate an instance you no longer use. Then redeploy your app.
               </p>
             </div>
 
@@ -503,9 +437,10 @@ export default function InstallPage() {
           </div>
 
           <div style={{ marginTop: 24, padding: '16px 18px', background: 'var(--b50)', border: '1px solid var(--b100)', borderRadius: 'var(--r2)', fontSize: 14, color: 'var(--b)' }}>
-            <strong>Still stuck?</strong> Email us at{' '}
-            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)', fontWeight: 600, textDecoration: 'underline' }}>info@jobflow-ai.app</a>{' '}
-            with your Vercel project URL and a description of what you see. We respond within 24 hours.
+            <strong>Still stuck?</strong> Open an issue on{' '}
+            <a href="https://github.com/aviadel/jobflow-ai/issues" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--b)', fontWeight: 600, textDecoration: 'underline' }}>GitHub</a>{' '}
+            with a description of what you see, or email{' '}
+            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)', fontWeight: 600, textDecoration: 'underline' }}>info@jobflow-ai.app</a>.
           </div>
         </div>
 

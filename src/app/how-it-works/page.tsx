@@ -81,27 +81,14 @@ function Path({ children }: { children: React.ReactNode }) {
   )
 }
 
-function ProBadge() {
-  return (
-    <span style={{
-      fontSize: 10, fontWeight: 700, letterSpacing: '.05em',
-      textTransform: 'uppercase' as const,
-      color: 'var(--pu)', background: 'var(--pul)', borderRadius: 4,
-      padding: '1px 6px', border: '1px solid rgba(124,58,237,.25)',
-      verticalAlign: 'middle', marginLeft: 8,
-    }}>Pro</span>
-  )
-}
-
 function Feature({
-  icon, title, path, steps, tip, pro,
+  icon, title, path, steps, tip,
 }: {
   icon: string
   title: string
   path: string
   steps: React.ReactNode[]
   tip?: React.ReactNode
-  pro?: boolean
 }) {
   return (
     <section style={{ borderTop: '1px solid var(--bo)', paddingTop: 48 }}>
@@ -116,7 +103,7 @@ function Feature({
           fontFamily: 'var(--fd)', fontSize: 19, fontWeight: 700,
           letterSpacing: '-.02em', color: 'var(--t1)', margin: 0,
         }}>
-          {title}{pro && <ProBadge />}
+          {title}
         </h2>
       </div>
       <div style={{ marginBottom: 20, paddingLeft: 46 }}>
@@ -154,10 +141,10 @@ export default function HowItWorksPage() {
               &larr; Back
             </Link>
             <Link
-              href="/#pricing"
+              href="/install"
               style={{ fontSize: 13, fontWeight: 600, color: '#fff', padding: '7px 16px', background: 'var(--b)', borderRadius: 'var(--r1)', lineHeight: 1 }}
             >
-              Get JobFlow
+              Deploy free
             </Link>
           </div>
         </div>
@@ -237,7 +224,6 @@ export default function HowItWorksPage() {
             icon="🔬"
             title="Resume audit"
             path="/audit"
-            pro
             steps={[
               <>Go to <Path>/audit</Path>. JobFlow scores your current profile CV for ATS (applicant tracking system) compatibility.</>,
               <>Review the keyword gap analysis - it compares your profile against the target roles you set at <Path>/profile</Path>.</>,
@@ -251,7 +237,6 @@ export default function HowItWorksPage() {
             icon="💬"
             title="Application Q&A"
             path="/tracker - open application - Q&A tab"
-            pro
             steps={[
               <>Open an application from the tracker and go to the <strong style={{ color: 'var(--t1)', fontWeight: 600 }}>Q&A</strong> tab. Or start from <Path>/new</Path> and switch to the Q&A tab after generating.</>,
               <>Paste between 1 and 4 free-text questions from the application form. These are the open-ended questions employers ask alongside the CV submission.</>,
@@ -267,7 +252,7 @@ export default function HowItWorksPage() {
         {/* Footer nav */}
         <div style={{ marginTop: 72, paddingTop: 32, borderTop: '1px solid var(--bo)', display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
           <Link href="/" style={{ fontSize: 13, color: 'var(--t3)' }}>- Back to home</Link>
-          <Link href="/#pricing" style={{ fontSize: 13, color: 'var(--b)', fontWeight: 600 }}>Get JobFlow -&gt;</Link>
+          <Link href="/install" style={{ fontSize: 13, color: 'var(--b)', fontWeight: 600 }}>Deploy free -&gt;</Link>
         </div>
 
       </div>

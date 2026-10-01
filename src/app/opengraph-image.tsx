@@ -50,7 +50,7 @@ export default function Image() {
         {/* Subline */}
         <div style={{ fontSize: 24, color: '#7d8590', maxWidth: 640, lineHeight: 1.5 }}>
           Paste a job description. Get a tailored CV and cover letter in under 2 minutes.
-          Self-hosted · One-time purchase · Powered by Claude.
+          Self-hosted · Free & open source · Powered by Claude.
         </div>
 
         {/* Bottom accent */}

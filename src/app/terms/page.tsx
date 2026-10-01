@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export const metadata = {
   title: 'Terms & Conditions - JobFlow',
-  description: 'JobFlow terms of use, license grant, and purchase policy.',
+  description: 'JobFlow terms of use and open source license.',
 }
 
 const CSS = `
@@ -67,8 +67,8 @@ export default function TermsPage() {
             </span>
             JobFlow AI
           </Link>
-          <Link href="/#pricing" style={{ fontSize: 13, fontWeight: 600, color: '#fff', padding: '7px 16px', background: 'var(--b)', borderRadius: 'var(--r1)', lineHeight: 1 }}>
-            Get JobFlow
+          <Link href="/install" style={{ fontSize: 13, fontWeight: 600, color: '#fff', padding: '7px 16px', background: 'var(--b)', borderRadius: 'var(--r1)', lineHeight: 1 }}>
+            Deploy free
           </Link>
         </div>
       </nav>
@@ -83,79 +83,73 @@ export default function TermsPage() {
           Terms &amp; Conditions
         </h1>
         <p style={{ fontSize: 13, color: 'var(--t3)', marginBottom: 48 }}>
-          Last updated: 22 September 2026
+          Last updated: 1 October 2026
         </p>
 
-        <Section title="1. What you are buying">
+        <Section title="1. What this is">
           <p>
-            JobFlow is a self-hosted software toolkit you deploy to your own Vercel account. When you purchase a license you receive
-            a license key that unlocks the software for one deployment. You are not purchasing a hosted service, a subscription, or
-            any ongoing managed infrastructure.
+            JobFlow is free, open source software you deploy to your own Vercel account. There is no purchase, no license key,
+            and no subscription. You clone or deploy the code, bring your own Anthropic API key, and run your own instance.
           </p>
         </Section>
 
-        <Section title="2. License grant">
+        <Section title="2. License">
           <p>
-            Your license is personal and non-transferable. It covers one active Vercel deployment at a time. If you need to
-            re-deploy (for example, after a project reset or a migration to a new Vercel account), contact us at{' '}
-            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a> and we will reactivate
-            your license. You may not resell, sublicense, or redistribute the software or your license key. All intellectual
-            property in the software remains owned by JobFlow.
+            JobFlow&apos;s source code is licensed under the{' '}
+            <a href="https://github.com/aviadel/jobflow-ai/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--b)' }}>
+              Apache License 2.0
+            </a>. In short: you may use, modify, and redistribute the software, including for commercial purposes, as long as you
+            retain the copyright notice and license text. The license includes an express patent grant and disclaims warranty
+            and liability (see sections 6 and 7 below, which restate what the license already says). The license text in the
+            repository is the authoritative version - this page is a plain-language summary, not a substitute for it.
           </p>
         </Section>
 
-        <Section title="3. One-time payment">
+        <Section title="3. Cost">
           <p>
-            The purchase price is a single, one-time charge. There are no recurring fees, no subscriptions, and no hidden costs.
-            Payments are processed by Lemon Squeezy, our third-party payment processor. Your Anthropic API usage is billed
-            directly by Anthropic under your own API key - that cost is separate and outside this agreement.
+            JobFlow itself is free. The only costs you incur are your own: Anthropic API usage (typically a few cents per
+            generated document, billed directly to you by Anthropic) and, if your usage exceeds Vercel&apos;s free Hobby tier,
+            whatever Vercel charges you directly. JobFlow and its author receive none of this.
           </p>
         </Section>
 
-        <Section title="4. Updates">
+        <Section title="4. Contributions">
           <p>
-            Starter licenses include software updates for 6 months from the date of purchase. Professional licenses include
-            updates for 12 months. After that period the software continues to work - you simply will not receive new features
-            or fixes automatically. You can purchase a new license at any time to renew update access.
+            Pull requests and issues are welcome on{' '}
+            <a href="https://github.com/aviadel/jobflow-ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--b)' }}>
+              GitHub
+            </a>. By submitting a contribution, you agree it is licensed under the same Apache License 2.0 as the rest of the
+            project.
           </p>
         </Section>
 
-        <Section title="5. Refund policy">
-          <p>
-            If you are not satisfied with your purchase, you may request a full refund within 14 days of the purchase date, no
-            questions asked. To request a refund, email{' '}
-            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a> with your order details
-            and we will process it promptly. After 14 days, purchases are final and no refunds will be issued. If you have a
-            technical issue at any time, please contact us - we will do our best to help you resolve it.
-          </p>
-        </Section>
-
-        <Section title="6. Your data">
+        <Section title="5. Your data">
           <p>
             JobFlow runs entirely within your own Vercel deployment. Your CV, job descriptions, cover letters, and application
-            history are stored in your instance and are never sent to or stored by JobFlow. The only external services your
+            history are stored in your instance and are never sent to or stored by us. The only external services your
             instance communicates with are Anthropic (for AI generation) and any database adapter you configure (such as Google
             Sheets), both under your own accounts.
           </p>
         </Section>
 
-        <Section title="7. No warranty">
+        <Section title="6. No warranty">
           <p>
-            JobFlow is provided &quot;as is&quot; without warranty of any kind. We do not guarantee that the software will be
-            error-free, uninterrupted, or suitable for any particular purpose. AI-generated content (CVs, cover letters) should
-            be reviewed by you before use - we are not responsible for the accuracy or outcomes of generated content.
+            JobFlow is provided &quot;as is&quot;, without warranty of any kind, as set out in the Apache License 2.0. We do not
+            guarantee that the software will be error-free, uninterrupted, or suitable for any particular purpose. AI-generated
+            content (CVs, cover letters) should be reviewed by you before use - we are not responsible for the accuracy or
+            outcomes of generated content.
           </p>
         </Section>
 
-        <Section title="8. Limitation of liability">
+        <Section title="7. Limitation of liability">
           <p>
-            To the maximum extent permitted by law, JobFlow and its author shall not be liable for any indirect, incidental, or
-            consequential damages arising from your use of the software, including but not limited to lost job opportunities,
-            data loss, or costs from third-party services.
+            To the maximum extent permitted by law, and as set out in the Apache License 2.0, JobFlow and its contributors shall
+            not be liable for any damages arising from your use of the software, including but not limited to lost job
+            opportunities, data loss, or costs from third-party services.
           </p>
         </Section>
 
-        <Section title="9. Acceptable use">
+        <Section title="8. Acceptable use">
           <p>
             You may not use JobFlow to generate documents intended to misrepresent your qualifications or deceive employers. You
             may not use it to bulk-spam job applications in an automated, unsupervised manner. Normal job searching is
@@ -163,30 +157,25 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="10. Governing law">
-          <p>
-            These terms are governed by the laws of Israel. Any disputes shall be resolved in the courts of Tel Aviv, Israel.
-          </p>
-        </Section>
-
-        <Section title="11. Changes to these terms">
+        <Section title="9. Changes to these terms">
           <p>
             We may update these terms from time to time. When we do, we will update the &quot;Last updated&quot; date at the
-            top of this page. Your continued use of the software after an update constitutes acceptance of the revised terms.
-            Material changes will be announced via the email address associated with your purchase where possible.
+            top of this page. Material changes will be announced on the GitHub repository where possible.
           </p>
         </Section>
 
-        <Section title="12. Contact">
+        <Section title="10. Contact">
           <p>
-            Questions about these terms?{' '}
-            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a>
+            Questions?{' '}
+            <a href="mailto:info@jobflow-ai.app" style={{ color: 'var(--b)' }}>info@jobflow-ai.app</a>{' '}
+            or open an issue on{' '}
+            <a href="https://github.com/aviadel/jobflow-ai/issues" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--b)' }}>GitHub</a>.
           </p>
         </Section>
 
         <div style={{ paddingTop: 8, display: 'flex', gap: 24, flexWrap: 'wrap' as const }}>
           <Link href="/" style={{ fontSize: 13, color: 'var(--t3)' }}>- Back to home</Link>
-          <Link href="/#pricing" style={{ fontSize: 13, color: 'var(--b)', fontWeight: 600 }}>Get JobFlow -&gt;</Link>
+          <Link href="/install" style={{ fontSize: 13, color: 'var(--b)', fontWeight: 600 }}>Deploy free -&gt;</Link>
         </div>
 
       </div>

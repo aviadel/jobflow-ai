@@ -59,7 +59,6 @@ type Feature = {
   icon: string
   title: string
   tagline: string
-  pro: boolean
   paragraphs: string[]
   badges: string[]
   comingSoon: string[]
@@ -389,13 +388,12 @@ const FEATURES: Feature[] = [
     icon: '📄',
     title: 'CV generation',
     tagline: 'Tailored CV per application - self-correcting AI pass, section-by-section regen until you approve.',
-    pro: false,
     paragraphs: [
       'JobFlow reads the job description, extracts the key requirements, and generates a CV that leads with what this specific role cares about - not a generic template reshuffled.',
       'After the first draft, it runs a self-check pass comparing the output against the JD keywords and flags any coverage gaps before handing it back to you.',
       'Every section is independently regeneratable. Keep the intro, redo the experience bullets - without losing edits elsewhere. One click per section, custom prompt optional.',
     ],
-    badges: ['Starter + Pro', 'Claude-powered', 'Instant download (.docx)'],
+    badges: ['Claude-powered', 'Instant download (.docx)'],
     comingSoon: ['PDF formatting presets', 'Google Docs export'],
     mock: <CvGenerationMock />,
   },
@@ -404,13 +402,12 @@ const FEATURES: Feature[] = [
     icon: '✉️',
     title: 'Cover letters',
     tagline: 'Written in parallel with your CV - matches your voice, custom-prompt regen per section.',
-    pro: false,
     paragraphs: [
       'The cover letter is drafted alongside your CV so both documents reference the same tailored framing and key selling points - no mismatches.',
       'JobFlow writes in an active, first-person voice that sounds like you, not a generic template. Each paragraph (intro, body, close) can be regenerated independently with a custom prompt.',
       'You stay in control of tone and content without starting from scratch every time.',
     ],
-    badges: ['Starter + Pro', 'Claude-powered', 'Instant download (.docx)'],
+    badges: ['Claude-powered', 'Instant download (.docx)'],
     comingSoon: [],
     mock: <CoverLetterMock />,
   },
@@ -419,13 +416,12 @@ const FEATURES: Feature[] = [
     icon: '🔍',
     title: 'JD Decode',
     tagline: 'Extract role requirements, ATS keywords, and a fit verdict - all in one click.',
-    pro: false,
     paragraphs: [
       'Paste the job description and JobFlow extracts the must-have vs nice-to-have requirements, surfaces the ATS keywords the role is optimised for, and gives you a quick fit verdict based on your profile.',
       'The structured breakdown takes about 15 seconds and is shown before any generation starts - so you can decide whether the role is worth applying to before committing.',
       'Keywords extracted here are used automatically by the CV and cover letter generators to ensure your documents match what the ATS is scanning for.',
     ],
-    badges: ['Starter + Pro', 'Claude-powered'],
+    badges: ['Claude-powered'],
     comingSoon: [],
     mock: <JdDecodeMock />,
   },
@@ -434,13 +430,12 @@ const FEATURES: Feature[] = [
     icon: '📊',
     title: 'Application tracker',
     tagline: 'Status, notes, and full history - stored in your own instance, never shared.',
-    pro: false,
     paragraphs: [
       'Every application you create is stored in your own Vercel instance. Track status (Applied, Interview, Offer, Rejected), add notes, and view a full history of generated documents per role.',
       'Nothing is sent to external servers. Your application history is yours alone, stored in the database you configured - not on our infrastructure.',
       'The tracker is the central hub: from here you can jump back into any application to regenerate a section, view the original JD, or update the status after a recruiter reply.',
     ],
-    badges: ['Starter + Pro'],
+    badges: ['Self-hosted'],
     comingSoon: ['Google Sheets sync', 'Email status auto-detection'],
     mock: <TrackerMock />,
   },
@@ -449,13 +444,12 @@ const FEATURES: Feature[] = [
     icon: '🔬',
     title: 'Resume audit',
     tagline: 'ATS compatibility check, keyword gap analysis - a final pass before you submit.',
-    pro: true,
     paragraphs: [
       'Before you submit, run your tailored CV and cover letter through the audit tool. It checks ATS formatting - tables, columns, and graphics that break parsers - and flags them with specific fixes.',
       'Identifies keywords from the JD that are missing from your documents, with suggestions on where and how to work them in naturally.',
       'You get a line-by-line report with specific, actionable fixes - not vague suggestions like "improve your summary."',
     ],
-    badges: ['Pro only', 'Claude-powered'],
+    badges: ['Claude-powered'],
     comingSoon: ['LinkedIn profile consistency check'],
     mock: <AuditMock />,
   },
@@ -464,13 +458,12 @@ const FEATURES: Feature[] = [
     icon: '💬',
     title: 'Application Q&A',
     tagline: 'Paste 1-4 free-text questions from the application form - Claude answers in your voice.',
-    pro: true,
     paragraphs: [
       'Many applications include free-text questions like "Why do you want to work here?" or "Describe a time you led a team under pressure."',
       'Paste up to 4 questions alongside the job description and your profile, and JobFlow drafts answers that reference your actual experience - not generic platitudes pulled from the web.',
       'Each answer can be regenerated with a custom tone prompt. Get a first draft in under 30 seconds, then edit to taste.',
     ],
-    badges: ['Pro only', 'Claude-powered'],
+    badges: ['Claude-powered'],
     comingSoon: [],
     mock: <QandAMock />,
   },
@@ -553,14 +546,6 @@ export default async function FeaturePage({ params }: { params: Promise<{ slug: 
               <h1 style={{ fontFamily: 'var(--fd)', fontSize: 'clamp(22px,3.5vw,32px)', fontWeight: 800, letterSpacing: '-.025em', color: 'var(--t1)', lineHeight: 1.1 }}>
                 {feature.title}
               </h1>
-              {feature.pro && (
-                <span style={{
-                  fontSize: 10, fontWeight: 700, letterSpacing: '.05em',
-                  textTransform: 'uppercase' as const,
-                  color: 'var(--pu)', background: 'var(--pul)', borderRadius: 4,
-                  padding: '2px 8px', border: '1px solid rgba(124,58,237,.25)', flexShrink: 0,
-                }}>Pro</span>
-              )}
             </div>
             <p style={{ fontSize: 15, color: 'var(--t2)', lineHeight: 1.65, maxWidth: 560 }}>{feature.tagline}</p>
           </div>

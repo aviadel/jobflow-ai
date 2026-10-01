@@ -16,10 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "JobFlow — AI Job Application Toolkit",
-  description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. One-time purchase.",
+  description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. Free & open source.",
   openGraph: {
     title: "JobFlow — AI Job Application Toolkit",
-    description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. One-time purchase.",
+    description: "Paste a job description. Get a tailored CV and cover letter in under 2 minutes. Self-hosted on Vercel, powered by Claude. Free & open source.",
     type: "website",
     siteName: "JobFlow",
   },

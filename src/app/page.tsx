@@ -4,13 +4,10 @@ import FaqAccordion from './_components/FaqAccordion'
 
 export const metadata = {
   title: 'JobFlow - AI-powered job application toolkit',
-  description: 'Self-hosted AI toolkit that writes a tailored CV and cover letter for every job in under 2 minutes. One-time purchase, deploy to Vercel, bring your own Claude API key.',
+  description: 'Self-hosted AI toolkit that writes a tailored CV and cover letter for every job in under 2 minutes. Free & open source, deploy to Vercel, bring your own Claude API key.',
 }
 
-const STARTER_URL =
-  'https://jobflow-ai.lemonsqueezy.com/checkout/buy/8c94e194-a3ca-40e2-af28-48dc88d72b4c'
-const PRO_URL =
-  'https://jobflow-ai.lemonsqueezy.com/checkout/buy/fe106e14-4419-48f2-b4e9-678a041ce8dc'
+const GITHUB_URL = 'https://github.com/aviadel/jobflow-ai'
 const DEPLOY_URL =
   'https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai' +
   '&env=ANTHROPIC_API_KEY,APP_PASSWORD' +
@@ -23,8 +20,8 @@ const FEATURES = [
   { icon: '✉️', title: 'Cover letters',       slug: 'cover-letters',       desc: 'Written in parallel with your CV. Matches your voice and tone. Custom-prompt regen per section.' },
   { icon: '🔍', title: 'JD Decode',           slug: 'jd-decode',           desc: 'Extract role requirements, keywords, and a fit verdict against your profile in one click.' },
   { icon: '📊', title: 'Application tracker', slug: 'application-tracker', desc: 'Status, notes, and history - stored in your own instance, never shared with anyone.' },
-  { icon: '🔬', title: 'Resume audit',        slug: 'resume-audit',        desc: 'ATS compatibility check, keyword gap analysis, and LinkedIn consistency review.', pro: true },
-  { icon: '💬', title: 'Application Q&A',     slug: 'application-qa',      desc: 'Paste 1-4 free-text questions from the application form. Claude answers in your voice.', pro: true },
+  { icon: '🔬', title: 'Resume audit',        slug: 'resume-audit',        desc: 'ATS compatibility check, keyword gap analysis, and LinkedIn consistency review.' },
+  { icon: '💬', title: 'Application Q&A',     slug: 'application-qa',      desc: 'Paste 1-4 free-text questions from the application form. Claude answers in your voice.' },
 ] as const
 
 
@@ -127,7 +124,6 @@ a{color:inherit;text-decoration:none}
 .jfcic{width:38px;height:38px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:1.05rem;margin-bottom:11px}
 .jib{background:var(--b50)}.jia{background:var(--aml)}.jip{background:var(--pul)}.jic{background:var(--cyl)}
 .jfc h3{font-family:var(--fd);font-size:.88rem;font-weight:700;margin-bottom:5px}
-.jprot{display:inline-block;background:var(--aml);color:var(--am);font-size:.55rem;font-weight:800;padding:2px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;text-transform:uppercase}
 .jfc p{font-size:.8rem;color:var(--t2);line-height:1.6}
 
 /* INCENTIVES */
@@ -168,13 +164,9 @@ a{color:inherit;text-decoration:none}
 .jinstbtn{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:8px 14px;background:var(--b);color:#fff;border-radius:var(--r2);font-size:.77rem;font-weight:600;white-space:nowrap;flex-shrink:0;transition:all .2s;box-shadow:0 2px 8px rgba(37,99,235,.2)}
 .jinstbtn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.3)}
 
-/* PRICING */
-.jpcg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
-.jpc{padding:24px 20px;background:var(--ca);border:1.5px solid var(--bo);border-radius:var(--r3);position:relative;overflow:hidden}
-.jpc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.jpc:nth-child(1)::before{background:var(--b)}
-.jpc:nth-child(2)::before{background:linear-gradient(90deg,var(--b),var(--pu))}
-.jpc:nth-child(3)::before{background:var(--t4)}
+/* OPEN SOURCE */
+.jpc{padding:24px 20px;background:var(--ca);border:1.5px solid var(--bo);border-radius:var(--r3);position:relative}
+.jpc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r3) var(--r3) 0 0;background:linear-gradient(90deg,var(--b),var(--pu))}
 .jpc.jpcf{border-color:var(--b);box-shadow:var(--sl),var(--sg);transform:scale(1.03)}
 .jpcbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--b),var(--pu));color:#fff;padding:3px 12px;border-radius:999px;font-size:.63rem;font-weight:700;white-space:nowrap;box-shadow:0 2px 10px rgba(124,58,237,.25)}
 .jpctier{font-size:.77rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
@@ -189,8 +181,6 @@ a{color:inherit;text-decoration:none}
 .jpcbtn{display:block;width:100%;padding:11px;text-align:center;border-radius:var(--r2);font-weight:700;font-size:.88rem;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
 .jpbp{background:linear-gradient(135deg,var(--b),var(--pu));color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.2)}
 .jpbp:hover{filter:brightness(1.08);transform:translateY(-2px)}
-.jpbs{background:var(--bg2);color:var(--t1)}.jpbs:hover{background:var(--b50);color:var(--b)}
-.jpbd{background:var(--bg2);color:var(--t3);cursor:not-allowed;opacity:.65}
 .jpcnote{text-align:center;margin-top:22px;font-size:.84rem;color:var(--t3)}
 .jpcinstall{display:block;text-align:center;font-size:.78rem;color:var(--b);font-weight:500;margin-top:10px;padding-top:10px;border-top:1px solid var(--bo2)}
 .jpcinstall:hover{text-decoration:underline}
@@ -254,7 +244,6 @@ a{color:inherit;text-decoration:none}
   .jstat:nth-child(1),.jstat:nth-child(2){border-bottom:1px solid var(--bo)}
   .jfeatg{grid-template-columns:1fr}
   .jstepsg{grid-template-columns:1fr}
-  .jpcg{grid-template-columns:1fr;max-width:340px;margin-inline:auto}
   .jpc.jpcf{transform:none}
   .jinst{flex-direction:column;align-items:flex-start}
   .jinstbtn{width:100%;justify-content:center;margin-left:0}
@@ -326,10 +315,10 @@ export default function Home() {
               <li><a href="#features">Features</a></li>
               <li><Link href="/how-it-works">How It Works</Link></li>
               <li><a href="#why-saas">Why Not SaaS</a></li>
-              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="#pricing">Open Source</a></li>
               <li><a href="#faq">FAQ</a></li>
               <li><Link href="/install">Install guide</Link></li>
-              <li><a href="#pricing" className="jncta">Get JobFlow</a></li>
+              <li><a href={DEPLOY_URL} className="jncta" target="_blank" rel="noopener noreferrer">Deploy free</a></li>
             </ul>
           </div>
         </div>
@@ -346,18 +335,18 @@ export default function Home() {
                   <span className="jbdot" />&nbsp;Powered by Claude AI
                 </div>
                 <h1>A <span className="jgr">tailored CV</span> for every application.</h1>
-                <p className="jhsub">Paste a job description. JobFlow decodes it, writes a tailored CV, and drafts a cover letter - in under 2 minutes. Self-hosted on Vercel. One-time purchase. Your data never leaves your server.</p>
+                <p className="jhsub">Paste a job description. JobFlow decodes it, writes a tailored CV, and drafts a cover letter - in under 2 minutes. Free & open source. Self-hosted on Vercel. Your data never leaves your server.</p>
                 <div className="jctas">
-                  <a href="#pricing" className="jbp">Get JobFlow - from &euro;25 <ArrowRight /></a>
-                  <a href={DEPLOY_URL} className="jbs" target="_blank" rel="noopener noreferrer">
+                  <a href={DEPLOY_URL} className="jbp" target="_blank" rel="noopener noreferrer">
                     Deploy to Vercel&nbsp;
                     <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
                       <path d="M4 1h9v9m0-9L4 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </a>
+                  <a href={GITHUB_URL} className="jbs" target="_blank" rel="noopener noreferrer">View on GitHub</a>
                 </div>
                 <div className="jproof">
-                  <span><span className="jck">&#10003;</span> One-time purchase</span>
+                  <span><span className="jck">&#10003;</span> Free & open source</span>
                   <span><span className="jck">&#10003;</span> Self-hosted</span>
                   <span><span className="jck">&#10003;</span> No subscriptions</span>
                 </div>
@@ -373,8 +362,8 @@ export default function Home() {
           <div className="jw">
             <div className="jstatsg">
               <div className="jstat"><div className="jstatv">&lt;2 min</div><div className="jstatl">Per application</div></div>
-              <div className="jstat"><div className="jstatv">1&times;</div><div className="jstatl">One-time payment</div></div>
-              <div className="jstat"><div className="jstatv">0</div><div className="jstatl">Subscriptions, ever</div></div>
+              <div className="jstat"><div className="jstatv">&euro;0</div><div className="jstatl">Cost to use</div></div>
+              <div className="jstat"><div className="jstatv">100%</div><div className="jstatl">Open source</div></div>
               <div className="jstat"><div className="jstatv">&infin;</div><div className="jstatl">Applications/month</div></div>
             </div>
           </div>
@@ -392,10 +381,7 @@ export default function Home() {
               {FEATURES.map(f => (
                 <Link key={f.slug} href={`/features/${f.slug}`} className="jfc">
                   <div className={`jfcic ${FEAT_COLOR[f.slug]}`}>{f.icon}</div>
-                  <h3>
-                    {f.title}
-                    {'pro' in f && f.pro && <span className="jprot">PRO</span>}
-                  </h3>
+                  <h3>{f.title}</h3>
                   <p>{f.desc}</p>
                 </Link>
               ))}
@@ -417,8 +403,8 @@ export default function Home() {
                 <div className="jvs">VS</div>
                 <div className="jinca jing">
                   <div className="jincl">&#10004; JobFlow AI</div>
-                  <div className="jincr"><span>&#128176;</span><span><strong>&euro;25 once</strong> - same tool forever, no matter how long you search</span></div>
-                  <div className="jincr"><span>&#128154;</span><span>We <strong>want</strong> you to get hired fast - you already paid</span></div>
+                  <div className="jincr"><span>&#128176;</span><span><strong>Free, forever</strong> - open source, no matter how long you search</span></div>
+                  <div className="jincr"><span>&#128154;</span><span>No business model to protect - we have <strong>nothing to gain</strong> from your search dragging on</span></div>
                   <div className="jincr"><span>&#128275;</span><span>Your data, your server, your CVs - forever</span></div>
                 </div>
               </div>
@@ -426,7 +412,7 @@ export default function Home() {
                 <div className="jeyb">Think About It</div>
                 <h2 className="jsttl">SaaS CV tools are the dating apps of job search.</h2>
                 <p className="jssub">A dating app profits when you don&apos;t find a match. A subscription CV tool profits when your search drags on. Their incentives are misaligned with yours by design.</p>
-                <div className="jincq">JobFlow flips the model. <strong>Pay once, search forever.</strong> We have zero financial incentive to keep you searching. The faster you land the job, the more value you got.</div>
+                <div className="jincq">JobFlow flips the model. <strong>Free and open source, search as long as you need.</strong> We have zero financial incentive to keep you searching. The faster you land the job, the more value you got.</div>
               </div>
             </div>
           </div>
@@ -444,7 +430,7 @@ export default function Home() {
               <div className="jstep">
                 <div className="jstepn">1</div>
                 <h3>Deploy to Vercel</h3>
-                <p>Click deploy, add your API keys and license key. Set up a free Postgres database.</p>
+                <p>Click deploy, add your Claude API key. Set up a free Postgres database.</p>
                 <span className="jstept">&#9201; 3 min</span>
               </div>
               <div className="jstep">
@@ -479,56 +465,33 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRICING */}
+        {/* OPEN SOURCE */}
         <section className="jsec jseca" id="pricing">
           <div className="jw">
             <div className="jshd">
-              <div className="jeyb">Pricing</div>
-              <h2 className="jsttl">One-time purchase. Yours forever.</h2>
-              <p className="jssub">Bring your own Anthropic API key. No subscription, no lock-in, no data leaving your server.</p>
+              <div className="jeyb">Open Source</div>
+              <h2 className="jsttl">Free. Forever. Yours to run.</h2>
+              <p className="jssub">Clone the repo, deploy to your own Vercel account, bring your own Anthropic API key. No license, no subscription, no one else touching your data.</p>
             </div>
-            <div className="jpcg">
-              <div className="jpc">
-                <div className="jpctier">Starter</div>
-                <div className="jpcpr"><span className="jcur">&euro;</span>25</div>
-                <div className="jpcpd">one-time</div>
+            <div style={{ maxWidth: 420, marginInline: 'auto' }}>
+              <div className="jpc jpcf">
+                <div className="jpcbadge">Apache-2.0 licensed</div>
+                <div className="jpctier">Everything included</div>
+                <div className="jpcpr"><span className="jcur">&euro;</span>0</div>
+                <div className="jpcpd">forever</div>
                 <ul className="jpcfl">
                   <li><span className="jpck">&#10003;</span> CV generation</li>
                   <li><span className="jpck">&#10003;</span> Cover letters</li>
                   <li><span className="jpck">&#10003;</span> JD Decode</li>
                   <li><span className="jpck">&#10003;</span> Application tracker</li>
-                </ul>
-                <a href={STARTER_URL} className="jpcbtn jpbs" target="_blank" rel="noopener noreferrer">Buy Starter &rarr;</a>
-                <Link href="/install" className="jpcinstall">Already have a key? Install guide &rarr;</Link>
-              </div>
-              <div className="jpc jpcf">
-                <div className="jpcbadge">&#9733; Best Value</div>
-                <div className="jpctier">Professional</div>
-                <div className="jpcpr"><span className="jcur">&euro;</span>49</div>
-                <div className="jpcpd">one-time</div>
-                <ul className="jpcfl">
-                  <li><span className="jpck">&#10003;</span> Everything in Starter</li>
                   <li><span className="jpck">&#10003;</span> Resume audit</li>
                   <li><span className="jpck">&#10003;</span> Application Q&amp;A</li>
-                  <li><span className="jpck">&#10003;</span> Postgres + Sheets storage</li>
                 </ul>
-                <a href={PRO_URL} className="jpcbtn jpbp" target="_blank" rel="noopener noreferrer">Buy Professional &rarr;</a>
-                <Link href="/install" className="jpcinstall">Already have a key? Install guide &rarr;</Link>
-              </div>
-              <div className="jpc">
-                <div className="jpctier">Lifetime</div>
-                <div className="jpcpr" style={{ fontSize: '1.4rem', color: 'var(--t3)' }}>Coming Soon</div>
-                <div className="jpcpd">&nbsp;</div>
-                <ul className="jpcfl">
-                  <li><span className="jpcd">-</span> Everything in Pro</li>
-                  <li><span className="jpcd">-</span> AI job suggestions</li>
-                  <li><span className="jpcd">-</span> Custom integrations</li>
-                  <li style={{ border: 'none' }}>&nbsp;</li>
-                </ul>
-                <button className="jpcbtn jpbd" disabled>Coming Soon</button>
+                <a href={DEPLOY_URL} className="jpcbtn jpbp" target="_blank" rel="noopener noreferrer">Deploy to Vercel &rarr;</a>
+                <Link href="/install" className="jpcinstall">Prefer a guided walkthrough? Install guide &rarr;</Link>
               </div>
             </div>
-            <p className="jpcnote"><strong>Rezi Pro</strong> charges $29/month. JobFlow costs less - <strong>once</strong>.</p>
+            <p className="jpcnote"><strong>Rezi Pro</strong> charges $29/month. JobFlow is <strong>Apache-2.0 licensed and free</strong> to self-host.</p>
           </div>
         </section>
 
@@ -547,8 +510,8 @@ export default function Home() {
         <section className="jcta">
           <div className="jw">
             <h2>Stop writing CVs from scratch.</h2>
-            <p>Let AI tailor your CV to every job in under 2 minutes. One purchase. Unlimited applications.</p>
-            <a href="#pricing" className="jbgh">Get JobFlow - from &euro;25 <ArrowRight /></a>
+            <p>Let AI tailor your CV to every job in under 2 minutes. Free & open source. Unlimited applications.</p>
+            <a href={DEPLOY_URL} className="jbgh" target="_blank" rel="noopener noreferrer">Deploy to Vercel <ArrowRight /></a>
           </div>
         </section>
 
@@ -563,12 +526,13 @@ export default function Home() {
               JobFlow AI
             </div>
             <ul className="jftlks">
+              <li><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a></li>
               <li><span className="jf-email" data-u="info" data-d="jobflow-ai.app" /></li>
               <li><Link href="/install">Install guide</Link></li>
               <li><Link href="/terms">Terms &amp; Conditions</Link></li>
               <li><Link href="/how-it-works">How it works</Link></li>
             </ul>
-            <p className="jftnote">Self-hosted &middot; Vercel + Claude API &middot; One-time purchase &middot; &copy; 2025-2026 JobFlow AI</p>
+            <p className="jftnote">Self-hosted &middot; Vercel + Claude API &middot; Free &amp; open source (Apache-2.0) &middot; &copy; 2025-2026 JobFlow AI</p>
           </div>
         </div>
       </footer>

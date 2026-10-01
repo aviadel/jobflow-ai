@@ -8,8 +8,12 @@ const FAQ_ITEMS = [
     a: "JobFlow uses Claude AI to decode the job description, extract requirements and keywords, then maps them against your stored profile. It generates a fully tailored CV and cover letter for that specific role - in under 2 minutes. You can regenerate any section individually until you're satisfied.",
   },
   {
-    q: 'I have a license key - what is next?',
-    a: "Head to the installation guide and follow the six steps: deploy to Vercel, add your four environment variables (including the license key), set up a free Postgres database, verify your config at /setup, then build your profile at /onboarding. You'll be generating tailored CVs in under ten minutes.",
+    q: 'Is JobFlow really free?',
+    a: "Yes. JobFlow is free and open source under the Apache License 2.0 - no license key, no purchase, no subscription. The only cost is your own Anthropic API usage, typically a few cents per generated document, billed directly to you by Anthropic.",
+  },
+  {
+    q: "I'm ready to install - what's next?",
+    a: "Head to the installation guide and follow the six steps: deploy to Vercel, add your two environment variables, set up a free Postgres database, verify your config at /setup, then build your profile at /onboarding. You'll be generating tailored CVs in under ten minutes.",
   },
   {
     q: 'Do I need a paid Vercel account?',
