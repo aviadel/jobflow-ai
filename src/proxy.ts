@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { isSignedLicense, validateLicense } from '@/lib/license'
 
 /** Pages that make up the public marketing site. These are the only routes a
  *  MARKETING_ONLY deployment serves. */
@@ -24,45 +23,6 @@ function isMarketingSurface(pathname: string): boolean {
   )
 }
 
-/** Shared secret for the middleware -> /api/license hop. That route sits in
- *  PUBLIC_PATHS to avoid recursing through this proxy, so the header is the
- *  only thing keeping outsiders from triggering license activations.
- *  Uses Web Crypto (available in Edge runtime) instead of Node.js crypto. */
-async function internalSecret(): Promise<string | null> {
-  const s = process.env.INTERNAL_SECRET
-  if (!s) return null
-  const enc = new TextEncoder()
-  const key = await crypto.subtle.importKey(
-    'raw', enc.encode(s),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false, ['sign'],
-  )
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode('license-internal'))
-  return Array.from(new Uint8Array(sig))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('')
-}
-
-async function isLemonLicenseValid(origin: string, secret: string): Promise<boolean> {
-  try {
-    const res = await fetch(`${origin}/api/license`, {
-      headers: { 'x-internal-secret': secret },
-    })
-    if (!res.ok) return false
-    const data = await res.json() as { valid: boolean }
-    return data.valid
-  } catch {
-    return false
-  }
-}
-
-function toSetup(request: NextRequest) {
-  const url = request.nextUrl.clone()
-  url.pathname = '/setup'
-  url.search = ''
-  return NextResponse.redirect(url)
-}
-
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -79,10 +39,7 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // /api/license is the middleware's own bridge to the DB-cached verdict. It is
-  // exempt from the password check to avoid recursing through this proxy, and
-  // is guarded by its own internal-secret header instead.
-  if (isMarketingSurface(pathname) || pathname === '/api/license') {
+  if (isMarketingSurface(pathname)) {
     return NextResponse.next()
   }
 
@@ -105,35 +62,7 @@ export default async function proxy(request: NextRequest) {
     }
   }
 
-  // ── License check ───────────────────────────────────────────────────────────
-  // JobFlow is paid-only: no valid license, no access. Failures land on /setup,
-  // which is always reachable so its config check can explain what is missing.
-  if (pathname.toLowerCase() === '/setup') return NextResponse.next()
-
-  const licenseKey = process.env.JOBFLOW_LICENSE_KEY
-  if (!licenseKey) return toSetup(request)
-
-  if (isSignedLicense(licenseKey)) {
-    // One of our own Ed25519 keys - verified locally, no network call.
-    // Wrapped in try/catch: Edge runtime may not support the Node.js asymmetric
-    // crypto APIs used by validateLicense; redirect to /setup rather than crash.
-    try {
-      return validateLicense(licenseKey).valid
-        ? NextResponse.next()
-        : toSetup(request)
-    } catch {
-      return toSetup(request)
-    }
-  }
-
-  // Lemon Squeezy key. The verdict is cached server-side, so this is a local
-  // hop that only reaches LZ once a week.
-  const secret = await internalSecret()
-  if (!secret) return toSetup(request)
-
-  return (await isLemonLicenseValid(request.nextUrl.origin, secret))
-    ? NextResponse.next()
-    : toSetup(request)
+  return NextResponse.next()
 }
 
 export const config = {

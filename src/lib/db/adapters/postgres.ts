@@ -4,7 +4,6 @@ import type {
   Application,
   GeneratedDocument,
   JobSuggestion,
-  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from '../types'
@@ -45,11 +44,6 @@ async function ensureSchema(sql: postgres.Sql): Promise<void> {
       id TEXT PRIMARY KEY,
       application_id TEXT NOT NULL,
       data JSONB NOT NULL
-    )`
-  await sql`
-    CREATE TABLE IF NOT EXISTS jf_instance (
-      key TEXT PRIMARY KEY,
-      value TEXT NOT NULL
     )`
   schemaReady = true
 }
@@ -144,21 +138,5 @@ export class PostgresProvider implements DataProvider {
     const rows = await this.sql`
       SELECT data FROM jf_documents WHERE application_id = ${applicationId}`
     return rows.map(r => r.data as GeneratedDocument)
-  }
-
-  // ── Cached license verdict ────────────────────────────────
-
-  async getLicenseCache(): Promise<LicenseCache | null> {
-    await this.init()
-    const rows = await this.sql`SELECT value FROM jf_instance WHERE key = 'license_cache'`
-    if (!rows[0]) return null
-    try { return JSON.parse(rows[0].value as string) as LicenseCache } catch { return null }
-  }
-
-  async setLicenseCache(c: LicenseCache): Promise<void> {
-    await this.init()
-    await this.sql`
-      INSERT INTO jf_instance (key, value) VALUES ('license_cache', ${JSON.stringify(c)})
-      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`
   }
 }

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import type { LicenseTier } from '@/lib/license'
 
 const RESPONSIVE = `
   .jf-two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
@@ -176,8 +175,6 @@ async function downloadDocx(
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type Tier = LicenseTier
-
 type JDAnalysis = {
   company: string
   role: string
@@ -212,10 +209,6 @@ const card: React.CSSProperties = {
 
 const cardApproved: React.CSSProperties = {
   ...card, border: '1px solid #86EFAC', background: '#F0FDF4',
-}
-
-const cardLocked: React.CSSProperties = {
-  ...card, opacity: 0.7,
 }
 
 const inp: React.CSSProperties = {
@@ -270,35 +263,9 @@ function orderedKeys(content: Record<string, string>): string[] {
   return ['summary', ...jobs, 'coverLetter'].filter(k => k in content)
 }
 
-function isPro(tier: Tier) {
-  return tier === 'professional' || tier === 'lifetime'
-}
-
-// ── Pro lock card ─────────────────────────────────────────────────────────────
-
-function ProLock({ feature }: { feature: string }) {
-  return (
-    <div style={cardLocked}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>{feature}</span>
-            <span style={badge('purple')}>Professional</span>
-          </div>
-          <p style={{ fontSize: 12, color: '#6B6660' }}>Upgrade your license to unlock this feature.</p>
-        </div>
-        <Link href="/#pricing" style={{ ...btn, textDecoration: 'none', flexShrink: 0, fontSize: 12 }}>
-          Upgrade →
-        </Link>
-      </div>
-    </div>
-  )
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function NewClient({
-  tier,
   profileName,
   profileEmail,
   profilePhone,
@@ -306,7 +273,6 @@ export function NewClient({
   photoData,
   cvWithPhoto,
 }: {
-  tier: Tier
   profileName?: string
   profileEmail?: string
   profilePhone?: string
@@ -555,14 +521,12 @@ export function NewClient({
         </div>
       )}
 
-      {/* Resume audit — Pro feature */}
-      {isPro(tier) ? (
-        <div style={card}>
+      {/* Resume audit */}
+      <div style={card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
                 <p style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>Audit this application</p>
-                <span style={badge('purple')}>Professional</span>
               </div>
               <p style={{ fontSize: 12, color: '#6B6660' }}>ATS check, recruiter-scan read, keyword coverage + LinkedIn consistency</p>
             </div>
@@ -605,7 +569,6 @@ export function NewClient({
             </div>
           )}
         </div>
-      ) : <ProLock feature="Resume audit" />}
 
       {/* Section cards */}
       {keys.map((key) => {
@@ -664,12 +627,10 @@ export function NewClient({
         )
       })}
 
-      {/* Application questions — Pro feature */}
-      {isPro(tier) ? (
-        <div style={card}>
+      {/* Application questions */}
+      <div style={card}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: '#1A1917' }}>Application questions</p>
-            <span style={badge('purple')}>Professional</span>
           </div>
           <textarea
             value={appQuestions}
@@ -714,7 +675,6 @@ export function NewClient({
             </div>
           ))}
         </div>
-      ) : <ProLock feature="Application questions" />}
 
       {/* Bottom action bar */}
       <div className="jf-action-bar">

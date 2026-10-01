@@ -1,8 +1,5 @@
 import Link from 'next/link'
-import { isSignedLicense } from '@/lib/license'
-import { resolveLicense } from '@/lib/license-server'
 import { createDataProvider } from '@/lib/db'
-import SecretGenerator from './_components/SecretGenerator'
 
 export const metadata = { title: 'Setup — JobFlow' }
 
@@ -16,7 +13,6 @@ interface Check {
   example?: string
   source?: string
   fix?: string
-  generate?: true
   isNew?: true
 }
 
@@ -32,42 +28,6 @@ async function runChecks(): Promise<Check[]> {
     example: 'sk-ant-api03-...',
     source: 'console.anthropic.com → API Keys → Create Key',
     fix: 'Create a free account at console.anthropic.com, go to API Keys, and create a new key.',
-  })
-
-  const license = await resolveLicense()
-  checks.push({
-    label: 'License key',
-    ok: license.valid,
-    detail: license.valid
-      ? `Valid — ${license.tier} tier`
-      : license.hasKey
-        ? license.error ?? 'License key is set but could not be verified'
-        : 'No license key set — JobFlow requires a license to run',
-    envVar: 'JOBFLOW_LICENSE_KEY',
-    example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    source: 'Your purchase email from Lemon Squeezy (subject: "JobFlow")',
-    fix: license.hasKey
-      ? 'Check the key was pasted in full with no extra spaces. Env var changes only apply after a redeploy.'
-      : 'Buy a license at jobflow-ai.app. The key is emailed to you immediately after purchase.',
-  })
-
-  const hasInternalSecret = Boolean(process.env.INTERNAL_SECRET)
-  const needsInternalSecret = !isSignedLicense(process.env.JOBFLOW_LICENSE_KEY ?? '')
-  checks.push({
-    label: 'Internal secret',
-    ok: hasInternalSecret || !needsInternalSecret,
-    detail: hasInternalSecret
-      ? 'INTERNAL_SECRET is set'
-      : needsInternalSecret
-        ? 'INTERNAL_SECRET is missing'
-        : 'Not required for this license type',
-    envVar: needsInternalSecret ? 'INTERNAL_SECRET' : undefined,
-    example: needsInternalSecret ? '64-character random hex string' : undefined,
-    source: needsInternalSecret ? 'Generate one using the button below' : undefined,
-    fix: needsInternalSecret
-      ? 'Generate a random value using the button below, then add it to Vercel.'
-      : undefined,
-    generate: needsInternalSecret && !hasInternalSecret ? true : undefined,
   })
 
   const providerName = process.env.DATA_PROVIDER ?? 'json'
@@ -318,16 +278,7 @@ export default async function SetupPage() {
                   )}
 
                   {c.envVar && (
-                    <EnvVarBox name={c.envVar} example={c.generate ? undefined : c.example} />
-                  )}
-
-                  {c.generate && (
-                    <div style={{ marginTop: 14 }}>
-                      <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--t3)', textTransform: 'uppercase', letterSpacing: '.05em', margin: '0 0 4px' }}>
-                        Generate your INTERNAL_SECRET here
-                      </p>
-                      <SecretGenerator />
-                    </div>
+                    <EnvVarBox name={c.envVar} example={c.example} />
                   )}
 
                   <div style={{

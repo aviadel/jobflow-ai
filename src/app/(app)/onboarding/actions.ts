@@ -3,7 +3,6 @@
 import { redirect } from 'next/navigation'
 import { createDataProvider } from '@/lib/db'
 import { parseCvToText } from '@/lib/parse-cv'
-import { resolveLicense } from '@/lib/license-server'
 import type { UserProfile } from '@/lib/db/types'
 
 function cap(value: string | null | undefined, max: number): string {
@@ -11,9 +10,6 @@ function cap(value: string | null | undefined, max: number): string {
 }
 
 export async function saveProfile(formData: FormData) {
-  const license = await resolveLicense()
-  if (!license.valid) redirect('/setup')
-
   const db = createDataProvider()
 
   const now = new Date().toISOString()
@@ -75,9 +71,6 @@ export async function saveProfile(formData: FormData) {
 }
 
 export async function updateProfile(formData: FormData) {
-  const license = await resolveLicense()
-  if (!license.valid) redirect('/setup')
-
   const db = createDataProvider()
 
   const now = new Date().toISOString()

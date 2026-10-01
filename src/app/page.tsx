@@ -13,8 +13,8 @@ const PRO_URL =
   'https://jobflow-ai.lemonsqueezy.com/checkout/buy/fe106e14-4419-48f2-b4e9-678a041ce8dc'
 const DEPLOY_URL =
   'https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai' +
-  '&env=ANTHROPIC_API_KEY,APP_PASSWORD,INTERNAL_SECRET,JOBFLOW_LICENSE_KEY' +
-  '&envDescription=Your%20Claude%20API%20key%2C%20a%20password%20to%20protect%20your%20instance%2C%20a%20random%20string%2C%20and%20your%20license%20key' +
+  '&env=ANTHROPIC_API_KEY,APP_PASSWORD' +
+  '&envDescription=Your%20Claude%20API%20key%20and%20a%20password%20to%20protect%20your%20instance' +
   '&envLink=https%3A%2F%2Fgithub.com%2Faviadel%2Fjobflow-ai%23environment-variables' +
   '&project-name=jobflow-ai&repository-name=jobflow-ai'
 

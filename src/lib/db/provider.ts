@@ -2,7 +2,6 @@ import type {
   Application,
   GeneratedDocument,
   JobSuggestion,
-  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from './types'
@@ -26,8 +25,4 @@ export interface DataProvider {
   // Generated documents (CV / cover letter versions)
   saveDocument(doc: GeneratedDocument): Promise<GeneratedDocument>
   listDocuments(applicationId: string): Promise<GeneratedDocument[]>
-
-  // Cached Lemon Squeezy license verdict
-  getLicenseCache(): Promise<LicenseCache | null>
-  setLicenseCache(c: LicenseCache): Promise<void>
 }

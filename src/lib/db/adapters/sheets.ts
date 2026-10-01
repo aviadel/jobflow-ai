@@ -5,7 +5,6 @@ import type {
   ApplicationStatus,
   GeneratedDocument,
   JobSuggestion,
-  LicenseCache,
   SuggestionStatus,
   UserProfile,
 } from '../types'
@@ -110,7 +109,7 @@ async function ensureSheets(spreadsheetId: string): Promise<void> {
   const meta = await res.json() as { sheets: { properties: { title: string } }[] }
   const existing = new Set(meta.sheets.map(s => s.properties.title))
   const toAdd: string[] = []
-  for (const name of ['applications', 'profile', 'config']) {
+  for (const name of ['applications', 'profile']) {
     if (!existing.has(name)) toAdd.push(name)
   }
   if (toAdd.length === 0) return
@@ -254,24 +253,5 @@ export class SheetsProvider implements DataProvider {
 
   async listDocuments(applicationId: string): Promise<GeneratedDocument[]> {
     return this._docs.get(applicationId) ?? []
-  }
-
-  // ── Cached license verdict ────────────────────────────────
-
-  async getLicenseCache(): Promise<LicenseCache | null> {
-    await ensureSheets(this.id)
-    const res = await sheetsGet(`/${this.id}/values/config!A2`)
-    const data = await res.json() as { values?: string[][] }
-    const raw = data.values?.[0]?.[0]
-    if (!raw) return null
-    try { return JSON.parse(raw) as LicenseCache } catch { return null }
-  }
-
-  async setLicenseCache(c: LicenseCache): Promise<void> {
-    await ensureSheets(this.id)
-    await sheetsPut(
-      `/${this.id}/values/config!A2?valueInputOption=RAW`,
-      { values: [[JSON.stringify(c)]] },
-    )
   }
 }
