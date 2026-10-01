@@ -40,8 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# License signing key — NEVER commit this
-license-private-key.pem
 *.pem
 
 # Credentials, recovery codes, secrets — never belong in the repo
