@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createHmac } from 'crypto'
 import { isSignedLicense, validateLicense } from '@/lib/license'
 
 /** Pages that make up the public marketing site. These are the only routes a
@@ -27,11 +26,21 @@ function isMarketingSurface(pathname: string): boolean {
 
 /** Shared secret for the middleware -> /api/license hop. That route sits in
  *  PUBLIC_PATHS to avoid recursing through this proxy, so the header is the
- *  only thing keeping outsiders from triggering license activations. */
-function internalSecret(): string | null {
+ *  only thing keeping outsiders from triggering license activations.
+ *  Uses Web Crypto (available in Edge runtime) instead of Node.js crypto. */
+async function internalSecret(): Promise<string | null> {
   const s = process.env.INTERNAL_SECRET
   if (!s) return null
-  return createHmac('sha256', s).update('license-internal').digest('hex')
+  const enc = new TextEncoder()
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(s),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false, ['sign'],
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode('license-internal'))
+  return Array.from(new Uint8Array(sig))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
 }
 
 async function isLemonLicenseValid(origin: string, secret: string): Promise<boolean> {
@@ -119,7 +128,7 @@ export default async function middleware(request: NextRequest) {
 
   // Lemon Squeezy key. The verdict is cached server-side, so this is a local
   // hop that only reaches LZ once a week.
-  const secret = internalSecret()
+  const secret = await internalSecret()
   if (!secret) return toSetup(request)
 
   return (await isLemonLicenseValid(request.nextUrl.origin, secret))
